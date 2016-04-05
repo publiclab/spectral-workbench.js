@@ -33,6 +33,7 @@ To begin using spectral-workbench.js on a webpage, you'll need to include jQuery
 <script src="bower_components/nvd3/build/nv.d3.js" type="text/javascript"></script>                                                                              
 <script src="bower_components/bootstrap-css/js/bootstrap.min.js"></script>
 <script src="bower_components/moment/moment.js"></script>
+<link href="bower_components/nvd3/build/nv.d3.css" rel="stylesheet">
 ````
 
 Then include the library itself: 
@@ -80,7 +81,7 @@ var spectrum = new SpectralWorkbench.Spectrum(data);
 
 ````
 
-For a working example, please see the automated test runner, linked to below.
+For a working example, see: https://publiclab.github.io/spectral-workbench.js/examples/
 
 
 ****
@@ -89,7 +90,7 @@ For a working example, please see the automated test runner, linked to below.
 ## Automated tests
 
 
-To run Jasmine tests, open `spec/javascripts/test.html` in a browser.
+To run Jasmine tests, open `spec/javascripts/test.html` in a browser. You can run them on our Github Pages-hosted suite here: http://publiclab.github.io/spectral-workbench.js/test.html.
 
 
 ## Contributing
