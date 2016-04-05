@@ -16,7 +16,7 @@ This library is primarily used in the Spectral Workbench application, running at
 To begin using SpectralWorkbench.js, you'll need to include its dependencies: 
 
 
-````js
+````html
 <script src="node_modules/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/d3/d3.js" type="text/javascript"></script>                                                                              
 <script src="bower_components/nvd3/build/nv.d3.js" type="text/javascript"></script>                                                                              
@@ -26,7 +26,7 @@ To begin using SpectralWorkbench.js, you'll need to include its dependencies:
 
 Then include the library: 
  
-````js
+````html
 <script src="dist/spectral-workbench.js" type="text/javascript"></script>
 
 ````
