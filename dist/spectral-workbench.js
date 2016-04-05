@@ -1,6 +1,13 @@
 var SpectralWorkbench = {
   UI: {}
 };
+
+(function(exports){
+
+   exports.SpectralWorkbench = SpectralWorkbench;
+
+})(typeof exports === 'undefined'? this['spectralworkbench']={}: exports);
+
 /* From http://ejohn.org/blog/simple-javascript-inheritance/ */
 
 /* Simple JavaScript Inheritance
