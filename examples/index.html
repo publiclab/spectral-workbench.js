@@ -55,11 +55,7 @@
   
       var spectrum = new SpectralWorkbench.Spectrum(data);
 
-      graph = new SpectralWorkbench.Graph({
-        selector: '#graph' // defaults to "#graph" using jQuery selector syntax
-      });
-
-      graph.dataType = 'spectrum';
+      graph = new SpectralWorkbench.Graph({});
 
       graph.load(spectrum);
 
