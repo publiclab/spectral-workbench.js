@@ -131,12 +131,6 @@ And run it with `node yourscript.js`
 ****
 
 
-## Automated tests
-
-
-To run Jasmine tests, open `spec/javascripts/test.html` in a browser. You can run them on our Github Pages-hosted suite here: http://publiclab.github.io/spectral-workbench.js/test.html.
-
-
 ## Contributing
 
 We welcome community contributions to spectral-workbench.js! Learn more about contributing to Spectral Workbench or other Public Lab code projects on this page: http://publiclab.org/wiki/developers
@@ -152,6 +146,18 @@ If you are submitting a bug, please include:
 * anything you can about the sequence of events which led to the bug 
 
 Thank you for your help!  
+
+
+## Automated tests
+
+
+To run Jasmine tests, open `spec/javascripts/test.html` in a browser. You can run them on our Github Pages-hosted suite here: http://publiclab.github.io/spectral-workbench.js/test.html.
+
+
+## Building
+
+spectral-workbench.js is built using a Grunt task from the source files in `/src/`, and the compiled file is saved to `/dist/spectral-workbench.js`. To build, run `grunt build`. To watch files for changes, and build whenever they occur, run `grunt`. You'll need the Grunt CLI -- `npm install -g grunt-cli`. 
+
 
 ****
 
