@@ -16,7 +16,7 @@
     "spectrometry"
   ],
   "author": "Jeff Warren",
-  "license": "MIT",
+  "license": "GPLv3",
   "bugs": {
     "url": "https://github.com/publiclab/spectral-workbench.js/issues"
   },
