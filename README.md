@@ -13,6 +13,18 @@ This library is primarily used in the Spectral Workbench application, running at
 
 ## Installation
 
+
+### In Node.js
+
+To install spectral-workbench, run:
+
+    npm install spectral-workbench
+
+
+### In a browser
+
+To begin using spectral-workbench.js on a webpage, you'll need to include jQuery, and to use any HTML-based features (such as UI or graphing), you'll need to include its dependencies.
+
 First, run:
 
     npm install
@@ -21,11 +33,7 @@ then:
 
     bower install
 
-
-## Usage on a webpage
-
-To begin using spectral-workbench.js on a webpage, you'll need to include jQuery, and to use any HTML-based features (such as UI or graphing), you'll need to include: 
-
+Your page should include:
 
 ````html
 <script src="node_modules/jquery/dist/jquery.min.js"></script>
@@ -61,6 +69,11 @@ jQuery(document).ready(function($) {
 
 ````
 
+****
+
+## Usage
+
+
 ### Inputting data
 
 We currently use a legacy data format we'd like to simplify, but for now, you can create a Spectrum object from data in the following format:
@@ -82,6 +95,37 @@ var spectrum = new SpectralWorkbench.Spectrum(data);
 ````
 
 For a working example, see: https://publiclab.github.io/spectral-workbench.js/examples/
+
+
+### In Node.js
+
+To write a script in Node.js, you could create and run a file like this:
+
+````js
+
+#!/usr/bin/env node
+
+var SpectralWorkbench = require('spectral-workbench').SpectralWorkbench;
+
+var data = {
+  "data": { 
+    "name": "Test spectrum",
+    "lines":[ // as many data points as you like may be entered here:
+      {"average":64.3333,"r":69,"g":46,"b":78,"wavelength":269.089},
+      {"average":63.3333,"r":71,"g":45,"b":74,"wavelength":277.718},
+      {"average":64,"r":71,"g":47,"b":74,"wavelength":291.524},
+      {"average":64,"r":68,"g":49,"b":75,"wavelength":303.604}
+    ]
+  }
+}
+
+var spectrum = new SpectralWorkbench.Spectrum(data);
+
+console.log(spectrum.getIntensity(282));
+
+````
+
+And run it with `node yourscript.js`
 
 
 ****
