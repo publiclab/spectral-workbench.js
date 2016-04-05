@@ -13,7 +13,7 @@ This library is primarily used in the Spectral Workbench application, running at
 
 ## Installation
 
-To begin using SpectralWorkbench.js, you'll need to include its dependencies: 
+To begin using spectral-workbench.js, you'll need to include its dependencies: 
 
 
 ````html
@@ -69,7 +69,7 @@ To run Jasmine tests, open `spec/javascripts/test.html` in a browser.
 
 ## Contributing
 
-We welcome community contributions to SpectralWorkbench.js! Learn more about contributing to Spectral Workbench or other Public Lab code projects on this page: http://publiclab.org/wiki/developers
+We welcome community contributions to spectral-workbench.js! Learn more about contributing to Spectral Workbench or other Public Lab code projects on this page: http://publiclab.org/wiki/developers
 
 
 ## Bug reports & troubleshooting
@@ -90,7 +90,7 @@ publiclab.org | spectralworkbench.org
 
 ## License
 
-Spectral Workbench is free software: you can redistribute it and/or modify
+spectral-workbench.js is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
