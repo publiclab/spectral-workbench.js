@@ -2,22 +2,23 @@
   "name": "spectral-workbench",
   "version": "0.0.1",
   "description": "Framework for spectrometric data management & analysis by Public Lab",
+  "main": "dist/spectral-workbench.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "grunt build"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/publiclab/SpectralWorkbench.js.git"
+    "url": "https://github.com/publiclab/spectral-workbench.js.git"
   },
   "keywords": [
-    "pixel",
-    "adventure",
-    "game"
+    "science",
+    "Public Lab",
+    "spectrometry"
   ],
   "author": "Jeff Warren",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/publiclab/SpectralWorkbench.js/issues"
+    "url": "https://github.com/publiclab/spectral-workbench.js/issues"
   },
   "homepage": "http://spectralworkbench.org",
   "dependencies": {
