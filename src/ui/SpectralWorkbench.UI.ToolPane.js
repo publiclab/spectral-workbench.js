@@ -9,7 +9,7 @@ SpectralWorkbench.UI.ToolPane = Class.extend({
     var form = _tool.form;
 
     _tool.options = SpectralWorkbench.UI.ToolPaneTypes[toolType];
-    _tool.selector = selector || '.datum-tool-pane';
+    _tool.selector = selector || '.swb-datum-tool-pane';
 
     _tool.options.formData = _tool.options.formData || {};
     _tool.options.formData['not'] = _graph.datum.id;

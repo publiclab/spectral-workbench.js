@@ -14,7 +14,7 @@ SpectralWorkbench.UI.SpectraPane = SpectralWorkbench.UI.ToolPane.extend({
     // unhide the SpectraPane related stuff. 
     // We should just construct it here.
 
-    //$('.datum-tool-pane .search, .datum-tool-pane .results').show()
+    //$('.swb-datum-tool-pane .search, .swb-datum-tool-pane .results').show()
     form.searchEl.show();//        = form.el.find('form input.input-choose-spectrum');
     form.el.find('.search').show();//        = form.el.find('form input.input-choose-spectrum');
     form.el.find('.results').show();//        = form.el.find('form input.input-choose-spectrum');

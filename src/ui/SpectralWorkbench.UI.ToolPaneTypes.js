@@ -282,7 +282,7 @@ SpectralWorkbench.UI.ToolPaneTypes = {
 
       if (form.graph.datum.getPowerTag('linearCalibration').length > 0) {
 
-        $('.datum-tool-pane .description').append("<span style='color:#900'>You have already calibrated this spectrum. We recommend clearing your previous calibration before re-calibrating.</span>");
+        $('.swb-datum-tool-pane .description').append("<span style='color:#900'>You have already calibrated this spectrum. We recommend clearing your previous calibration before re-calibrating.</span>");
 
       }
 
@@ -317,7 +317,7 @@ SpectralWorkbench.UI.ToolPaneTypes = {
       pane += " <p style='color: rgba(255, 255, 255, 0.701961); text-align: right; margin-top: -19px; font-size: 10px; padding: 1px 4px;'>REFERENCE</p>";
       pane += "</div>";
 
-      $('.spectrum-img-container').prepend('<div class="calibration-pane"></div>');
+      $('.swb-spectrum-img-container').prepend('<div class="calibration-pane"></div>');
       $('.calibration-pane').html(pane);
 
       $('.calibration-pane .slider').css('margin-top', -24);

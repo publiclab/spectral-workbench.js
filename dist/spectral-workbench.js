@@ -1544,17 +1544,17 @@ SpectralWorkbench.Tag = Class.extend({
 
     _tag.startSpinner = function() {
 
-      $('#tag-form-' + _tag.datum.id + ' .add-on i').removeClass('fa-tag')
-                                                    .addClass('fa-spin')
-                                                    .addClass('fa-spinner');
+      $('#swb-tag-form-' + _tag.datum.id + ' .add-on i').removeClass('fa-tag')
+                                                        .addClass('fa-spin')
+                                                        .addClass('fa-spinner');
 
     }
 
     _tag.stopSpinner = function() {
 
-      $('#tag-form-' + _tag.datum.id + ' .add-on i').addClass('fa-tag')
-                                                    .removeClass('fa-spin')
-                                                    .removeClass('fa-spinner');
+      $('#swb-tag-form-' + _tag.datum.id + ' .add-on i').addClass('fa-tag')
+                                                        .removeClass('fa-spin')
+                                                        .removeClass('fa-spinner');
 
     }
 
@@ -1713,7 +1713,7 @@ SpectralWorkbench.Tag = Class.extend({
     // actually insert DOM elements into the page
     _tag.render = function() {
 
-      var container = $('#tags span.list');
+      var container = $('.swb-tags span.list');
  
       _tag.el = $("<span id='tag_" + _tag.id + "'></span>");
 
@@ -4069,7 +4069,7 @@ SpectralWorkbench.UI.ToolPaneTypes = {
 
       if (form.graph.datum.getPowerTag('linearCalibration').length > 0) {
 
-        $('.datum-tool-pane .description').append("<span style='color:#900'>You have already calibrated this spectrum. We recommend clearing your previous calibration before re-calibrating.</span>");
+        $('.swb-datum-tool-pane .description').append("<span style='color:#900'>You have already calibrated this spectrum. We recommend clearing your previous calibration before re-calibrating.</span>");
 
       }
 
@@ -4104,7 +4104,7 @@ SpectralWorkbench.UI.ToolPaneTypes = {
       pane += " <p style='color: rgba(255, 255, 255, 0.701961); text-align: right; margin-top: -19px; font-size: 10px; padding: 1px 4px;'>REFERENCE</p>";
       pane += "</div>";
 
-      $('.spectrum-img-container').prepend('<div class="calibration-pane"></div>');
+      $('.swb-spectrum-img-container').prepend('<div class="calibration-pane"></div>');
       $('.calibration-pane').html(pane);
 
       $('.calibration-pane .slider').css('margin-top', -24);
@@ -4501,7 +4501,7 @@ SpectralWorkbench.UI.ToolPane = Class.extend({
     var form = _tool.form;
 
     _tool.options = SpectralWorkbench.UI.ToolPaneTypes[toolType];
-    _tool.selector = selector || '.datum-tool-pane';
+    _tool.selector = selector || '.swb-datum-tool-pane';
 
     _tool.options.formData = _tool.options.formData || {};
     _tool.options.formData['not'] = _graph.datum.id;
@@ -4597,7 +4597,7 @@ SpectralWorkbench.UI.SpectraPane = SpectralWorkbench.UI.ToolPane.extend({
     // unhide the SpectraPane related stuff. 
     // We should just construct it here.
 
-    //$('.datum-tool-pane .search, .datum-tool-pane .results').show()
+    //$('.swb-datum-tool-pane .search, .swb-datum-tool-pane .results').show()
     form.searchEl.show();//        = form.el.find('form input.input-choose-spectrum');
     form.el.find('.search').show();//        = form.el.find('form input.input-choose-spectrum');
     form.el.find('.results').show();//        = form.el.find('form input.input-choose-spectrum');
@@ -4711,7 +4711,7 @@ SpectralWorkbench.UI.TagForm = Class.extend({
 
     var tagForm = this;
 
-    tagForm.selector = "#tag-form-" + _graph.datum.id;
+    tagForm.selector = "#swb-tag-form-" + _graph.datum.id;
     tagForm.el = $(tagForm.selector);
     tagForm.input = tagForm.el.find('input.name');
 
@@ -4738,7 +4738,7 @@ SpectralWorkbench.UI.TagForm = Class.extend({
     tagForm.el.bind('ajax:beforeSend', function(){
 
       tagForm.input.prop('disabled',true)
-      $('#tags .loading').remove();
+      $('.swb-tags .loading').remove();
 
     });
 
@@ -4751,7 +4751,7 @@ SpectralWorkbench.UI.TagForm = Class.extend({
 
     tagForm.error = function(msg) {
 
-      $('#taginput').prop('disabled',false);
+      $('.swb-tag-input').prop('disabled',false);
       
       tagForm.el.find('input.name').val("");
       tagForm.clearError();
@@ -4843,7 +4843,7 @@ SpectralWorkbench.UI.LegacyAddTag = function(spectrum_id, names, callback) {
           // we use CSS classnames to identify tag types
           if (key.match(/[a-zA-Z-]+:[a-zA-Z0-9-]+/)) color = " purple";
  
-          $('#tags').append(" <span id='tag_"+tag.id+"' rel='tooltip' title='This is a powertag.' class='label label-info" + color + "'><a href='/tags/"+key+"'>"+key+"</a> <a class='tagdelete' data-method='delete' href='/tags/"+tag.id+"'>x</a></span> ");
+          $('.swb-tags').append(" <span id='tag_"+tag.id+"' rel='tooltip' title='This is a powertag.' class='label label-info" + color + "'><a href='/tags/"+key+"'>"+key+"</a> <a class='tagdelete' data-method='delete' href='/tags/"+tag.id+"'>x</a></span> ");
 
           // deletion listener
           $('#tag_'+tag.id).bind('ajax:success', function(e, tagid){
@@ -4933,7 +4933,7 @@ SpectralWorkbench.Graph = Class.extend({
     this.el = $(this.selector);
 
     // this could be moved into the graph.image Image object:
-    this.imgSelector = this.args.imageSelector || 'div.spectrum-img-container';
+    this.imgSelector = this.args.imageSelector || 'div.swb-spectrum-img-container';
     this.imgContainer = $(this.imgSelector);
     this.imgEl = this.imgContainer.find('img');
 

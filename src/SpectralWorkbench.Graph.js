@@ -21,7 +21,7 @@ SpectralWorkbench.Graph = Class.extend({
     this.el = $(this.selector);
 
     // this could be moved into the graph.image Image object:
-    this.imgSelector = this.args.imageSelector || 'div.spectrum-img-container';
+    this.imgSelector = this.args.imageSelector || 'div.swb-spectrum-img-container';
     this.imgContainer = $(this.imgSelector);
     this.imgEl = this.imgContainer.find('img');
 

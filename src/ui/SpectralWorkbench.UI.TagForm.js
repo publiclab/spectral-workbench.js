@@ -4,7 +4,7 @@ SpectralWorkbench.UI.TagForm = Class.extend({
 
     var tagForm = this;
 
-    tagForm.selector = "#tag-form-" + _graph.datum.id;
+    tagForm.selector = "#swb-tag-form-" + _graph.datum.id;
     tagForm.el = $(tagForm.selector);
     tagForm.input = tagForm.el.find('input.name');
 
@@ -31,7 +31,7 @@ SpectralWorkbench.UI.TagForm = Class.extend({
     tagForm.el.bind('ajax:beforeSend', function(){
 
       tagForm.input.prop('disabled',true)
-      $('#tags .loading').remove();
+      $('.swb-tags .loading').remove();
 
     });
 
@@ -44,7 +44,7 @@ SpectralWorkbench.UI.TagForm = Class.extend({
 
     tagForm.error = function(msg) {
 
-      $('#taginput').prop('disabled',false);
+      $('.swb-tag-input').prop('disabled',false);
       
       tagForm.el.find('input.name').val("");
       tagForm.clearError();
@@ -136,7 +136,7 @@ SpectralWorkbench.UI.LegacyAddTag = function(spectrum_id, names, callback) {
           // we use CSS classnames to identify tag types
           if (key.match(/[a-zA-Z-]+:[a-zA-Z0-9-]+/)) color = " purple";
  
-          $('#tags').append(" <span id='tag_"+tag.id+"' rel='tooltip' title='This is a powertag.' class='label label-info" + color + "'><a href='/tags/"+key+"'>"+key+"</a> <a class='tagdelete' data-method='delete' href='/tags/"+tag.id+"'>x</a></span> ");
+          $('.swb-tags').append(" <span id='tag_"+tag.id+"' rel='tooltip' title='This is a powertag.' class='label label-info" + color + "'><a href='/tags/"+key+"'>"+key+"</a> <a class='tagdelete' data-method='delete' href='/tags/"+tag.id+"'>x</a></span> ");
 
           // deletion listener
           $('#tag_'+tag.id).bind('ajax:success', function(e, tagid){

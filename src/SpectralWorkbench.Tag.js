@@ -29,17 +29,17 @@ SpectralWorkbench.Tag = Class.extend({
 
     _tag.startSpinner = function() {
 
-      $('#tag-form-' + _tag.datum.id + ' .add-on i').removeClass('fa-tag')
-                                                    .addClass('fa-spin')
-                                                    .addClass('fa-spinner');
+      $('#swb-tag-form-' + _tag.datum.id + ' .add-on i').removeClass('fa-tag')
+                                                        .addClass('fa-spin')
+                                                        .addClass('fa-spinner');
 
     }
 
     _tag.stopSpinner = function() {
 
-      $('#tag-form-' + _tag.datum.id + ' .add-on i').addClass('fa-tag')
-                                                    .removeClass('fa-spin')
-                                                    .removeClass('fa-spinner');
+      $('#swb-tag-form-' + _tag.datum.id + ' .add-on i').addClass('fa-tag')
+                                                        .removeClass('fa-spin')
+                                                        .removeClass('fa-spinner');
 
     }
 
@@ -198,7 +198,7 @@ SpectralWorkbench.Tag = Class.extend({
     // actually insert DOM elements into the page
     _tag.render = function() {
 
-      var container = $('#tags span.list');
+      var container = $('.swb-tags span.list');
  
       _tag.el = $("<span id='tag_" + _tag.id + "'></span>");
 
