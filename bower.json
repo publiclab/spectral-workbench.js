@@ -1,6 +1,6 @@
 {
   "name": "spectral-workbench",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "dependencies": {
     "fontawesome":     "~4.5.0",
     "bootstrap-css":   "~2.3.2",

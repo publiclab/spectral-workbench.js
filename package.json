@@ -1,6 +1,6 @@
 {
   "name": "spectral-workbench",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Framework for spectrometric data management & analysis by Public Lab",
   "main": "dist/spectral-workbench.js",
   "scripts": {
@@ -16,7 +16,7 @@
     "spectrometry"
   ],
   "author": "Jeff Warren",
-  "license": "GPLv3",
+  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/publiclab/spectral-workbench.js/issues"
   },
