@@ -4956,10 +4956,9 @@ SpectralWorkbench.Graph = Class.extend({
 
     this.updateSize()();
  
-    this.svg = d3.select(_graph.selector).append("svg")
-                                         .attr("width",  this.width  + this.margin.left + this.margin.right)
-                                         .attr("height", this.height + this.margin.top  + this.margin.bottom);
-
+    this.svg = d3.select(this.selector).append("svg")
+                                       .attr("width",  this.width  + this.margin.left + this.margin.right)
+                                       .attr("height", this.height + this.margin.top  + this.margin.bottom);
 
     /* ======================================
      * Refresh datum into DOM in d3 syntax
@@ -5138,8 +5137,8 @@ SpectralWorkbench.Graph = Class.extend({
 
       /* Enter data into the graph */
       _graph.data = d3.select('#graph svg')  //Select the <svg> element you want to render the chart in.   
-          .datum(datum.d3)   //Populate the <svg> element with chart data
-          .call(_graph.chart)         //Finally, render the chart!
+                      .datum(datum.d3)   //Populate the <svg> element with chart data
+                      .call(_graph.chart)         //Finally, render the chart!
 
       // create DOM <id> attributes for our lines:
 
@@ -5335,7 +5334,7 @@ SpectralWorkbench.Graph = Class.extend({
 
     _graph.chart = nv.models.lineWithFocusChart() // this sets up zooming behavior
                      .options({ useVoronoi: false })
-                     .height(_graph.height - _graph.margin.top - _graph.margin.bottom + 100) // 100 for zoom brush pane, hidden by default
+                     .height(_graph.height - _graph.margin.top - _graph.margin.bottom + 50) // 100 for zoom brush pane, hidden by default
                      .margin(_graph.margin)
                      .showLegend(false)       //Show the legend, allowing users to turn on/off line series.
     ;
