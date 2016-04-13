@@ -64,6 +64,15 @@ describe("Spectrum", function() {
 
   });
 
+  it("does not require a Graph to use Spectrum/Datum tags", function() {
+
+    var spectrum2 = new SpectralWorkbench.Spectrum(data)
+    var tag = spectrum2.addAndParseTag('smooth:3');
+
+    expect(tag).toBeDefined();
+
+  });
+
   it("getIntensity() returns closest intensity for a given wavelength from available wavelength/intensity pairs", function() {
 
     expect(spectrum.getIntensity(400, 'average')).toBeDefined();
