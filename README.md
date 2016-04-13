@@ -76,7 +76,27 @@ jQuery(document).ready(function($) {
 
 ### Inputting data
 
-We currently use a legacy data format we'd like to simplify, but for now, you can create a Spectrum object from data in the following format:
+You can pass a nested array of `[wavelength, intensity]` data to the Spectrum constructor like this:
+
+````js
+
+var data = [
+  [400, 24],
+  [410, 44],
+  [420, 42],
+  [430, 45],
+  [440, 20]
+];
+
+var spectrum = new SpectralWorkbench.Spectrum(data);
+
+````
+
+This assumes monochrome input, although if you're using a [Public Lab webcam-based spectrometer](https://publiclab.org/wiki/spectrometer), you'll be dealing with RGB data. 
+
+For a working example of an array-based spectrum see: https://publiclab.github.io/spectral-workbench.js/examples/array.html
+
+Most tests continue to use a legacy data format (that used by the SpectralWorkbench.org service) which we'd like to simplify, but for now, you can create a Spectrum object from JSON data in the following format, that does accept RGB pixel data:
 
 ````js
 

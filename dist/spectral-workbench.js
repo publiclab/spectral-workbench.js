@@ -737,15 +737,66 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
   channels: ["average", "red", "green", "blue"],
 
   /* ======================================
-   * <data> is a JSON object as it arrives from the server
+   * <data> is a JSON object as it arrives from the server at SpectralWorkbench.org
    */
   init: function(data, _graph) {
 
+    // _super is Datum; this stashes <data> in this.json
     this._super(data, _graph);
 
     var _spectrum = this;
 
    _spectrum.load = function() {
+
+     if (_spectrum.args instanceof Array) _spectrum.decodeArray(_spectrum.args);
+     else if (_spectrum.json && (_spectrum.json.lines || _spectrum.json.data.lines)) _spectrum.decodeJSON(_spectrum.json); // snapshot or spectrum format
+
+    }
+
+    /* ======================================
+     * Decodes and saves a [wavelength, intensity] array of 
+     * data into spectrum.average/red/green/blue
+     * UNTESTED IN JASMINE
+     */
+    _spectrum.decodeArray = function(array) {
+
+      _spectrum.average = [];
+      _spectrum.red     = [];
+      _spectrum.green   = [];
+      _spectrum.blue    = [];
+
+      // Set up x and y properties like data.x and data.y for d3
+      array.forEach(function(line, i) {
+     
+        var x = line[0];
+
+        // Only actually add it if it's in specified wavelength range ([start, end]), if any;
+        // or, if there's no graph at all, add it. Perhaps range should be stored in spectrum?
+        // But we need range in the graph to calculate viewport sizes.
+        // Tortured:
+        if (!_spectrum.graph || (!_spectrum.graph.range || (x >= _spectrum.graph.range[0] && x <= _spectrum.graph.range[1]))) {
+
+          _spectrum.average.push({ y: parseInt(line[1] / 2.55)/100, x: x })
+          _spectrum.red.push(    { y: parseInt(line[1] / 2.55)/100, x: x })
+          _spectrum.green.push(  { y: parseInt(line[1] / 2.55)/100, x: x })
+          _spectrum.blue.push(   { y: parseInt(line[1] / 2.55)/100, x: x })
+
+        }
+
+      });
+
+      _spectrum.json.data = { 'lines': [] };
+      _spectrum.json.data.lines = _spectrum.encodeJSON();
+
+    }
+
+
+    /* ======================================
+     * Decodes and saves a SpectralWorkbench.org-style JSON object of 
+     * data into spectrum.average/red/green/blue
+     * UNTESTED IN JASMINE
+     */
+    _spectrum.decodeJSON = function(json) {
 
       _spectrum.average = [];
       _spectrum.red     = [];
@@ -753,10 +804,10 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
       _spectrum.blue    = [];
 
       // Rearrange in case we got a Snapshot response (which is more minimal) instead of a Spectrum response
-      if (_spectrum.json.lines) _spectrum.json.data = { 'lines': _spectrum.json.lines };
+      if (json.lines) _spectrum.json.data = { 'lines': json.lines };
 
       // Set up x and y properties like data.x and data.y for d3
-      _spectrum.json.data.lines.forEach(function(line, i) {
+      json.data.lines.forEach(function(line, i) {
      
         if (line.wavelength == null) var x = line.pixel; // change graph labels
         else                         var x = line.wavelength;
@@ -781,7 +832,7 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
 
     /* ======================================
-     * Prepares a server-ready formatted JSON string of 
+     * Prepares a server-ready formatted JSON object of 
      * currently displayed data based on spectrum.average/red/green/blue
      * UNTESTED IN JASMINE
      */
