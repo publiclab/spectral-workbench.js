@@ -53,12 +53,14 @@
           ]
         }
       }
-  
-      var spectrum = new SpectralWorkbench.Spectrum(data);
 
       graph = new SpectralWorkbench.Graph({});
+  
+      var spectrum = new SpectralWorkbench.Spectrum(data, graph); // graph is optional but needed if you want changes to spectrum to display
 
       graph.load(spectrum);
+
+      graph.datum.addAndParseTag('smooth:3')
 
     });
 

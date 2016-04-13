@@ -92,7 +92,7 @@ var spectrum = new SpectralWorkbench.Spectrum(data);
 
 ````
 
-This assumes monochrome input, although if you're using a [Public Lab webcam-based spectrometer](https://publiclab.org/wiki/spectrometer), you'll be dealing with RGB data. 
+This assumes monochrome input with units `[nanometers, 0-255]`, although if you're using a [Public Lab webcam-based spectrometer](https://publiclab.org/wiki/spectrometer), you'll be dealing with RGB data. 
 
 For a working example of an array-based spectrum see: https://publiclab.github.io/spectral-workbench.js/examples/array.html
 
@@ -146,6 +146,29 @@ console.log(spectrum.getIntensity(282));
 ````
 
 And run it with `node yourscript.js`
+
+
+### Manipulating spectrum data
+
+Once you've initialized a Spectrum, you can add Operations to it using the following syntax:
+
+````js
+
+var spectrum = new SpectralWorkbench.Spectrum(data);
+
+spectrum.addAndParseTag('smooth:3');
+
+````
+
+Operations are a type of tag that are passed as strings in `operation:value` format, and there are a variety of operations available, including:
+
+* `smooth`
+* `subtract`
+* `transform`
+* `crossSection` (requires an image)
+* plus several more
+
+Read more at https://publiclab.org/wiki/spectral-workbench-operations
 
 
 ****

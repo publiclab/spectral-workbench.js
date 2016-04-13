@@ -419,7 +419,7 @@ SpectralWorkbench.Datum = Class.extend({
 
           if (callback) callback(tag);
 
-          _datum.graph.reload_and_refresh();
+          if (_datum.graph) _datum.graph.reload_and_refresh();
 
         });
 
@@ -449,8 +449,8 @@ SpectralWorkbench.Datum = Class.extend({
  
               if (callback) callback(tag);
  
-              if (tag.passive) _datum.graph.undim();
-              else _datum.graph.reload_and_refresh();
+              if (tag.passive && _datum.graph) _datum.graph.undim();
+              else if (_datum.graph) _datum.graph.reload_and_refresh();
  
             });
  
@@ -493,8 +493,8 @@ SpectralWorkbench.Datum = Class.extend({
   
                 if (callback) callback(tag);
   
-                if (tag.passive) _datum.graph.undim();
-                else _datum.graph.reload_and_refresh();
+                if (tag.passive && _datum.graph) _datum.graph.undim();
+                else if (_datum.graph) _datum.graph.reload_and_refresh();
   
               });
 
@@ -643,7 +643,7 @@ SpectralWorkbench.Datum = Class.extend({
       // don't split here; specialize via inheritance
       if (_datum instanceof SpectralWorkbench.Spectrum) {
 
-        _datum.graph.dim();
+        if (_datum.graph) _datum.graph.dim();
 
         console.log("fetching tags for spectrum", _datum.id);
 
@@ -673,7 +673,7 @@ SpectralWorkbench.Datum = Class.extend({
               // Check the URL hash for directives, such
               // as `calibrate:foo` from the original page load;
               // these should clear out the first time they're checked.
-              _datum.graph.readHashDirectives();
+              if (_datum.graph) _datum.graph.readHashDirectives();
 
             });
 
@@ -709,7 +709,7 @@ SpectralWorkbench.Datum = Class.extend({
 
              if (index == _datum.powertags.length - 1) {
 
-               _datum.graph.reload_and_refresh();
+               if (_datum.graph) _datum.graph.reload_and_refresh();
                if (callback) callback();
 
              }
