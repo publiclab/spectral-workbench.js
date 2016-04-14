@@ -419,7 +419,7 @@ SpectralWorkbench.Datum = Class.extend({
 
           if (callback) callback(tag);
 
-          _datum.graph.reload_and_refresh();
+          if (_datum.graph) _datum.graph.reload_and_refresh();
 
         });
 
@@ -449,8 +449,8 @@ SpectralWorkbench.Datum = Class.extend({
  
               if (callback) callback(tag);
  
-              if (tag.passive) _datum.graph.undim();
-              else _datum.graph.reload_and_refresh();
+              if (tag.passive && _datum.graph) _datum.graph.undim();
+              else if (_datum.graph) _datum.graph.reload_and_refresh();
  
             });
  
@@ -493,8 +493,8 @@ SpectralWorkbench.Datum = Class.extend({
   
                 if (callback) callback(tag);
   
-                if (tag.passive) _datum.graph.undim();
-                else _datum.graph.reload_and_refresh();
+                if (tag.passive && _datum.graph) _datum.graph.undim();
+                else if (_datum.graph) _datum.graph.reload_and_refresh();
   
               });
 
@@ -643,7 +643,7 @@ SpectralWorkbench.Datum = Class.extend({
       // don't split here; specialize via inheritance
       if (_datum instanceof SpectralWorkbench.Spectrum) {
 
-        _datum.graph.dim();
+        if (_datum.graph) _datum.graph.dim();
 
         console.log("fetching tags for spectrum", _datum.id);
 
@@ -673,7 +673,7 @@ SpectralWorkbench.Datum = Class.extend({
               // Check the URL hash for directives, such
               // as `calibrate:foo` from the original page load;
               // these should clear out the first time they're checked.
-              _datum.graph.readHashDirectives();
+              if (_datum.graph) _datum.graph.readHashDirectives();
 
             });
 
@@ -709,7 +709,7 @@ SpectralWorkbench.Datum = Class.extend({
 
              if (index == _datum.powertags.length - 1) {
 
-               _datum.graph.reload_and_refresh();
+               if (_datum.graph) _datum.graph.reload_and_refresh();
                if (callback) callback();
 
              }
@@ -737,15 +737,66 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
   channels: ["average", "red", "green", "blue"],
 
   /* ======================================
-   * <data> is a JSON object as it arrives from the server
+   * <data> is a JSON object as it arrives from the server at SpectralWorkbench.org
    */
   init: function(data, _graph) {
 
+    // _super is Datum; this stashes <data> in this.json
     this._super(data, _graph);
 
     var _spectrum = this;
 
    _spectrum.load = function() {
+
+     if (_spectrum.args instanceof Array) _spectrum.decodeArray(_spectrum.args);
+     else if (_spectrum.json && (_spectrum.json.lines || _spectrum.json.data.lines)) _spectrum.decodeJSON(_spectrum.json); // snapshot or spectrum format
+
+    }
+
+    /* ======================================
+     * Decodes and saves a [wavelength, intensity] array of 
+     * data into spectrum.average/red/green/blue
+     * UNTESTED IN JASMINE
+     */
+    _spectrum.decodeArray = function(array) {
+
+      _spectrum.average = [];
+      _spectrum.red     = [];
+      _spectrum.green   = [];
+      _spectrum.blue    = [];
+
+      // Set up x and y properties like data.x and data.y for d3
+      array.forEach(function(line, i) {
+     
+        var x = line[0];
+
+        // Only actually add it if it's in specified wavelength range ([start, end]), if any;
+        // or, if there's no graph at all, add it. Perhaps range should be stored in spectrum?
+        // But we need range in the graph to calculate viewport sizes.
+        // Tortured:
+        if (!_spectrum.graph || (!_spectrum.graph.range || (x >= _spectrum.graph.range[0] && x <= _spectrum.graph.range[1]))) {
+
+          _spectrum.average.push({ y: parseInt(line[1] / 2.55)/100, x: x })
+          _spectrum.red.push(    { y: parseInt(line[1] / 2.55)/100, x: x })
+          _spectrum.green.push(  { y: parseInt(line[1] / 2.55)/100, x: x })
+          _spectrum.blue.push(   { y: parseInt(line[1] / 2.55)/100, x: x })
+
+        }
+
+      });
+
+      _spectrum.json.data = { 'lines': [] };
+      _spectrum.json.data.lines = _spectrum.encodeJSON();
+
+    }
+
+
+    /* ======================================
+     * Decodes and saves a SpectralWorkbench.org-style JSON object of 
+     * data into spectrum.average/red/green/blue
+     * UNTESTED IN JASMINE
+     */
+    _spectrum.decodeJSON = function(json) {
 
       _spectrum.average = [];
       _spectrum.red     = [];
@@ -753,10 +804,10 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
       _spectrum.blue    = [];
 
       // Rearrange in case we got a Snapshot response (which is more minimal) instead of a Spectrum response
-      if (_spectrum.json.lines) _spectrum.json.data = { 'lines': _spectrum.json.lines };
+      if (json.lines) _spectrum.json.data = { 'lines': json.lines };
 
       // Set up x and y properties like data.x and data.y for d3
-      _spectrum.json.data.lines.forEach(function(line, i) {
+      json.data.lines.forEach(function(line, i) {
      
         if (line.wavelength == null) var x = line.pixel; // change graph labels
         else                         var x = line.wavelength;
@@ -781,7 +832,7 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
 
     /* ======================================
-     * Prepares a server-ready formatted JSON string of 
+     * Prepares a server-ready formatted JSON object of 
      * currently displayed data based on spectrum.average/red/green/blue
      * UNTESTED IN JASMINE
      */
@@ -4956,10 +5007,9 @@ SpectralWorkbench.Graph = Class.extend({
 
     this.updateSize()();
  
-    this.svg = d3.select(_graph.selector).append("svg")
-                                         .attr("width",  this.width  + this.margin.left + this.margin.right)
-                                         .attr("height", this.height + this.margin.top  + this.margin.bottom);
-
+    this.svg = d3.select(this.selector).append("svg")
+                                       .attr("width",  this.width  + this.margin.left + this.margin.right)
+                                       .attr("height", this.height + this.margin.top  + this.margin.bottom);
 
     /* ======================================
      * Refresh datum into DOM in d3 syntax
@@ -5138,8 +5188,8 @@ SpectralWorkbench.Graph = Class.extend({
 
       /* Enter data into the graph */
       _graph.data = d3.select('#graph svg')  //Select the <svg> element you want to render the chart in.   
-          .datum(datum.d3)   //Populate the <svg> element with chart data
-          .call(_graph.chart)         //Finally, render the chart!
+                      .datum(datum.d3)   //Populate the <svg> element with chart data
+                      .call(_graph.chart)         //Finally, render the chart!
 
       // create DOM <id> attributes for our lines:
 
@@ -5335,7 +5385,7 @@ SpectralWorkbench.Graph = Class.extend({
 
     _graph.chart = nv.models.lineWithFocusChart() // this sets up zooming behavior
                      .options({ useVoronoi: false })
-                     .height(_graph.height - _graph.margin.top - _graph.margin.bottom + 100) // 100 for zoom brush pane, hidden by default
+                     .height(_graph.height - _graph.margin.top - _graph.margin.bottom + 50) // 100 for zoom brush pane, hidden by default
                      .margin(_graph.margin)
                      .showLegend(false)       //Show the legend, allowing users to turn on/off line series.
     ;

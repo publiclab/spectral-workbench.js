@@ -10,7 +10,7 @@ describe("Spectrum", function() {
 
   var spectrum = new SpectralWorkbench.Spectrum(data)
 
-  it("is not undefined when initialized with spectrum data", function() {
+  it("is not undefined when initialized with spectrum json", function() {
 
     expect(spectrum).toBeDefined();
 
@@ -33,6 +33,43 @@ describe("Spectrum", function() {
 
     expect(spectrum.blue).toBeDefined();
     expect(spectrum.blue.length).toBe(spectrum.json.data.lines.length);
+
+  });
+
+  it("succeeds in basic initialization with spectrum [wavelength, intensity] array data", function() {
+
+    var array = [
+      [400, 24],
+      [410, 44],
+      [420, 42],
+      [430, 45],
+      [440, 20]
+    ];
+    var arraySpectrum = new SpectralWorkbench.Spectrum(array)
+
+    expect(arraySpectrum).toBeDefined();
+
+    expect(arraySpectrum.average).toBeDefined();
+    expect(arraySpectrum.average.length).toBe(array.length);
+    expect(arraySpectrum.average.length).not.toBe(7);
+
+    expect(arraySpectrum.red).toBeDefined();
+    expect(arraySpectrum.red.length).toBe(array.length);
+
+    expect(arraySpectrum.green).toBeDefined();
+    expect(arraySpectrum.green.length).toBe(array.length);
+
+    expect(arraySpectrum.blue).toBeDefined();
+    expect(arraySpectrum.blue.length).toBe(array.length);
+
+  });
+
+  it("does not require a Graph to use Spectrum/Datum tags", function() {
+
+    var spectrum2 = new SpectralWorkbench.Spectrum(data)
+    var tag = spectrum2.addAndParseTag('smooth:3');
+
+    expect(tag).toBeDefined();
 
   });
 

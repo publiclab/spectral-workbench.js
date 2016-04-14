@@ -1,6 +1,7 @@
 {
   "name": "spectral-workbench",
-  "version": "0.0.1",
+  "version": "0.0.7",
+  "main": "dist/spectral-workbench.js",
   "dependencies": {
     "fontawesome":     "~4.5.0",
     "bootstrap-css":   "~2.3.2",
@@ -8,5 +9,13 @@
     "moment":          "~2.10.6",
     "nvd3":            "~1.8.2",
     "d3":              "~3.4.4"
-  }
+  },
+  "ignore": [
+    "examples",
+    "spec",
+    "test.html",
+    "ISSUE_TEMPLATE.md",
+    "PULL_REQUEST_TEMPLATE.md",
+    "package.json"
+  ]
 }

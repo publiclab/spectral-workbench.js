@@ -12,6 +12,7 @@
 
   <script src="../dist/spectral-workbench.js" type="text/javascript"></script>
   <link href="../bower_components/nvd3/build/nv.d3.css" rel="stylesheet">
+  <link href="../dist/spectral-workbench.css" rel="stylesheet">
 
 </head>
 <body>
@@ -52,12 +53,14 @@
           ]
         }
       }
-  
-      var spectrum = new SpectralWorkbench.Spectrum(data);
 
       graph = new SpectralWorkbench.Graph({});
+  
+      var spectrum = new SpectralWorkbench.Spectrum(data, graph); // graph is optional but needed if you want changes to spectrum to display
 
       graph.load(spectrum);
+
+      graph.datum.addAndParseTag('smooth:3')
 
     });
 

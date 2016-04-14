@@ -22,7 +22,7 @@
 
 /* zoom brushing */
 .swb-graphing #graph .nv-context {
-  display: none;
+  display: none !important;
 }
 
 .swb-graphing .zoom {
