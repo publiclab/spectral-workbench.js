@@ -36,6 +36,33 @@ describe("Spectrum", function() {
 
   });
 
+  it("succeeds in basic initialization with CSV data", function() {
+
+    var string = "400,24\n410,44\n420,42\n430,45\n440,20";
+
+    var csvSpectrum = new SpectralWorkbench.Spectrum(string)
+
+    expect(csvSpectrum).toBeDefined();
+
+    expect(csvSpectrum.average).toBeDefined();
+    expect(csvSpectrum.average.length).toBe(5);
+    expect(csvSpectrum.average.length).not.toBe(7);
+
+    expect(csvSpectrum.red).toBeDefined();
+    expect(csvSpectrum.red.length).toBe(5);
+
+    expect(csvSpectrum.green).toBeDefined();
+    expect(csvSpectrum.green.length).toBe(5);
+
+    expect(csvSpectrum.blue).toBeDefined();
+    expect(csvSpectrum.blue.length).toBe(5);
+
+    var intensity = csvSpectrum.getIntensity(415, 'average');
+    expect(typeof intensity).toBe('number');
+    expect(intensity).toBeGreaterThan(0);
+
+  });
+
   it("succeeds in basic initialization with spectrum [wavelength, intensity] array data", function() {
 
     var array = [
@@ -62,6 +89,10 @@ describe("Spectrum", function() {
     expect(arraySpectrum.blue).toBeDefined();
     expect(arraySpectrum.blue.length).toBe(array.length);
 
+    var intensity = arraySpectrum.getIntensity(415, 'average');
+    expect(typeof intensity).toBe('number');
+    expect(intensity).toBeGreaterThan(0);
+
   });
 
   it("does not require a Graph to use Spectrum/Datum tags", function() {
@@ -81,6 +112,23 @@ describe("Spectrum", function() {
 
     expect(spectrum.getIntensity(270, 'average')).toBe(parseInt(64.3333/2.55)/100);
     expect(spectrum.getIntensity(958, 'average')).toBe(parseInt(31/2.55)/100);
+
+    /* 
+
+    // need to change this function to interpolate rather than return nearest; also change:
+      // it("succeeds in basic initialization with spectrum [wavelength, intensity] array data", function() {
+      // it("succeeds in basic initialization with CSV data", function() {
+
+    var intensity = spectrum.getIntensity(500.5, 'average');
+    expect(typeof intensity).toBe('number');
+    expect(intensity).toBeGreaterThan(0);
+    expect(intensity).toBeGreaterThan(spectrum.getIntensity(500, 'average'));
+    expect(intensity).toBeLessThan(   spectrum.getIntensity(501, 'average'));
+    expect(intensity).toEqual( ( 
+      spectrum.getIntensity(500, 'average') + 
+      spectrum.getIntensity(500, 'average')
+    ) / 2); // average
+    */
 
   });
 

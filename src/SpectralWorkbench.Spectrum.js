@@ -17,6 +17,7 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
    _spectrum.load = function() {
 
      if (_spectrum.args instanceof Array) _spectrum.decodeArray(_spectrum.args);
+     else if (typeof _spectrum.args == 'string') _spectrum.decodeCSV(_spectrum.args);
      else if (_spectrum.json && (_spectrum.json.lines || _spectrum.json.data.lines)) _spectrum.decodeJSON(_spectrum.json); // snapshot or spectrum format
 
     }
@@ -24,7 +25,22 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
     /* ======================================
      * Decodes and saves a [wavelength, intensity] array of 
      * data into spectrum.average/red/green/blue
-     * UNTESTED IN JASMINE
+     */
+    _spectrum.decodeCSV = function(string) {
+
+        var points = string.split('\n');
+
+        points.forEach(function(point, i) { 
+          points[i] = [ +point.split(',')[0], +point.split(',')[1] ];
+        });
+
+        _spectrum.decodeArray(points);
+
+    }
+
+    /* ======================================
+     * Decodes and saves a [wavelength, intensity] array of 
+     * data into spectrum.average/red/green/blue
      */
     _spectrum.decodeArray = function(array) {
 
@@ -53,6 +69,7 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
       });
 
+      _spectrum.json = {};
       _spectrum.json.data = { 'lines': [] };
       _spectrum.json.data.lines = _spectrum.encodeJSON();
 

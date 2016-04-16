@@ -51,7 +51,7 @@ SpectralWorkbench.Tag = Class.extend({
       _tag.startSpinner();
 
       // grey out graph during load
-      _tag.datum.graph.dim();
+      if (_tag.datum.graph) _tag.datum.graph.dim();
 
       var name = _tag.name;
 
@@ -90,14 +90,18 @@ SpectralWorkbench.Tag = Class.extend({
     // used on failed tag upload
     _tag.notify_and_offer_clear = function() {
 
-      var notice = _tag.datum.graph.UI.notify("The tag you've applied couldn't be saved, but it's been run locally. <a class='tag-clear-" + _tag.id + "'>Clear it now</a>.");
+      if (_tag.datum.graph) {
 
-      $('.tag-clear-' + _tag.id).click(function() {
+        var notice = _tag.datum.graph.UI.notify("The tag you've applied couldn't be saved, but it's been run locally. <a class='tag-clear-" + _tag.id + "'>Clear it now</a>.");
+       
+        $('.tag-clear-' + _tag.id).click(function() {
+       
+          _tag.destroy();
+          notice.remove();
+       
+        });
 
-        _tag.destroy();
-        notice.remove();
-
-      });
+      }
 
     }
 
@@ -105,10 +109,10 @@ SpectralWorkbench.Tag = Class.extend({
     _tag.uploadSuccess = function(response, callback) {
 
       _tag.stopSpinner();
-      _tag.datum.graph.tagForm.clearError();
+      if (_tag.datum.graph) _tag.datum.graph.tagForm.clearError();
 
       // remove grey out of graph after load
-      _tag.datum.graph.undim();
+      if (_tag.datum.graph) _tag.datum.graph.undim();
 
       if (response['saved']) {
 
@@ -140,7 +144,7 @@ SpectralWorkbench.Tag = Class.extend({
 
       if (response['errors'] && response['errors'].length > 0) {
 
-        _tag.datum.graph.tagForm.error(response['errors']);
+        if (_tag.datum.graph) _tag.datum.graph.tagForm.error(response['errors']);
         _tag.notify_and_offer_clear();
         console.log(response.responseText);
 
@@ -151,7 +155,7 @@ SpectralWorkbench.Tag = Class.extend({
 
     _tag.uploadError = function(response) {
 
-      _tag.datum.graph.tagForm.error('There was an error.');
+      if (_tag.datum.graph) _tag.datum.graph.tagForm.error('There was an error.');
       _tag.notify_and_offer_clear();
       console.log(response.responseText);
 
@@ -182,7 +186,7 @@ SpectralWorkbench.Tag = Class.extend({
     // scrubs local tag data; for use after deletion
     _tag.cleanUp = function(callback) {
 
-        _tag.datum.graph.dim();
+        if (_tag.datum.graph) _tag.datum.graph.dim();
 
         // if it failed to initialize, the element may not exist
         if (_tag.el) _tag.el.remove();

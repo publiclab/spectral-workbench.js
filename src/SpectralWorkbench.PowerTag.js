@@ -209,7 +209,7 @@ SpectralWorkbench.PowerTag = SpectralWorkbench.Tag.extend({
      */
     _tag.cleanUp = function(callback) {
 
-        _tag.datum.graph.dim();
+        if (_tag.datum.graph) _tag.datum.graph.dim();
 
         // if it failed to initialize, the element may not exist
         if (_tag.el) _tag.el.remove();
@@ -225,7 +225,7 @@ SpectralWorkbench.PowerTag = SpectralWorkbench.Tag.extend({
         _tag.showLastOperationDeleteButtonOnly();
 
         // flush the graph range so the image gets resized:
-        _tag.datum.graph.range = false;
+        if (_tag.datum.graph) _tag.datum.graph.range = false;
 
         // re-fetch spectrum data, as it may have been overwritten by various tags:
         _tag.datum.fetch(false, function() {
@@ -563,7 +563,7 @@ SpectralWorkbench.PowerTag = SpectralWorkbench.Tag.extend({
           _tag.labelEl().html(_tag.name + "#" + _tag.reference_id);
           $('.snapshot i').popover('hide');
 
-          _tag.datum.graph.dim();
+          if (_tag.datum.graph) _tag.datum.graph.dim();
 
           // re-fetch spectrum data, re-parseTags
           _tag.datum.fetch(false, function() {
