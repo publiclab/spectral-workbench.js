@@ -96,6 +96,17 @@ This assumes monochrome input with units `[nanometers, 0-255]`, although if you'
 
 For a working example of an array-based spectrum see: https://publiclab.github.io/spectral-workbench.js/examples/array.html
 
+You can also use a string of comma-separated values (a CSV), where each line is `wavelength,intensity` (similarly to the array format above):
+
+````js
+
+// \n instead of linebreaks here: 
+var string = "400,24\n410,44\n420,42\n430,45\n440,20";
+
+var spectrum = new SpectralWorkbench.Spectrum(string);
+
+````
+
 Most tests continue to use a legacy data format (that used by the SpectralWorkbench.org service) which we'd like to simplify, but for now, you can create a Spectrum object from JSON data in the following format, that does accept RGB pixel data:
 
 ````js

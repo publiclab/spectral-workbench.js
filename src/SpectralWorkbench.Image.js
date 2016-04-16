@@ -25,7 +25,7 @@ SpectralWorkbench.Image = Class.extend({
       image.ctx.canvas.height = image.height;
       image.ctx.drawImage(image.imgObj, 0, 0, image.width, image.height);
 
-      if (_graph.args.hasOwnProperty('sample_row')) image.setLine(_graph.args.sample_row);
+      if (_graph && _graph.args.hasOwnProperty('sample_row')) image.setLine(_graph.args.sample_row);
 
       image.callback(); // since image loading is asynchronous
 
@@ -72,18 +72,22 @@ SpectralWorkbench.Image = Class.extend({
      */
     image.setupLine = function(y) {
 
-      image.imgEl.before($('<div class="section-line-container"><div class="section-line"></div></div>'));
-      image.lineContainerEl = _graph.imgContainer.find('.section-line-container');
-      image.lineContainerEl.css('position', 'relative');
-      image.lineEl = _graph.imgContainer.find('.section-line');
-      image.lineEl.css('position', 'absolute')
-                  .css('width', '100%')
-                  .css('top', 0)
-                  .css('border-bottom', '1px solid rgba(255,255,255,0.5)')
-                  .css('font-size', '9px')
-                  .css('color', 'rgba(255,255,255,0.5)')
-                  .css('text-align', 'right')
-                  .css('padding-right', '6px')
+      if (_graph) {
+
+        image.imgEl.before($('<div class="section-line-container"><div class="section-line"></div></div>'));
+        image.lineContainerEl = _graph.imgContainer.find('.section-line-container');
+        image.lineContainerEl.css('position', 'relative');
+        image.lineEl = _graph.imgContainer.find('.section-line');
+        image.lineEl.css('position', 'absolute')
+                    .css('width', '100%')
+                    .css('top', 0)
+                    .css('border-bottom', '1px solid rgba(255,255,255,0.5)')
+                    .css('font-size', '9px')
+                    .css('color', 'rgba(255,255,255,0.5)')
+                    .css('text-align', 'right')
+                    .css('padding-right', '6px')
+
+      }
 
     }
 

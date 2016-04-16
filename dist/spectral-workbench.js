@@ -164,7 +164,7 @@ SpectralWorkbench.Image = Class.extend({
       image.ctx.canvas.height = image.height;
       image.ctx.drawImage(image.imgObj, 0, 0, image.width, image.height);
 
-      if (_graph.args.hasOwnProperty('sample_row')) image.setLine(_graph.args.sample_row);
+      if (_graph && _graph.args.hasOwnProperty('sample_row')) image.setLine(_graph.args.sample_row);
 
       image.callback(); // since image loading is asynchronous
 
@@ -211,18 +211,22 @@ SpectralWorkbench.Image = Class.extend({
      */
     image.setupLine = function(y) {
 
-      image.imgEl.before($('<div class="section-line-container"><div class="section-line"></div></div>'));
-      image.lineContainerEl = _graph.imgContainer.find('.section-line-container');
-      image.lineContainerEl.css('position', 'relative');
-      image.lineEl = _graph.imgContainer.find('.section-line');
-      image.lineEl.css('position', 'absolute')
-                  .css('width', '100%')
-                  .css('top', 0)
-                  .css('border-bottom', '1px solid rgba(255,255,255,0.5)')
-                  .css('font-size', '9px')
-                  .css('color', 'rgba(255,255,255,0.5)')
-                  .css('text-align', 'right')
-                  .css('padding-right', '6px')
+      if (_graph) {
+
+        image.imgEl.before($('<div class="section-line-container"><div class="section-line"></div></div>'));
+        image.lineContainerEl = _graph.imgContainer.find('.section-line-container');
+        image.lineContainerEl.css('position', 'relative');
+        image.lineEl = _graph.imgContainer.find('.section-line');
+        image.lineEl.css('position', 'absolute')
+                    .css('width', '100%')
+                    .css('top', 0)
+                    .css('border-bottom', '1px solid rgba(255,255,255,0.5)')
+                    .css('font-size', '9px')
+                    .css('color', 'rgba(255,255,255,0.5)')
+                    .css('text-align', 'right')
+                    .css('padding-right', '6px')
+
+      }
 
     }
 
@@ -749,6 +753,7 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
    _spectrum.load = function() {
 
      if (_spectrum.args instanceof Array) _spectrum.decodeArray(_spectrum.args);
+     else if (typeof _spectrum.args == 'string') _spectrum.decodeCSV(_spectrum.args);
      else if (_spectrum.json && (_spectrum.json.lines || _spectrum.json.data.lines)) _spectrum.decodeJSON(_spectrum.json); // snapshot or spectrum format
 
     }
@@ -756,7 +761,22 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
     /* ======================================
      * Decodes and saves a [wavelength, intensity] array of 
      * data into spectrum.average/red/green/blue
-     * UNTESTED IN JASMINE
+     */
+    _spectrum.decodeCSV = function(string) {
+
+        var points = string.split('\n');
+
+        points.forEach(function(point, i) { 
+          points[i] = [ +point.split(',')[0], +point.split(',')[1] ];
+        });
+
+        _spectrum.decodeArray(points);
+
+    }
+
+    /* ======================================
+     * Decodes and saves a [wavelength, intensity] array of 
+     * data into spectrum.average/red/green/blue
      */
     _spectrum.decodeArray = function(array) {
 
@@ -785,6 +805,7 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
       });
 
+      _spectrum.json = {};
       _spectrum.json.data = { 'lines': [] };
       _spectrum.json.data.lines = _spectrum.encodeJSON();
 
@@ -1617,7 +1638,7 @@ SpectralWorkbench.Tag = Class.extend({
       _tag.startSpinner();
 
       // grey out graph during load
-      _tag.datum.graph.dim();
+      if (_tag.datum.graph) _tag.datum.graph.dim();
 
       var name = _tag.name;
 
@@ -1656,14 +1677,18 @@ SpectralWorkbench.Tag = Class.extend({
     // used on failed tag upload
     _tag.notify_and_offer_clear = function() {
 
-      var notice = _tag.datum.graph.UI.notify("The tag you've applied couldn't be saved, but it's been run locally. <a class='tag-clear-" + _tag.id + "'>Clear it now</a>.");
+      if (_tag.datum.graph) {
 
-      $('.tag-clear-' + _tag.id).click(function() {
+        var notice = _tag.datum.graph.UI.notify("The tag you've applied couldn't be saved, but it's been run locally. <a class='tag-clear-" + _tag.id + "'>Clear it now</a>.");
+       
+        $('.tag-clear-' + _tag.id).click(function() {
+       
+          _tag.destroy();
+          notice.remove();
+       
+        });
 
-        _tag.destroy();
-        notice.remove();
-
-      });
+      }
 
     }
 
@@ -1671,10 +1696,10 @@ SpectralWorkbench.Tag = Class.extend({
     _tag.uploadSuccess = function(response, callback) {
 
       _tag.stopSpinner();
-      _tag.datum.graph.tagForm.clearError();
+      if (_tag.datum.graph) _tag.datum.graph.tagForm.clearError();
 
       // remove grey out of graph after load
-      _tag.datum.graph.undim();
+      if (_tag.datum.graph) _tag.datum.graph.undim();
 
       if (response['saved']) {
 
@@ -1706,7 +1731,7 @@ SpectralWorkbench.Tag = Class.extend({
 
       if (response['errors'] && response['errors'].length > 0) {
 
-        _tag.datum.graph.tagForm.error(response['errors']);
+        if (_tag.datum.graph) _tag.datum.graph.tagForm.error(response['errors']);
         _tag.notify_and_offer_clear();
         console.log(response.responseText);
 
@@ -1717,7 +1742,7 @@ SpectralWorkbench.Tag = Class.extend({
 
     _tag.uploadError = function(response) {
 
-      _tag.datum.graph.tagForm.error('There was an error.');
+      if (_tag.datum.graph) _tag.datum.graph.tagForm.error('There was an error.');
       _tag.notify_and_offer_clear();
       console.log(response.responseText);
 
@@ -1748,7 +1773,7 @@ SpectralWorkbench.Tag = Class.extend({
     // scrubs local tag data; for use after deletion
     _tag.cleanUp = function(callback) {
 
-        _tag.datum.graph.dim();
+        if (_tag.datum.graph) _tag.datum.graph.dim();
 
         // if it failed to initialize, the element may not exist
         if (_tag.el) _tag.el.remove();
@@ -2024,7 +2049,7 @@ SpectralWorkbench.PowerTag = SpectralWorkbench.Tag.extend({
      */
     _tag.cleanUp = function(callback) {
 
-        _tag.datum.graph.dim();
+        if (_tag.datum.graph) _tag.datum.graph.dim();
 
         // if it failed to initialize, the element may not exist
         if (_tag.el) _tag.el.remove();
@@ -2040,7 +2065,7 @@ SpectralWorkbench.PowerTag = SpectralWorkbench.Tag.extend({
         _tag.showLastOperationDeleteButtonOnly();
 
         // flush the graph range so the image gets resized:
-        _tag.datum.graph.range = false;
+        if (_tag.datum.graph) _tag.datum.graph.range = false;
 
         // re-fetch spectrum data, as it may have been overwritten by various tags:
         _tag.datum.fetch(false, function() {
@@ -2378,7 +2403,7 @@ SpectralWorkbench.PowerTag = SpectralWorkbench.Tag.extend({
           _tag.labelEl().html(_tag.name + "#" + _tag.reference_id);
           $('.snapshot i').popover('hide');
 
-          _tag.datum.graph.dim();
+          if (_tag.datum.graph) _tag.datum.graph.dim();
 
           // re-fetch spectrum data, re-parseTags
           _tag.datum.fetch(false, function() {
