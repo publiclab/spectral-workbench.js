@@ -128,10 +128,10 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
       _spectrum.average.forEach(function(line, i) {
 
         lines.push({
-          average:    +(_spectrum.average[i].y,
-          r:          +(_spectrum.red[i].y,
-          g:          +(_spectrum.green[i].y,
-          b:          +(_spectrum.blue[i].y   
+          average:    +_spectrum.average[i].y,
+          r:          +_spectrum.red[i].y,
+          g:          +_spectrum.green[i].y,
+          b:          +_spectrum.blue[i].y   
         });
 
         if (_spectrum.isCalibrated()) lines[lines.length-1].wavelength = _spectrum.average[i].x;
