@@ -1,6 +1,5 @@
 {
   "name": "spectral-workbench",
-  "version": "0.0.8",
   "description": "Framework for spectrometric data management & analysis by Public Lab",
   "main": "dist/spectral-workbench.js",
   "scripts": {
@@ -23,8 +22,8 @@
   "homepage": "http://spectralworkbench.org",
   "dependencies": {
     "jquery":          "~2.1.3",
-    "nvd3":            "~1.8.2",
-    "d3":              "~3.4.4"
+    "nvd3":            "~1.7.1",
+    "d3":              "~3.3.13"
   },
   "devDependencies": {
     "matchdep":                 "^0.3.0",
