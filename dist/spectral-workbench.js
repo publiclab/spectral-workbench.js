@@ -796,10 +796,10 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
         // Tortured:
         if (!_spectrum.graph || (!_spectrum.graph.range || (x >= _spectrum.graph.range[0] && x <= _spectrum.graph.range[1]))) {
 
-          _spectrum.average.push({ y: parseInt(line[1] / 2.55)/100, x: x })
-          _spectrum.red.push(    { y: parseInt(line[1] / 2.55)/100, x: x })
-          _spectrum.green.push(  { y: parseInt(line[1] / 2.55)/100, x: x })
-          _spectrum.blue.push(   { y: parseInt(line[1] / 2.55)/100, x: x })
+          _spectrum.average.push({ y: _spectrum.scale8BitToFloat(line[1]), x: x })
+          _spectrum.red.push(    { y: _spectrum.scale8BitToFloat(line[1]), x: x })
+          _spectrum.green.push(  { y: _spectrum.scale8BitToFloat(line[1]), x: x })
+          _spectrum.blue.push(   { y: _spectrum.scale8BitToFloat(line[1]), x: x })
 
         }
 
@@ -839,11 +839,11 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
         // Tortured:
         if (!_spectrum.graph || (!_spectrum.graph.range || (x >= _spectrum.graph.range[0] && x <= _spectrum.graph.range[1]))) {
 
-          _spectrum.average.push({ y: parseInt(line.average / 2.55)/100, x: x })
+          _spectrum.average.push({ y: _spectrum.scale8BitToFloat(line.average), x: x })
  
-          if (line.r != null) _spectrum.red.push(  { y: parseInt(line.r / 2.55)/100, x: x })
-          if (line.g != null) _spectrum.green.push({ y: parseInt(line.g / 2.55)/100, x: x })
-          if (line.b != null) _spectrum.blue.push( { y: parseInt(line.b / 2.55)/100, x: x })
+          if (line.r != null) _spectrum.red.push(  { y: _spectrum.scale8BitToFloat(line.r), x: x })
+          if (line.g != null) _spectrum.green.push({ y: _spectrum.scale8BitToFloat(line.g), x: x })
+          if (line.b != null) _spectrum.blue.push( { y: _spectrum.scale8BitToFloat(line.b), x: x })
 
         }
 
@@ -864,10 +864,10 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
       _spectrum.average.forEach(function(line, i) {
 
         lines.push({
-          average:    +(_spectrum.average[i].y * 255).toPrecision(_spectrum.sigFigIntensity),
-          r:          +(_spectrum.red[i].y     * 255).toPrecision(_spectrum.sigFigIntensity),
-          g:          +(_spectrum.green[i].y   * 255).toPrecision(_spectrum.sigFigIntensity),
-          b:          +(_spectrum.blue[i].y    * 255).toPrecision(_spectrum.sigFigIntensity)
+          average:    +_spectrum.average[i].y,
+          r:          +_spectrum.red[i].y,
+          g:          +_spectrum.green[i].y,
+          b:          +_spectrum.blue[i].y   
         });
 
         if (_spectrum.isCalibrated()) lines[lines.length-1].wavelength = _spectrum.average[i].x;
@@ -876,6 +876,30 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
       }); 
 
       return lines;
+
+    }
+
+
+    /* ======================================
+     * Scales data from an 8-bit float to a 0-1 float
+     * at _spectrum.sigFigIntensity precision
+     * UNTESTED IN JASMINE
+     */
+    _spectrum.scale8BitToFloat = function(value) {
+
+      return parseInt(value / 2.55) / 100;
+
+    }
+
+
+    /* ======================================
+     * Scales data from a 0-1 float to an 8-bit float 
+     * at _spectrum.sigFigIntensity precision
+     * UNTESTED IN JASMINE
+     */
+    _spectrum.scaleIntensityTo8Bit = function(value) {
+
+      return (value * 255).toPrecision(_spectrum.sigFigIntensity);
 
     }
 

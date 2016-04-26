@@ -1,6 +1,5 @@
 {
   "name": "spectral-workbench",
-  "version": "0.0.8",
   "main": "dist/spectral-workbench.js",
   "dependencies": {
     "fontawesome":     "~4.5.0",
