@@ -224,7 +224,7 @@ SpectralWorkbench.Graph = Class.extend({
       _graph.tagForm = new SpectralWorkbench.UI.TagForm(_graph); 
 
       /* Enter data into the graph */
-      _graph.data = d3.select('#graph svg')  //Select the <svg> element you want to render the chart in.   
+      _graph.data = d3.select(_graph.selector + ' svg')  //Select the <svg> element you want to render the chart in.   
                       .datum(datum.d3)   //Populate the <svg> element with chart data
                       .call(_graph.chart)         //Finally, render the chart!
 

@@ -107,6 +107,8 @@ var spectrum = new SpectralWorkbench.Spectrum(string);
 
 ````
 
+TSVs (tab-separated values) are also supported as of v0.0.10.
+
 Most tests continue to use a legacy data format (that used by the SpectralWorkbench.org service) which we'd like to simplify, but for now, you can create a Spectrum object from JSON data in the following format, that does accept RGB pixel data:
 
 ````js
