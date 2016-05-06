@@ -63,6 +63,33 @@ describe("Spectrum", function() {
 
   });
 
+  it("succeeds in basic initialization with TSV data", function() {
+
+    var string = "400\t24\n410\t44\n420\t42\n430\t45\n440\t20";
+
+    var tsvSpectrum = new SpectralWorkbench.Spectrum(string)
+
+    expect(tsvSpectrum).toBeDefined();
+
+    expect(tsvSpectrum.average).toBeDefined();
+    expect(tsvSpectrum.average.length).toBe(5);
+    expect(tsvSpectrum.average.length).not.toBe(7);
+
+    expect(tsvSpectrum.red).toBeDefined();
+    expect(tsvSpectrum.red.length).toBe(5);
+
+    expect(tsvSpectrum.green).toBeDefined();
+    expect(tsvSpectrum.green.length).toBe(5);
+
+    expect(tsvSpectrum.blue).toBeDefined();
+    expect(tsvSpectrum.blue.length).toBe(5);
+
+    var intensity = tsvSpectrum.getIntensity(415, 'average');
+    expect(typeof intensity).toBe('number');
+    expect(intensity).toBeGreaterThan(0);
+
+  });
+
   it("succeeds in basic initialization with spectrum [wavelength, intensity] array data", function() {
 
     var array = [
