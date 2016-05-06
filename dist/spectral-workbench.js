@@ -767,7 +767,7 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
         var points = string.split('\n');
 
         points.forEach(function(point, i) { 
-          points[i] = [ +point.split(',')[0], +point.split(',')[1] ];
+          if (point.length > 0 && point[0] != "#") points[i] = [ +point.split(/,|\t/)[0], +point.split(/,|\t/)[1] ];
         });
 
         _spectrum.decodeArray(points);
