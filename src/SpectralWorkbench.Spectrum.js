@@ -28,13 +28,14 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
      */
     _spectrum.decodeCSV = function(string) {
 
-        var points = string.split('\n');
+        var points = string.split('\n'),
+            cleanPoints = [];
 
         points.forEach(function(point, i) { 
-          if (point.length > 0 && point[0] != "#") points[i] = [ +point.split(/,|\t/)[0], +point.split(/,|\t/)[1] ];
+          if (point.length > 0 && point[0] != "#") cleanPoints.push([ +point.split(/,|\t/)[0], +point.split(/,|\t/)[1] ]);
         });
 
-        _spectrum.decodeArray(points);
+        _spectrum.decodeArray(cleanPoints);
 
     }
 

@@ -63,9 +63,9 @@ describe("Spectrum", function() {
 
   });
 
-  it("succeeds in basic initialization with TSV data", function() {
+  it("succeeds in basic initialization with TSV data and comments", function() {
 
-    var string = "400\t24\n410\t44\n420\t42\n430\t45\n440\t20";
+    var string = "#Units,Units\n400\t24\n410\t44\n420\t42\n430\t45\n440\t20";
 
     var tsvSpectrum = new SpectralWorkbench.Spectrum(string)
 
@@ -74,6 +74,9 @@ describe("Spectrum", function() {
     expect(tsvSpectrum.average).toBeDefined();
     expect(tsvSpectrum.average.length).toBe(5);
     expect(tsvSpectrum.average.length).not.toBe(7);
+
+    expect(tsvSpectrum.average[0].x).not.toBe("#");
+    expect(tsvSpectrum.average[0].x).toBe(400);
 
     expect(tsvSpectrum.red).toBeDefined();
     expect(tsvSpectrum.red.length).toBe(5);
