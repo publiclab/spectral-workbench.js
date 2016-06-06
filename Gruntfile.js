@@ -46,7 +46,33 @@ module.exports = function(grunt) {
                 ],
                 dest: 'dist/spectral-workbench.js',
             }
+        },
+
+        jasmine: {
+          swb: {
+            src: 'dist/*.js',
+            options: {
+              specs: 'spec/javascripts/*spec.js',
+              vendor: [
+                'node_modules/jquery/dist/jquery.min.js',
+                'bower_components/d3/d3.js',
+                'bower_components/nvd3/build/nv.d3.js',
+                'bower_components/bootstrap-css/js/bootstrap.min.js',
+                'bower_components/moment/moment.js',
+                'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
+                'node_modules/jasmine-ajax/lib/mock-ajax.js',
+                'spec/javascripts/helpers/test_responses.js'
+              ],
+              page: {
+                  viewportSize: {
+                      width: 1200,
+                      height: 800
+                  }
+              }
+            }
+          }
         }
+
     });
 
     /* Default (development): Watch files and build on change. */
@@ -55,5 +81,7 @@ module.exports = function(grunt) {
     grunt.registerTask('build', [
         'concat:dist'
     ]);
+
+    grunt.loadNpmTasks('grunt-contrib-jasmine');
 
 };
