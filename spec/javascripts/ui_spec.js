@@ -287,7 +287,7 @@ describe("UI", function() {
     expect(toolPane.form.titleEl.length).toBe(1);
     expect(toolPane.form.authorEl.length).toBe(1);
     expect(toolPane.form.linkEl.length).toBe(1);
-    expect(toolPane.form.descriptionEl.length).toBe(1);
+    //expect(toolPane.form.descriptionEl.length).toBe(1);
     expect(toolPane.form.formEl.length).toBe(1);
     expect(toolPane.form.searchEl.length).toBe(1);
     expect(toolPane.form.authorSelectEl.length).toBe(1);

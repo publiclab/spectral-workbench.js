@@ -207,7 +207,9 @@ Thank you for your help!
 ## Automated tests
 
 
-To run Jasmine tests, open `spec/javascripts/test.html` in a browser. You can run them on our Github Pages-hosted suite here: http://publiclab.github.io/spectral-workbench.js/test.html.
+To run Jasmine tests, open `test.html` in a browser. You can also run them on our Github Pages-hosted suite here: http://publiclab.github.io/spectral-workbench.js/test.
+
+Alternatively, if you have phantomjs installed, run: `grunt jasmine` to run tests from the command line.
 
 
 ## Building
