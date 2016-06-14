@@ -3,3 +3,5 @@ node_js:
   - '4'
   - '5'
 script: grunt jasmine
+before_install:
+  - npm install -g grunt-cli
