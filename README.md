@@ -201,7 +201,7 @@ If you are submitting a bug, please include:
 * your browser (and version if possible!)
 * anything you can about the sequence of events which led to the bug 
 
-Thank you for your help!  
+Thank you for your help!
 
 
 ## Automated tests
