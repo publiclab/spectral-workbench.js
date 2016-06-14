@@ -4,7 +4,8 @@
   "description": "Framework for spectrometric data management & analysis by Public Lab",
   "main": "dist/spectral-workbench.js",
   "scripts": {
-    "build": "grunt build"
+    "build": "grunt build",
+    "test": "grunt jasmine"
   },
   "repository": {
     "type": "git",
