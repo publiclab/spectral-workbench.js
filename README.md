@@ -1,6 +1,8 @@
 spectral-workbench.js
 ====
 
+[![Build Status](https://travis-ci.org/publiclab/spectral-workbench.js.svg?branch=master)](https://travis-ci.org/publiclab/spectral-workbench.js)
+
 The JavaScript heart of Spectral Workbench; a Public Lab project to record, manipulate, and analyze spectrometric data. 
 
 spectral-workbench.js is currently set up to run in a browser, but some parts may work headless, in a JavaScript console. We hope to further separate the views from the library logic so that headless or Node.js usage is easier.
