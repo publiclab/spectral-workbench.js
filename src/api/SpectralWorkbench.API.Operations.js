@@ -218,7 +218,7 @@ SpectralWorkbench.API.Operations = {
 
       if (x1 > x2) {
 
-        tag.datum.graph.image.el.removeClass('flipped');
+        if (tag.datum.graph.image.el) tag.datum.graph.image.el.removeClass('flipped');
 
       }
 

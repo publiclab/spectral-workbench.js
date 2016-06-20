@@ -29,7 +29,9 @@ SpectralWorkbench.Graph = Class.extend({
 
       // Create an image and canvas element to display and manipulate image data. 
       // We could have this non-initialized at boot, and only create it if asked to.
-      _graph.image = new SpectralWorkbench.Image(_graph, _graph.onImageComplete);
+      _graph.image = new SpectralWorkbench.Image(_graph, {
+        callback: _graph.onImageComplete
+      });
 
     } else if (_graph.args.hasOwnProperty('set_id')) {
 
@@ -40,8 +42,8 @@ SpectralWorkbench.Graph = Class.extend({
     _graph.updateSize()();
  
     _graph.svg = d3.select(_graph.selector).append("svg")
-                                       .attr("width",  _graph.width  + _graph.margin.left + _graph.margin.right)
-                                       .attr("height", _graph.height + _graph.margin.top  + _graph.margin.bottom);
+                                           .attr("width",  _graph.width  + _graph.margin.left + _graph.margin.right)
+                                           .attr("height", _graph.height + _graph.margin.top  + _graph.margin.bottom);
 
     /* ======================================
      * Refresh datum into DOM in d3 syntax

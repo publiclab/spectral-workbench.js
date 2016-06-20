@@ -8,9 +8,16 @@ describe("Image", function() {
 
   });
 
-  it("should not be undefined", function(done) {
+  it("should not be undefined even if it has no graph or DOM element", function(done) {
 
-    image = new SpectralWorkbench.Image({ args: {} }, done); // fake graph with empty object
+    image = new SpectralWorkbench.Image(
+      {
+        args: {}  // fake graph with empty object
+      },
+      {
+        callback: done // options
+      }
+    );
 
     expect(image).toBeDefined();
 

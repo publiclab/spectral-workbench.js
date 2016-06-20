@@ -1,24 +1,27 @@
 SpectralWorkbench.Image = Class.extend({
 
-  init: function(_graph, callback) {
+  init: function(_graph, options) {
 
     var image = this;
 
-    image.selector  = _graph.args.imageSelector || 'div.swb-spectrum-img-container';
+    image.options = options || {};
+    image.options.selector = image.options.selector || _graph.args.imageSelector || 'div.swb-spectrum-img-container';
 
-    // if ($(image.selector).length > 0) image.container = $(image.selector);
-    // else {
-    //   // Do we really need an image element? Only if it's part of a Graph.
-    //   // If we have a GUI, it needs to respond to graph width css...
-    // }
+    image.container = $(image.options.selector);
 
-    image.container = $(image.selector);
-    image.el        = image.container.find('img');
+    if (image.container) {
 
-    image.obj       = new Image();
-    image.lineEl    = false; // the line indicating the cross-section
+      image.el = image.container.find('img');
 
-    image.callback = callback;
+    } else {
+      // Do we really need an image element? Only if it's part of a Graph.
+      // If we have a GUI, it needs to respond to graph width css...
+
+
+    }
+
+    image.obj    = new Image();
+    image.lineEl = false; // the line indicating the cross-section
 
     image.obj.onload = function() {
 
@@ -38,11 +41,12 @@ SpectralWorkbench.Image = Class.extend({
 
       if (_graph && _graph.args.hasOwnProperty('sample_row')) image.setLine(_graph.args.sample_row);
 
-      image.callback(); // since image loading is asynchronous
+      if (image.options.callback) image.options.callback(); // since image loading is asynchronous
 
     }
 
-    image.obj.src = _graph.args.imgSrc || image.el.attr('src');
+    if (image.el) image.obj.src = image.options.url || _graph.args.imgSrc || image.el.attr('src');
+    else          image.obj.src = image.options.url || _graph.args.imgSrc;
 
 
     /* ======================================
@@ -86,9 +90,9 @@ SpectralWorkbench.Image = Class.extend({
       if (_graph) {
 
         image.el.before($('<div class="section-line-container"><div class="section-line"></div></div>'));
-        image.lineContainerEl = _graph.image.container.find('.section-line-container');
+        image.lineContainerEl = image.container.find('.section-line-container');
         image.lineContainerEl.css('position', 'relative');
-        image.lineEl = _graph.image.container.find('.section-line');
+        image.lineEl = image.container.find('.section-line');
         image.lineEl.css('position', 'absolute')
                     .css('width', '100%')
                     .css('top', 0)
@@ -172,11 +176,11 @@ SpectralWorkbench.Image = Class.extend({
       // we are getting aggressively empirical here and adding "_graph.extraPadding" to fix things
       // but essentially it seems there's a difference between reported d3 chart display width and actual 
       // measurable DOM width, so we adjust the displayed image with extraPadding.
-      _graph.image.container.width(_graph.width)
+      image.container.width(_graph.width)
                             .height(100);
 
-      if (!_graph.embed) _graph.image.container.css('margin-left',  _graph.margin.left);
-      else               _graph.image.container.css('margin-left',  _graph.margin.left);
+      if (!_graph.embed) image.container.css('margin-left',  _graph.margin.left);
+      else               image.container.css('margin-left',  _graph.margin.left);
                          // .css('margin-right', _graph.margin.right); // margin not required on image, for some reason
 
 
@@ -206,13 +210,13 @@ SpectralWorkbench.Image = Class.extend({
 
         }
 
-        _graph.image.el.width(_graph.width + _graph.leftCrop + _graph.rightCrop) // left and rightCrop are masked out range
+        image.el.width(_graph.width + _graph.leftCrop + _graph.rightCrop) // left and rightCrop are masked out range
                        .css('max-width', 'none')
                        .css('margin-left', -_graph.leftCrop);
 
       } else {
 
-        _graph.image.el.width(_graph.width)
+        image.el.width(_graph.width)
                        .height(100)
                        .css('max-width', 'none')
                        .css('margin-left', 0);
