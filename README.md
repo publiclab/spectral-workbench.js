@@ -138,6 +138,8 @@ For a working example, see: https://publiclab.github.io/spectral-workbench.js/ex
 
 ### In Node.js
 
+Example node scripts are available in the `/examples/` directory. 
+
 To write a script in Node.js, you could create and run a file like this:
 
 ````js

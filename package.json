@@ -1,6 +1,6 @@
 {
   "name": "spectral-workbench",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Framework for spectrometric data management & analysis by Public Lab",
   "main": "dist/spectral-workbench.js",
   "scripts": {
