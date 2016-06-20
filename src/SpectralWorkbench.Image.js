@@ -5,18 +5,14 @@ SpectralWorkbench.Image = Class.extend({
     var image = this;
 
     image.options = options || {};
-    image.options.selector = image.options.selector || _graph.args.imageSelector || 'div.swb-spectrum-img-container';
+    image.options = options || {};
+    image.options.selector = image.options.selector || 'div.swb-spectrum-img-container';
 
     image.container = $(image.options.selector);
 
     if (image.container) {
 
       image.el = image.container.find('img');
-
-    } else {
-      // Do we really need an image element? Only if it's part of a Graph.
-      // If we have a GUI, it needs to respond to graph width css...
-
 
     }
 
@@ -25,28 +21,43 @@ SpectralWorkbench.Image = Class.extend({
 
     image.obj.onload = function() {
 
-      // Build a canvas element, but hide it.
-      // Here, we may switch to node-canvas or something for headless use.
-      $('body').append('<canvas id="spectral-workbench-canvas" style="display:none;"></canvas>;');
-      image.canvasEl = $('canvas#spectral-workbench-canvas');
       image.graph = _graph;
       image.width = image.obj.width;
       image.height = image.obj.height;
-      image.canvasEl.width(image.width);
-      image.canvasEl.height(image.height);
-      image.ctx = image.canvasEl[0].getContext("2d");
+
+      // test if we're inside a require()
+      // http://www.timetler.com/2012/10/13/environment-detection-in-javascript/
+      if (typeof exports !== 'undefined' && this.exports !== exports) {
+
+        var Canvas = require('canvas'),
+             Image = Canvas.Image,
+             canvas = new Canvas(image.width, image.height);
+
+        image.ctx = canvas.getContext('2d');
+
+      } else {
+
+        // We're in a browser; build a canvas element, but hide it.
+        $('body').append('<canvas id="spectral-workbench-canvas" style="display:none;"></canvas>;');
+        image.canvasEl = $('canvas#spectral-workbench-canvas');
+        image.canvasEl.width(image.width);
+        image.canvasEl.height(image.height);
+        image.ctx = image.canvasEl[0].getContext("2d");
+
+      }
+
       image.ctx.canvas.width = image.width;
       image.ctx.canvas.height = image.height;
       image.ctx.drawImage(image.obj, 0, 0, image.width, image.height);
 
-      if (_graph && _graph.args.hasOwnProperty('sample_row')) image.setLine(_graph.args.sample_row);
+      if (image.options.sample_row) image.setLine(image.options.sample_row);
 
       if (image.options.callback) image.options.callback(); // since image loading is asynchronous
 
     }
 
-    if (image.el) image.obj.src = image.options.url || _graph.args.imgSrc || image.el.attr('src');
-    else          image.obj.src = image.options.url || _graph.args.imgSrc;
+    if (image.el) image.obj.src = image.options.url || image.el.attr('src');
+    else          image.obj.src = image.options.url;
 
 
     /* ======================================
