@@ -883,6 +883,29 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
 
     /* ======================================
+     * Prepares a CSV formatted data in range
+     * based on spectrum.average
+     * UNTESTED IN JASMINE
+     */
+    _spectrum.encodeCSV = function() {
+
+      var lines = [];
+
+      _spectrum.average.forEach(function(line, i) {
+
+        if (_spectrum.isCalibrated()) lines.push(_spectrum.average[i].x);
+        else                          lines.push(i);
+
+        lines[lines.length - 1] += ',' + +(_spectrum.average[i].y * 255).toPrecision(_spectrum.sigFigIntensity);
+        
+      }); 
+
+      return lines.join('\n');
+
+    }
+
+
+    /* ======================================
      * Prepares a server-ready formatted JSON object of 
      * currently displayed data based on spectrum.average/red/green/blue
      * UNTESTED IN JASMINE
