@@ -134,6 +134,46 @@ describe("Spectrum", function() {
 
   });
 
+
+  it("encodes JSON", function() {
+
+    var json = spectrum.encodeJSON();
+
+    expect(json).not.toBeUndefined();
+    expect(json[0]).not.toBeUndefined();
+    expect(json[0].r).not.toBeUndefined();
+    expect(json[0].g).not.toBeUndefined();
+    expect(json[0].b).not.toBeUndefined();
+    expect(json[0].wavelength).not.toBeUndefined();
+
+    expect(json[0].r).toBe(68.85);
+    expect(json[0].g).toBe(45.9);
+    expect(json[0].b).toBe(76.5);
+    expect(json[0].wavelength).toBe(269.089);
+
+  });
+
+
+  it("encodes CSV", function() {
+
+    var csv = spectrum.encodeCSV();
+    var lines = csv.split('\n');
+    var first = lines[0].split(',');
+
+    expect(csv).not.toBeUndefined();
+    expect(lines).not.toBeUndefined();
+    expect(first).not.toBeUndefined();
+    expect(first[0]).not.toBeUndefined();
+    expect(first[1]).not.toBeUndefined();
+
+    expect(parseFloat(first[0])).toBe(269.089);
+
+    var average = (68.85 + 45.9 + 76.5) / 3;
+    expect(parseFloat(first[1])).toBe(average);
+
+  });
+
+
   it("getIntensity() returns closest intensity for a given wavelength from available wavelength/intensity pairs", function() {
 
     expect(spectrum.getIntensity(400, 'average')).toBeDefined();

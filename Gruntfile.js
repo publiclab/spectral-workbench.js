@@ -19,6 +19,16 @@ module.exports = function(grunt) {
             }
         },
 
+/*
+        browserify: {
+            dist: {
+                src: [
+                    'src/SpectralWorkbench.js'
+                ],
+                dest: 'dist/spectral-workbench.js'
+            }
+        },
+*/
         concat: {
             dist: {
                 src: [
@@ -83,6 +93,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build', [
         'concat:dist'
+        //'browserify:dist'
     ]);
 
     grunt.loadNpmTasks('grunt-contrib-jasmine');

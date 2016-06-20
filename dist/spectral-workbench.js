@@ -144,49 +144,66 @@ SpectralWorkbench.Image = Class.extend({
     var image = this;
 
     image.options = options || {};
-    image.options.selector = image.options.selector || _graph.args.imageSelector || 'div.swb-spectrum-img-container';
+    image.options.selector = image.options.selector || 'div.swb-spectrum-img-container';
 
-    image.container = $(image.options.selector);
+    // test if we're inside a require()
+    // http://www.timetler.com/2012/10/13/environment-detection-in-javascript/
+    var nodejs = typeof exports !== 'undefined' && this.exports !== exports;
 
-    if (image.container) {
-
-      image.el = image.container.find('img');
-
+    if (nodejs) {
+      var Canvas = require('canvas');
+      image.obj    = new Canvas.Image();
     } else {
-      // Do we really need an image element? Only if it's part of a Graph.
-      // If we have a GUI, it needs to respond to graph width css...
+      image.obj    = new Image();
+    }
 
+
+    if (!nodejs) {
+
+      image.container = $(image.options.selector);
+      image.el = image.container.find('img');
 
     }
 
-    image.obj    = new Image();
     image.lineEl = false; // the line indicating the cross-section
 
     image.obj.onload = function() {
 
-      // Build a canvas element, but hide it.
-      // Here, we may switch to node-canvas or something for headless use.
-      $('body').append('<canvas id="spectral-workbench-canvas" style="display:none;"></canvas>;');
-      image.canvasEl = $('canvas#spectral-workbench-canvas');
       image.graph = _graph;
       image.width = image.obj.width;
       image.height = image.obj.height;
-      image.canvasEl.width(image.width);
-      image.canvasEl.height(image.height);
-      image.ctx = image.canvasEl[0].getContext("2d");
+
+      if (nodejs) {
+
+        var Canvas = require('canvas'),
+             Image = Canvas.Image,
+             canvas = new Canvas(image.width, image.height);
+
+        image.ctx = canvas.getContext('2d');
+
+      } else {
+
+        // We're in a browser; build a canvas element, but hide it.
+        $('body').append('<canvas id="spectral-workbench-canvas" style="display:none;"></canvas>;');
+        image.canvasEl = $('canvas#spectral-workbench-canvas');
+        image.canvasEl.width(image.width);
+        image.canvasEl.height(image.height);
+        image.ctx = image.canvasEl[0].getContext("2d");
+
+      }
+
       image.ctx.canvas.width = image.width;
       image.ctx.canvas.height = image.height;
       image.ctx.drawImage(image.obj, 0, 0, image.width, image.height);
 
-      if (_graph && _graph.args.hasOwnProperty('sample_row')) image.setLine(_graph.args.sample_row);
+      if (image.options.sample_row) image.setLine(image.options.sample_row);
 
       if (image.options.callback) image.options.callback(); // since image loading is asynchronous
 
     }
 
-    if (image.el) image.obj.src = image.options.url || _graph.args.imgSrc || image.el.attr('src');
-    else          image.obj.src = image.options.url || _graph.args.imgSrc;
-
+    if (image.el) image.obj.src = image.options.url || image.el.attr('src');
+    else          image.obj.src = image.options.url;
 
     /* ======================================
      * Returns a array of pixel brightnesses in [r,g,b,a] format, 
@@ -861,6 +878,29 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
         }
 
       });
+
+    }
+
+
+    /* ======================================
+     * Prepares a CSV formatted data in range
+     * based on spectrum.average
+     * UNTESTED IN JASMINE
+     */
+    _spectrum.encodeCSV = function() {
+
+      var lines = [];
+
+      _spectrum.average.forEach(function(line, i) {
+
+        if (_spectrum.isCalibrated()) lines.push(_spectrum.average[i].x);
+        else                          lines.push(i);
+
+        lines[lines.length - 1] += ',' + +(_spectrum.average[i].y * 255).toPrecision(_spectrum.sigFigIntensity);
+        
+      }); 
+
+      return lines.join('\n');
 
     }
 
@@ -5031,7 +5071,10 @@ SpectralWorkbench.Graph = Class.extend({
       // Create an image and canvas element to display and manipulate image data. 
       // We could have this non-initialized at boot, and only create it if asked to.
       _graph.image = new SpectralWorkbench.Image(_graph, {
-        callback: _graph.onImageComplete
+        callback:   _graph.onImageComplete,
+        selector:   _graph.args.imageSelector,
+        url:        _graph.args.imgSrc,
+        sample_row: _graph.args.sample_row
       });
 
     } else if (_graph.args.hasOwnProperty('set_id')) {

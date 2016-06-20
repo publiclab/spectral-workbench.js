@@ -11,9 +11,7 @@ describe("Image", function() {
   it("should not be undefined even if it has no graph or DOM element", function(done) {
 
     image = new SpectralWorkbench.Image(
-      {
-        args: {}  // fake graph with empty object
-      },
+      false,
       {
         callback: done // options
       }

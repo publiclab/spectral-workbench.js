@@ -30,7 +30,10 @@ SpectralWorkbench.Graph = Class.extend({
       // Create an image and canvas element to display and manipulate image data. 
       // We could have this non-initialized at boot, and only create it if asked to.
       _graph.image = new SpectralWorkbench.Image(_graph, {
-        callback: _graph.onImageComplete
+        callback:   _graph.onImageComplete,
+        selector:   _graph.args.imageSelector,
+        url:        _graph.args.imgSrc,
+        sample_row: _graph.args.sample_row
       });
 
     } else if (_graph.args.hasOwnProperty('set_id')) {
