@@ -22,7 +22,10 @@ To install spectral-workbench, run:
 
     npm install spectral-workbench
 
-The `SpectralWorkbench.Image` class uses the `node-canvas` package when run without a browser, so you'll need to run (on Debian): `sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++` before running `npm install`. See build instructions for [other platforms here](https://github.com/Automattic/node-canvas#installation).
+The `SpectralWorkbench.Image` class uses the `node-canvas` package when run without a browser, so you'll need to install it by:
+
+* runing (on Debian): `sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++` See build instructions for [other platforms here](https://github.com/Automattic/node-canvas#installation).
+* running `npm install`
 
 ### In a browser
 

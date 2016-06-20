@@ -205,7 +205,6 @@ SpectralWorkbench.Image = Class.extend({
     if (image.el) image.obj.src = image.options.url || image.el.attr('src');
     else          image.obj.src = image.options.url;
 
-
     /* ======================================
      * Returns a array of pixel brightnesses in [r,g,b,a] format, 
      * values from 0-255

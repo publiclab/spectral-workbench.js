@@ -18,9 +18,10 @@ var spectrum = new SpectralWorkbench.Spectrum(data);
 
 console.log('spectrum.getIntensity(282):', spectrum.getIntensity(282));
 
+var image;
 
-var image = new SpectralWorkbench.Image(false, {
-              url: '../spec/javascripts/fixtures/test-spectrum-9.png',
-            }); 
+image = new SpectralWorkbench.Image(false, {
+          url: 'spec/javascripts/fixtures/test-spectrum-9.png'
+        }); 
 
 console.log('image.getLine(1):', image.getLine(1));
