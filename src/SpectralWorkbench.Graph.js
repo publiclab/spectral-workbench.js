@@ -6,47 +6,42 @@ SpectralWorkbench.Graph = Class.extend({
 
     var _graph = this;
 
-    this.args = args;
-    this.callback = callback;
-    this.loaded = false; // measure initial load completion
-    this.onImageComplete = args['onImageComplete'] || function() { console.log('image load complete'); };
-    this.onComplete = args['onComplete'] || function() { console.log('graph load complete'); };
-    this.width = 600; // what this is is unclear :-(
-    this.zooming = false;
-    this.embed = args['embed'] || false;
-    this.embedmargin = 10;
-    this.margin = { top: 10, right: 30, bottom: 20, left: 70 }; // this is used both for the d3 svg and for the imgContainer
-    this.range = this.args.range || false;
-    this.selector = this.args.selector || '#graph';
-    this.el = $(this.selector);
+    _graph.args = args;
+    _graph.callback = callback;
+    _graph.loaded = false; // measure initial load completion
+    _graph.onImageComplete = args['onImageComplete'] || function() { console.log('image load complete'); };
+    _graph.onComplete = args['onComplete'] || function() { console.log('graph load complete'); };
+    _graph.width = 600; // what this is is unclear :-(
+    _graph.zooming = false;
+    _graph.embed = args['embed'] || false;
+    _graph.embedmargin = 10;
+    _graph.margin = { top: 10, right: 30, bottom: 20, left: 70 }; // this is used both for the d3 svg and for the image.container
+    _graph.range = _graph.args.range || false;
+    _graph.selector = _graph.args.selector || '#graph';
+    _graph.el = $(_graph.selector);
 
-    // this could be moved into the graph.image Image object:
-    this.imgSelector = this.args.imageSelector || 'div.swb-spectrum-img-container';
-    this.imgContainer = $(this.imgSelector);
-    this.imgEl = this.imgContainer.find('img');
-
-    this.API = new SpectralWorkbench.API(this);
+    _graph.API = new SpectralWorkbench.API(this);
 
     // set/spectrum breakout
-    if (this.args.hasOwnProperty('spectrum_id')) {
+    if (_graph.args.hasOwnProperty('spectrum_id')) {
 
-      this.dataType = "spectrum";
+      _graph.dataType = "spectrum";
 
-      // Create a canvas element to manipulate image data. 
+      // Create an image and canvas element to display and manipulate image data. 
       // We could have this non-initialized at boot, and only create it if asked to.
-      this.image = new SpectralWorkbench.Image(this.imgEl, this, this.onImageComplete);
+      _graph.image = new SpectralWorkbench.Image(_graph, _graph.onImageComplete);
 
-    } else if (this.args.hasOwnProperty('set_id')) {
+    } else if (_graph.args.hasOwnProperty('set_id')) {
 
-      this.dataType = "set";
+      _graph.dataType = "set";
 
     } 
 
-    this.updateSize()();
+    _graph.updateSize()();
  
-    this.svg = d3.select(this.selector).append("svg")
-                                       .attr("width",  this.width  + this.margin.left + this.margin.right)
-                                       .attr("height", this.height + this.margin.top  + this.margin.bottom);
+    _graph.svg = d3.select(_graph.selector).append("svg")
+                                       .attr("width",  _graph.width  + _graph.margin.left + _graph.margin.right)
+                                       .attr("height", _graph.height + _graph.margin.top  + _graph.margin.bottom);
 
     /* ======================================
      * Refresh datum into DOM in d3 syntax
@@ -122,8 +117,8 @@ SpectralWorkbench.Graph = Class.extend({
 
       // what proportion of the full image is being displayed?
       var proportion = x / _graph.image.width, // x position as a percent of original image
-          scaledX = proportion * _graph.image.imgEl.width(), // that proportion of the displayed DOM image element;
-          displayPxPerNm = _graph.image.imgEl.width() / (_graph.fullExtent[1] - _graph.fullExtent[0]), 
+          scaledX = proportion * _graph.image.el.width(), // that proportion of the displayed DOM image element;
+          displayPxPerNm = _graph.image.el.width() / (_graph.fullExtent[1] - _graph.fullExtent[0]), 
           leftXOffsetInDisplayPx = (_graph.extent[0] - _graph.fullExtent[0]) * displayPxPerNm;
 
       return scaledX - leftXOffsetInDisplayPx;
@@ -138,10 +133,10 @@ SpectralWorkbench.Graph = Class.extend({
     _graph.displayPxToImagePx = function(x) {
 
       // what proportion of the full image is being displayed?
-      var displayPxPerNm = _graph.image.imgEl.width() / (_graph.fullExtent[1] - _graph.fullExtent[0]), 
+      var displayPxPerNm = _graph.image.el.width() / (_graph.fullExtent[1] - _graph.fullExtent[0]), 
           leftXOffsetInDisplayPx = (_graph.extent[0] - _graph.fullExtent[0]) * displayPxPerNm,
           fullX = x + leftXOffsetInDisplayPx, // starting from true image DOM element zero
-          proportion = fullX / _graph.image.imgEl.width(), // x position as a percent of DOM image
+          proportion = fullX / _graph.image.el.width(), // x position as a percent of DOM image
           scaledX = proportion * _graph.image.width; // that proportion of the original image
 
       return scaledX;
@@ -551,9 +546,9 @@ SpectralWorkbench.Graph = Class.extend({
                     //- _graph.margin.right // right margin not required on image, for some reason
                     - (_graph.embedmargin * 2); // this is 10 * 2
 
-      _graph.imgEl.height(100); // this isn't done later because we mess w/ height, in, for example, calibration
+      _graph.el.height(100); // this isn't done later because we mess w/ height, in, for example, calibration
 
-      if (_graph.image) _graph.image.updateSize(); // adjust image element and imgContainer element
+      if (_graph.image) _graph.image.updateSize(); // adjust image element and image.container element
 
       if (_graph.datum) {
 

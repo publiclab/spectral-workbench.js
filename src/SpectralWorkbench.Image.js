@@ -1,29 +1,40 @@
 SpectralWorkbench.Image = Class.extend({
 
-  init: function(element, _graph, callback) {
+  init: function(_graph, callback) {
 
     var image = this;
 
-    image.imgEl = element;
-    image.imgObj = new Image();
-    image.lineEl = false; // the line indicating the cross-section
+    image.selector  = _graph.args.imageSelector || 'div.swb-spectrum-img-container';
+
+    // if ($(image.selector).length > 0) image.container = $(image.selector);
+    // else {
+    //   // Do we really need an image element? Only if it's part of a Graph.
+    //   // If we have a GUI, it needs to respond to graph width css...
+    // }
+
+    image.container = $(image.selector);
+    image.el        = image.container.find('img');
+
+    image.obj       = new Image();
+    image.lineEl    = false; // the line indicating the cross-section
 
     image.callback = callback;
 
-    image.imgObj.onload = function() {
+    image.obj.onload = function() {
 
-      // build a canvas element, but hide it
+      // Build a canvas element, but hide it.
+      // Here, we may switch to node-canvas or something for headless use.
       $('body').append('<canvas id="spectral-workbench-canvas" style="display:none;"></canvas>;');
       image.canvasEl = $('canvas#spectral-workbench-canvas');
       image.graph = _graph;
-      image.width = image.imgObj.width;
-      image.height = image.imgObj.height;
+      image.width = image.obj.width;
+      image.height = image.obj.height;
       image.canvasEl.width(image.width);
       image.canvasEl.height(image.height);
       image.ctx = image.canvasEl[0].getContext("2d");
       image.ctx.canvas.width = image.width;
       image.ctx.canvas.height = image.height;
-      image.ctx.drawImage(image.imgObj, 0, 0, image.width, image.height);
+      image.ctx.drawImage(image.obj, 0, 0, image.width, image.height);
 
       if (_graph && _graph.args.hasOwnProperty('sample_row')) image.setLine(_graph.args.sample_row);
 
@@ -31,7 +42,7 @@ SpectralWorkbench.Image = Class.extend({
 
     }
 
-    image.imgObj.src = image.imgEl.attr('src');
+    image.obj.src = _graph.args.imgSrc || image.el.attr('src');
 
 
     /* ======================================
@@ -74,10 +85,10 @@ SpectralWorkbench.Image = Class.extend({
 
       if (_graph) {
 
-        image.imgEl.before($('<div class="section-line-container"><div class="section-line"></div></div>'));
-        image.lineContainerEl = _graph.imgContainer.find('.section-line-container');
+        image.el.before($('<div class="section-line-container"><div class="section-line"></div></div>'));
+        image.lineContainerEl = _graph.image.container.find('.section-line-container');
         image.lineContainerEl.css('position', 'relative');
-        image.lineEl = _graph.imgContainer.find('.section-line');
+        image.lineEl = _graph.image.container.find('.section-line');
         image.lineEl.css('position', 'absolute')
                     .css('width', '100%')
                     .css('top', 0)
@@ -130,10 +141,10 @@ SpectralWorkbench.Image = Class.extend({
      */
     image.click = function(callback) {
 
-      image.imgEl.click(function(e){
+      image.el.click(function(e){
 
-        var x = Math.round((e.offsetX / image.imgEl.width())  * image.width),
-            y = Math.round((e.offsetY / image.imgEl.height()) * image.height);
+        var x = Math.round((e.offsetX / image.el.width())  * image.width),
+            y = Math.round((e.offsetY / image.el.height()) * image.height);
 
         callback(x, y, e);
 
@@ -147,13 +158,13 @@ SpectralWorkbench.Image = Class.extend({
      */
     image.clickOff = function() {
 
-      image.imgEl.off('click');
+      image.el.off('click');
 
     }
 
 
     /* ======================================
-     * Resizes image; called in Graph.updateSize()
+     * Resizes image elements; called in Graph.updateSize()
      */
     image.updateSize = function() {
 
@@ -161,14 +172,11 @@ SpectralWorkbench.Image = Class.extend({
       // we are getting aggressively empirical here and adding "_graph.extraPadding" to fix things
       // but essentially it seems there's a difference between reported d3 chart display width and actual 
       // measurable DOM width, so we adjust the displayed image with extraPadding.
+      _graph.image.container.width(_graph.width)
+                            .height(100);
 
-
-// extra removed
-      _graph.imgContainer.width(_graph.width)
-                         .height(100);
-
-      if (!_graph.embed) _graph.imgContainer.css('margin-left',  _graph.margin.left);
-      else               _graph.imgContainer.css('margin-left',  _graph.margin.left);
+      if (!_graph.embed) _graph.image.container.css('margin-left',  _graph.margin.left);
+      else               _graph.image.container.css('margin-left',  _graph.margin.left);
                          // .css('margin-right', _graph.margin.right); // margin not required on image, for some reason
 
 
@@ -198,16 +206,16 @@ SpectralWorkbench.Image = Class.extend({
 
         }
 
-        _graph.imgEl.width(_graph.width + _graph.leftCrop + _graph.rightCrop) // left and rightCrop are masked out range
-                    .css('max-width', 'none')
-                    .css('margin-left', -_graph.leftCrop);
+        _graph.image.el.width(_graph.width + _graph.leftCrop + _graph.rightCrop) // left and rightCrop are masked out range
+                       .css('max-width', 'none')
+                       .css('margin-left', -_graph.leftCrop);
 
       } else {
 
-        _graph.imgEl.width(_graph.width)
-                    .height(100)
-                    .css('max-width', 'none')
-                    .css('margin-left', 0);
+        _graph.image.el.width(_graph.width)
+                       .height(100)
+                       .css('max-width', 'none')
+                       .css('margin-left', 0);
 
       }
 

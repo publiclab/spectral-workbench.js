@@ -68,7 +68,10 @@ module.exports = function(grunt) {
                       width: 1200,
                       height: 800
                   }
-              }
+              },
+              styles: [
+                'dist/spectral-workbench.css'
+              ]
             }
           }
         }
