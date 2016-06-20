@@ -54,7 +54,7 @@ describe("Graph", function() {
   });
 
 
-  xit("makes imgContainer match width of graph bounds", function() {
+  xit("makes image.container match width of graph bounds", function() {
 
      expect(d3.select('.nv-series-0')[0][0].getBBox().width).toBe(graph.width - 10); // 10 is the "extra"
 
@@ -107,7 +107,7 @@ describe("Graph", function() {
     // expect(graph.width).toBe(600); // this prob depends on the container
     expect(graph.zooming).toBe(false);
     expect(graph.el.html()).toBeDefined();
-    expect(graph.imgEl.html()).toBeDefined();
+    expect(graph.image.el.html()).toBeDefined();
     expect(graph.svg).toBeDefined();
 
     expect(graph.svg).toBeDefined();
@@ -123,7 +123,7 @@ describe("Graph", function() {
     expect(graph.fullExtent).toBeDefined();
     expect(graph.fullExtent[1] - graph.fullExtent[0]).toBeGreaterThan(graph.extent[1] - graph.extent[0]);
     expect(graph.image).toBeDefined();
-    expect(graph.image.imgEl).toBeDefined();
+    expect(graph.image.el).toBeDefined();
     expect(graph.image.width).toBeDefined();
 
   });
@@ -132,7 +132,6 @@ describe("Graph", function() {
   var originalPxPerNm;
 
   it("imagePxToDisplayPx() converts an x-coordinate pixel value from image space to a display space pixel value", function() {
-
     originalPxPerNm = originalPxPerNm = graph.image.width / (graph.fullExtent[1] - graph.fullExtent[0]);
 
     // image 800px wide (graph.image.width), normally displayed at 800px, 
@@ -144,14 +143,14 @@ describe("Graph", function() {
     // and pxPerNm should be 1.1603754975109946
     // margins make displayed image width more difficult to calculate:
     // default margin = { top: 10, right: 30, bottom: 20, left: 70 }; but right margin is not used in image display
-    // but we can use graph.imgEl.width() for the final displayed width:
+    // but we can use graph.image.el.width() for the final displayed width:
 
     // 130 nm in original image pixels; 
     expect(Math.round(graph.imagePxToDisplayPx(originalPxPerNm * 130.911))).toBeCloseTo(0);
     // graph.width is 690px, displayed image, cropped
 
     var rightEdgeNm = 689.432 - 158.521; // full range in nm minus hidden right side should be right edge in nm
-    expect(Math.round(graph.imagePxToDisplayPx(originalPxPerNm * rightEdgeNm))).toBeCloseTo(Math.round(graph.imgContainer.width())); 
+    expect(Math.round(graph.imagePxToDisplayPx(originalPxPerNm * rightEdgeNm))).toBeCloseTo(Math.round(graph.image.container.width())); 
 
   });
 
@@ -167,7 +166,7 @@ describe("Graph", function() {
       so 500/800 = 0.625, times 680 = 425
     */
 
-    expect(graph.imgContainer.width()).toBe(680);
+    expect(graph.image.container.width()).toBe(680);
     expect(graph.imagePxToDisplayPx(500)).toBeCloseTo(425);
 
     graph.range = range;
@@ -205,7 +204,7 @@ describe("Graph", function() {
   });
 
 
-  xit("makes imgContainer match width of graph bounds after a range is set", function() {
+  xit("makes image.container match width of graph bounds after a range is set", function() {
 
      expect(graph.range.length).toBe(2);
      expect(d3.select('.nv-series-0')[0][0].getBBox().width).toBe(graph.width - 10); // 10 is the "extra" space the d3 chart requires
@@ -226,7 +225,7 @@ describe("Graph", function() {
 
     expect(Math.round(graph.imagePxToDisplayPx(originalPxPerNm * 130.911))).toBeCloseTo(-1); // rounding error; toBeCloseTo(0, 1) syntax doesn't seem to work for precision?
     var rightEdgeNm = 689.432 - 158.521; // displayed range in nm (~400) minus hidden right side should be right edge in nm
-    expect(Math.round(graph.imagePxToDisplayPx(originalPxPerNm * rightEdgeNm))).toBeCloseTo(graph.imgContainer.width() + 1); // rounding error
+    expect(Math.round(graph.imagePxToDisplayPx(originalPxPerNm * rightEdgeNm))).toBeCloseTo(graph.image.container.width() + 1); // rounding error
     expect(Math.round(graph.imagePxToDisplayPx(500))).toBeCloseTo(675);
 
     expect(graph.displayPxToNm(0)).toBeCloseTo(graph.extent[0]);

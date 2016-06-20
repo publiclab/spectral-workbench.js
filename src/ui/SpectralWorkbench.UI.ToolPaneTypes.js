@@ -267,8 +267,8 @@ SpectralWorkbench.UI.ToolPaneTypes = {
 
       $('.calibration-pane').remove();
 
-      form.graph.imgEl.height(100); // return it to full height
-      form.graph.imgContainer.height(100);
+      form.graph.image.el.height(100); // return it to full height
+      form.graph.image.container.height(100);
 
     },
     setup: function(form) {
@@ -286,8 +286,8 @@ SpectralWorkbench.UI.ToolPaneTypes = {
 
       }
 
-      form.graph.imgContainer.height(180); // we should move away from hard-coded height, but couldn't make the below work:
-      //form.graph.imgContainer.height(_graph.imgContainer.height() + 80);
+      form.graph.image.container.height(180); // we should move away from hard-coded height, but couldn't make the below work:
+      //form.graph.image.container.height(_graph.image.container.height() + 80);
 
       // Using reference image from 
       // http://publiclab.org/notes/warren/09-30-2015/new-wavelength-calibration-procedure-preview-for-spectral-workbench-2-0
@@ -334,8 +334,8 @@ SpectralWorkbench.UI.ToolPaneTypes = {
         var widthAsCalibrated = _graph.datum.json.data.lines.length; // sometimes calibration was run on a lower-res image; we are transitioning away from this
             auto_cal = SpectralWorkbench.API.Core.attemptCalibration(_graph), // [r,g,b] in terms of width of json stored image data
             // convert to display space from image space:
-            blue2guess  = _graph.imgContainer.width() * (auto_cal[2] / widthAsCalibrated),
-            green2guess = _graph.imgContainer.width() * (auto_cal[1] / widthAsCalibrated);
+            blue2guess  = _graph.image.container.width() * (auto_cal[2] / widthAsCalibrated),
+            green2guess = _graph.image.container.width() * (auto_cal[1] / widthAsCalibrated);
 
         calibrationResize(blue2guess, green2guess);
 
@@ -476,7 +476,7 @@ SpectralWorkbench.UI.ToolPaneTypes = {
       // displayed range, limit them:
       var limitRange = function(x) {
 
-        if (x > _graph.imgContainer.width()) x = _graph.imgContainer.width();
+        if (x > _graph.image.container.width()) x = _graph.image.container.width();
         if (x < 0) x = 0;
         return x;
 

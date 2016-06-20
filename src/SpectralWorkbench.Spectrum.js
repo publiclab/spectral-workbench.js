@@ -376,11 +376,11 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
           // I don't believe we *ever* want to actually reverse the data's order!
           // lines = lines.reverse();
-          _spectrum.graph.imgEl.addClass('flipped');
+          _spectrum.graph.image.el.addClass('flipped');
  
         } else {
  
-          _spectrum.graph.imgEl.removeClass('flipped');
+          _spectrum.graph.image.el.removeClass('flipped');
  
         }
 
