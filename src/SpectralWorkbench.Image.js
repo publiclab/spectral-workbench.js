@@ -5,18 +5,27 @@ SpectralWorkbench.Image = Class.extend({
     var image = this;
 
     image.options = options || {};
-    image.options = options || {};
     image.options.selector = image.options.selector || 'div.swb-spectrum-img-container';
 
-    image.container = $(image.options.selector);
+    // test if we're inside a require()
+    // http://www.timetler.com/2012/10/13/environment-detection-in-javascript/
+    var nodejs = typeof exports !== 'undefined' && this.exports !== exports;
 
-    if (image.container) {
+    if (nodejs) {
+      var Canvas = require('canvas');
+      image.obj    = new Canvas.Image();
+    } else {
+      image.obj    = new Image();
+    }
 
+
+    if (!nodejs) {
+
+      image.container = $(image.options.selector);
       image.el = image.container.find('img');
 
     }
 
-    image.obj    = new Image();
     image.lineEl = false; // the line indicating the cross-section
 
     image.obj.onload = function() {
@@ -25,9 +34,7 @@ SpectralWorkbench.Image = Class.extend({
       image.width = image.obj.width;
       image.height = image.obj.height;
 
-      // test if we're inside a require()
-      // http://www.timetler.com/2012/10/13/environment-detection-in-javascript/
-      if (typeof exports !== 'undefined' && this.exports !== exports) {
+      if (nodejs) {
 
         var Canvas = require('canvas'),
              Image = Canvas.Image,
