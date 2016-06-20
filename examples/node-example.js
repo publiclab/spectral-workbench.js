@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// This example creates a spectrum from JSON data, then, separately, 
+// imports an image file and converts its first line into nested array data.
+
 var SpectralWorkbench = require('../dist/spectral-workbench.js').SpectralWorkbench;
 
 var data = {

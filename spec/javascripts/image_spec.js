@@ -26,6 +26,8 @@ describe("Image", function() {
     expect(image.width).toBeDefined();
     expect(image.height).toBeDefined();
 
+    expect(image.width).toBe(800);
+
   });
 
   it("has a canvas element and context", function() {

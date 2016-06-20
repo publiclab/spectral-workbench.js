@@ -120,7 +120,6 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
     /* ======================================
      * Prepares a CSV formatted data in range
      * based on spectrum.average
-     * UNTESTED IN JASMINE
      */
     _spectrum.encodeCSV = function() {
 
@@ -143,7 +142,6 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
     /* ======================================
      * Prepares a server-ready formatted JSON object of 
      * currently displayed data based on spectrum.average/red/green/blue
-     * UNTESTED IN JASMINE
      */
     _spectrum.encodeJSON = function() {
 
