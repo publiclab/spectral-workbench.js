@@ -202,11 +202,16 @@ SpectralWorkbench.Image = Class.extend({
 
     }
 
-    if (image.el) image.obj.src = image.options.url || image.el.attr('src');
-    else          image.obj.src = image.options.url;
+    var src = image.options.url || image.el.attr('src');
 
-    // if there's no image, whether grabbed from the element, or supplied, just trigger onLoad callback already:
-    if (image.el.length === 0 && !image.options.url && image.options.hasOwnProperty('onLoad')) image.options.onLoad(image);
+    if (src) image.obj.src = src;
+    else {
+
+      // If there's no image, whether grabbed from the element
+      // or supplied, just trigger onLoad callback already
+      if (image.options.hasOwnProperty('onLoad')) image.options.onLoad(image);
+
+    }
 
     /* ======================================
      * Returns a array of pixel brightnesses in [r,g,b,a] format, 
@@ -1352,8 +1357,8 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
          _spectrum[channel].forEach(function(point, i) {
 
-           if (point.y) point.y = +point.y.toPrecision(sigFigures);
-           if (point.x) point.x = +point.x.toPrecision(_spectrum.sigFigWavelength);
+           if (point.y && (point.y + '').length > sigFigures) point.y = +(point.y).toPrecision(sigFigures);
+           if (point.x && (point.x + '').length > _spectrum.sigFigWavelength) point.x = +(point.x).toPrecision(_spectrum.sigFigWavelength);
 
          });
 
