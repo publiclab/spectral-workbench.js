@@ -249,6 +249,26 @@ describe("Graph", function() {
   });
 
 
+  it("does not create datum.image for an imageless spectrum", function(done) {
+
+    $('img.spectrum').src = "";
+    var graph = new SpectralWorkbench.Graph({
+      spectrum_id: 9,           // presence of spectrum_id denotes spectrum and not set
+      imageSelector: 'nothing', // pass nonexistent selector
+      onImageComplete: function onImageComplete(image) {
+
+        // graph.datum doesn't work because we've never run graph.load
+        // expect(graph.datum).not.toBeDefined();
+        expect(image.obj).toBeDefined();
+        expect(image.obj.width).toEqual(0); // no image
+        done();
+
+      }
+    });
+
+  });
+
+
 
 
 
