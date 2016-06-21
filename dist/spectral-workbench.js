@@ -198,12 +198,15 @@ SpectralWorkbench.Image = Class.extend({
 
       if (image.options.sample_row) image.setLine(image.options.sample_row);
 
-      if (image.options.onLoad) image.options.onLoad(); // since image loading is asynchronous
+      if (image.options.onLoad) image.options.onLoad(image); // since image loading is asynchronous
 
     }
 
     if (image.el) image.obj.src = image.options.url || image.el.attr('src');
     else          image.obj.src = image.options.url;
+
+    // if there's no image, whether grabbed from the element, or supplied, just trigger onLoad callback already:
+    if (image.el.length === 0 && !image.options.url && image.options.hasOwnProperty('onLoad')) image.options.onLoad(image);
 
     /* ======================================
      * Returns a array of pixel brightnesses in [r,g,b,a] format, 
