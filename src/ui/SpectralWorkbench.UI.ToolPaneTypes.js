@@ -222,21 +222,21 @@ SpectralWorkbench.UI.ToolPaneTypes = {
 
       form.customFormEl.html("<p>Click the spectrum image or enter a row number:</p><input class='cross-section' type='text' value='0' />");
 
-      form.graph.image.click(function(x, y, e) {
+      form.graph.datum.image.click(function(x, y, e) {
 
         form.el.find('.cross-section').val(y);
 
-        form.graph.image.setLine(y);
+        form.graph.datum.image.setLine(y);
 
       });
 
       // restore the existing sample row indicator
       // test this in jasmine!!!
-      form.closeEl.click(function() { form.graph.image.setLine(form.graph.args.sample_row) });
+      form.closeEl.click(function() { form.graph.datum.image.setLine(form.graph.args.sample_row) });
 
       form.customFormEl.find('input').on('change', function() {
 
-        form.graph.image.setLine(form.customFormEl.find('input').val());
+        form.graph.datum.image.setLine(form.customFormEl.find('input').val());
 
       });
 
@@ -267,8 +267,8 @@ SpectralWorkbench.UI.ToolPaneTypes = {
 
       $('.calibration-pane').remove();
 
-      form.graph.image.el.height(100); // return it to full height
-      form.graph.image.container.height(100);
+      form.graph.datum.image.el.height(100); // return it to full height
+      form.graph.datum.image.container.height(100);
 
     },
     setup: function(form) {
@@ -286,8 +286,8 @@ SpectralWorkbench.UI.ToolPaneTypes = {
 
       }
 
-      form.graph.image.container.height(180); // we should move away from hard-coded height, but couldn't make the below work:
-      //form.graph.image.container.height(_graph.image.container.height() + 80);
+      form.graph.datum.image.container.height(180); // we should move away from hard-coded height, but couldn't make the below work:
+      //form.graph.datum.image.container.height(_graph.datum.image.container.height() + 80);
 
       // Using reference image from 
       // http://publiclab.org/notes/warren/09-30-2015/new-wavelength-calibration-procedure-preview-for-spectral-workbench-2-0
@@ -334,8 +334,8 @@ SpectralWorkbench.UI.ToolPaneTypes = {
         var widthAsCalibrated = _graph.datum.json.data.lines.length; // sometimes calibration was run on a lower-res image; we are transitioning away from this
             auto_cal = SpectralWorkbench.API.Core.attemptCalibration(_graph), // [r,g,b] in terms of width of json stored image data
             // convert to display space from image space:
-            blue2guess  = _graph.image.container.width() * (auto_cal[2] / widthAsCalibrated),
-            green2guess = _graph.image.container.width() * (auto_cal[1] / widthAsCalibrated);
+            blue2guess  = _graph.datum.image.container.width() * (auto_cal[2] / widthAsCalibrated),
+            green2guess = _graph.datum.image.container.width() * (auto_cal[1] / widthAsCalibrated);
 
         calibrationResize(blue2guess, green2guess);
 
@@ -405,7 +405,7 @@ SpectralWorkbench.UI.ToolPaneTypes = {
         $('.slider-2').attr('data-pos', x2);
 
         // compatibility with legacy systems where data extraction from image to json is not always 1:1
-        var jsonPxPerImgPx = _graph.datum.json.data.lines.length/_graph.image.width;
+        var jsonPxPerImgPx = _graph.datum.json.data.lines.length/_graph.datum.image.width;
 
         // get source image pixel location, round to 2 decimal places:
         ix1 = Math.round(_graph.displayPxToImagePx(x1) * jsonPxPerImgPx * 100) / 100;
@@ -476,7 +476,7 @@ SpectralWorkbench.UI.ToolPaneTypes = {
       // displayed range, limit them:
       var limitRange = function(x) {
 
-        if (x > _graph.image.container.width()) x = _graph.image.container.width();
+        if (x > _graph.datum.image.container.width()) x = _graph.datum.image.container.width();
         if (x < 0) x = 0;
         return x;
 
@@ -556,15 +556,15 @@ SpectralWorkbench.UI.ToolPaneTypes = {
       // need a simple way to reset the toolPane content, like alert();
       alert('Start by clicking the middle blue line.');
 
-      form.graph.image.click(function(_x1, _y1) {
+      form.graph.datum.image.click(function(_x1, _y1) {
 
         x1 = _x1;
 
-        form.graph.image.clickOff();
+        form.graph.datum.image.clickOff();
   
         alert('Now, click the bright green line.');
   
-        form.graph.image.click(function(_x2, _y2) {
+        form.graph.datum.image.click(function(_x2, _y2) {
 
           x2 = _x2;
 

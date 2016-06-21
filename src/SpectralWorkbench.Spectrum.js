@@ -6,8 +6,12 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
   /* ======================================
    * <data> is a JSON object as it arrives from the server at SpectralWorkbench.org
+   * Alternative constructors are available: 
+   * 1. an array of [wavelength, intensity] using decodeArray()
+   * 2. a string (in comma-separated value/CSV format) using decodeCSV()
+   * 3. an image object using constructFromImage()
    */
-  init: function(data, _graph) {
+  init: function(data, _graph, options) {
 
     // _super is Datum; this stashes <data> in this.json
     this._super(data, _graph);
@@ -16,9 +20,12 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
    _spectrum.load = function() {
 
-     if (_spectrum.args instanceof Array) _spectrum.decodeArray(_spectrum.args);
-     else if (typeof _spectrum.args == 'string') _spectrum.decodeCSV(_spectrum.args);
-     else if (_spectrum.json && (_spectrum.json.lines || _spectrum.json.data.lines)) _spectrum.decodeJSON(_spectrum.json); // snapshot or spectrum format
+     if      (_spectrum.args instanceof Array)                    _spectrum.decodeArray(_spectrum.args);
+     else if (typeof _spectrum.args == 'string')                  _spectrum.decodeCSV(_spectrum.args);
+     else if (_spectrum.args instanceof SpectralWorkbench.Image)  _spectrum.constructFromImage(_spectrum.args, options);
+     else if (_spectrum.args instanceof Image)                    _spectrum.constructFromImage(_spectrum.args, options);
+     else if (_spectrum.json && 
+             (_spectrum.json.lines || _spectrum.json.data.lines)) _spectrum.decodeJSON(_spectrum.json); // snapshot or spectrum format
 
     }
 
@@ -41,7 +48,8 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
     /* ======================================
      * Decodes and saves a [wavelength, intensity] array of 
-     * data into spectrum.average/red/green/blue
+     * data into spectrum.average/red/green/blue expressed as
+     * percentages. Wavelength may be pixel number if uncalibrated.
      */
     _spectrum.decodeArray = function(array) {
 
@@ -162,6 +170,27 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
       }); 
 
       return lines;
+
+    }
+
+
+    /* ======================================
+     * Constructs spectrum from an image object,
+     * which must already be loaded and ready.
+     * If it's a plain image, will wrap it in SpectralWorkbench.Image.
+     */
+    _spectrum.constructFromImage = function(image, options) {
+
+      options = options || {};
+      options.y = options.y || 0;
+      // this is likely a new image, so we don't keep calibration by default:
+      options.keepCalibrated = options.keepCalibrated || false;
+
+      if (image instanceof Image) image = new SpectralWorkbench.Image(image);
+
+      _spectrum.image = image;
+
+      _spectrum.imgToJSON(options.y, options.keepCalibrated);
 
     }
 
@@ -397,11 +426,11 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
           // I don't believe we *ever* want to actually reverse the data's order!
           // lines = lines.reverse();
-          if (_spectrum.graph.image.el) _spectrum.graph.image.el.addClass('flipped');
+          if (_spectrum.image.el) _spectrum.image.el.addClass('flipped');
  
         } else {
  
-          if (_spectrum.graph.image.el) _spectrum.graph.image.el.removeClass('flipped');
+          if (_spectrum.image.el) _spectrum.image.el.removeClass('flipped');
  
         }
 
@@ -482,7 +511,8 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
     /* ======================================
      * Output server-style JSON of the spectrum
-     * with all active powertags/operations applied -- exactly as currently seen in the graph
+     * with all active powertags/operations applied -- 
+     * exactly as currently seen in the graph.
      */
     _spectrum.toJSON = function() {
 
@@ -506,6 +536,42 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
 
     /* ======================================
+     * Overwrite spectrum.json.data.lines, the raw JSON of the spectrum
+     * <y> is the y-position of the cross section of pixels, where 0 is the top row
+     * <keepCalibrated> is a boolean which indicates whether to keep or flush the calibration
+     * <image> is a SpectralWorkbench.Image object, defaulting to spectrum.image
+     */
+    _spectrum.imgToJSON = function(y, keepCalibrated, image) {
+
+      var lines = [];
+
+      image = image || _spectrum.image;
+
+      image.getLine(y).forEach(function(pixel, index) {
+
+        lines.push({
+          'average': +((pixel[0] + pixel[1] + pixel[2]) / 3).toPrecision(_spectrum.sigFigIntensity),
+          'r': pixel[0],
+          'g': pixel[1],
+          'b': pixel[2],
+          'pixel': index
+        });
+
+        if (keepCalibrated) lines[lines.length - 1].wavelength = _spectrum.pxToNm(index);
+
+      });
+
+      // dislike:
+      _spectrum.json = _spectrum.json || {};
+      _spectrum.json.data = _spectrum.json.data || {};
+      _spectrum.json.data.lines = lines;
+
+      return _spectrum.json.data.lines;
+
+    }
+
+
+    /* ======================================
      * Iterate through channel data and set precision of 
      * each entry to sigFigures>, but defaulting to
      * _spectrum.sigFigIntensity which is 3.
@@ -524,34 +590,6 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
          });
 
        });
-
-    }
-
-
-    /* ======================================
-     * Overwrite spectrum.json.data.lines, the raw JSON of the spectrum
-     * <y> is the y-position of the cross section of pixels, where 0 is the top row
-     * <keepCalibrated> is a boolean which indicates whether to keep or flush the calibration
-     */
-    _spectrum.imgToJSON = function(y, keepCalibrated) {
-
-      var lines = [];
-
-      _spectrum.graph.image.getLine(y).forEach(function(pixel, index) {
-
-        lines.push({
-          'average': +((pixel[0] + pixel[1] + pixel[2]) / 3).toPrecision(_spectrum.sigFigIntensity),
-          'r': pixel[0],
-          'g': pixel[1],
-          'b': pixel[2],
-          'pixel': index
-        });
-
-        if (keepCalibrated) lines[lines.length - 1].wavelength = _spectrum.pxToNm(index);
-
-      });
-
-      _spectrum.json.data.lines = lines;
 
     }
 

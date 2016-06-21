@@ -132,7 +132,7 @@ SpectralWorkbench.API.Operations = {
       tag.datum.load(); // reparse graph-format data
 
       tag.datum.graph.args.sample_row = tag.value;
-      tag.datum.graph.image.setLine(tag.value);
+      tag.datum.image.setLine(tag.value);
 
       if (callback) callback(tag);
 
@@ -218,7 +218,7 @@ SpectralWorkbench.API.Operations = {
 
       if (x1 > x2) {
 
-        if (tag.datum.graph.image.el) tag.datum.graph.image.el.removeClass('flipped');
+        if (tag.datum.image.el) tag.datum.image.el.removeClass('flipped');
 
       }
 

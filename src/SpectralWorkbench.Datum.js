@@ -2,16 +2,16 @@ SpectralWorkbench.Datum = Class.extend({
 
   init: function(args, _graph) {
 
-    this.args = args;
-  
-    this.json  = args;
-    this.title = args.title;
-    this.id    = args.id;
-    this.graph = _graph;
-    this.tags = [];
-    this.powertags = [];
-
     var _datum = this;
+
+    _datum.args = args;
+  
+    if (_datum.args.data || _datum.args.spectra) _datum.json  = args;
+    _datum.title = args.title;
+    _datum.id    = args.id;
+    _datum.graph = _graph;
+    _datum.tags  = [];
+    _datum.powertags = [];
 
 
     /* ======================================

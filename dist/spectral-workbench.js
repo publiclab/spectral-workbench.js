@@ -185,7 +185,7 @@ SpectralWorkbench.Image = Class.extend({
 
         // We're in a browser; build a canvas element, but hide it.
         $('body').append('<canvas id="spectral-workbench-canvas" style="display:none;"></canvas>;');
-        image.canvasEl = $('canvas#spectral-workbench-canvas');
+        image.canvasEl = $('canvas#spectral-workbench-canvas:last');
         image.canvasEl.width(image.width);
         image.canvasEl.height(image.height);
         image.ctx = image.canvasEl[0].getContext("2d");
@@ -198,7 +198,7 @@ SpectralWorkbench.Image = Class.extend({
 
       if (image.options.sample_row) image.setLine(image.options.sample_row);
 
-      if (image.options.callback) image.options.callback(); // since image loading is asynchronous
+      if (image.options.onLoad) image.options.onLoad(); // since image loading is asynchronous
 
     }
 
@@ -390,16 +390,16 @@ SpectralWorkbench.Datum = Class.extend({
 
   init: function(args, _graph) {
 
-    this.args = args;
-  
-    this.json  = args;
-    this.title = args.title;
-    this.id    = args.id;
-    this.graph = _graph;
-    this.tags = [];
-    this.powertags = [];
-
     var _datum = this;
+
+    _datum.args = args;
+  
+    if (_datum.args.data || _datum.args.spectra) _datum.json  = args;
+    _datum.title = args.title;
+    _datum.id    = args.id;
+    _datum.graph = _graph;
+    _datum.tags  = [];
+    _datum.powertags = [];
 
 
     /* ======================================
@@ -771,8 +771,12 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
   /* ======================================
    * <data> is a JSON object as it arrives from the server at SpectralWorkbench.org
+   * Alternative constructors are available: 
+   * 1. an array of [wavelength, intensity] using decodeArray()
+   * 2. a string (in comma-separated value/CSV format) using decodeCSV()
+   * 3. an image object using constructFromImage()
    */
-  init: function(data, _graph) {
+  init: function(data, _graph, options) {
 
     // _super is Datum; this stashes <data> in this.json
     this._super(data, _graph);
@@ -781,9 +785,12 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
    _spectrum.load = function() {
 
-     if (_spectrum.args instanceof Array) _spectrum.decodeArray(_spectrum.args);
-     else if (typeof _spectrum.args == 'string') _spectrum.decodeCSV(_spectrum.args);
-     else if (_spectrum.json && (_spectrum.json.lines || _spectrum.json.data.lines)) _spectrum.decodeJSON(_spectrum.json); // snapshot or spectrum format
+     if      (_spectrum.args instanceof Array)                    _spectrum.decodeArray(_spectrum.args);
+     else if (typeof _spectrum.args == 'string')                  _spectrum.decodeCSV(_spectrum.args);
+     else if (_spectrum.args instanceof SpectralWorkbench.Image)  _spectrum.constructFromImage(_spectrum.args, options);
+     else if (_spectrum.args instanceof Image)                    _spectrum.constructFromImage(_spectrum.args, options);
+     else if (_spectrum.json && 
+             (_spectrum.json.lines || _spectrum.json.data.lines)) _spectrum.decodeJSON(_spectrum.json); // snapshot or spectrum format
 
     }
 
@@ -806,7 +813,8 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
     /* ======================================
      * Decodes and saves a [wavelength, intensity] array of 
-     * data into spectrum.average/red/green/blue
+     * data into spectrum.average/red/green/blue expressed as
+     * percentages. Wavelength may be pixel number if uncalibrated.
      */
     _spectrum.decodeArray = function(array) {
 
@@ -927,6 +935,27 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
       }); 
 
       return lines;
+
+    }
+
+
+    /* ======================================
+     * Constructs spectrum from an image object,
+     * which must already be loaded and ready.
+     * If it's a plain image, will wrap it in SpectralWorkbench.Image.
+     */
+    _spectrum.constructFromImage = function(image, options) {
+
+      options = options || {};
+      options.y = options.y || 0;
+      // this is likely a new image, so we don't keep calibration by default:
+      options.keepCalibrated = options.keepCalibrated || false;
+
+      if (image instanceof Image) image = new SpectralWorkbench.Image(image);
+
+      _spectrum.image = image;
+
+      _spectrum.imgToJSON(options.y, options.keepCalibrated);
 
     }
 
@@ -1162,11 +1191,11 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
           // I don't believe we *ever* want to actually reverse the data's order!
           // lines = lines.reverse();
-          if (_spectrum.graph.image.el) _spectrum.graph.image.el.addClass('flipped');
+          if (_spectrum.image.el) _spectrum.image.el.addClass('flipped');
  
         } else {
  
-          if (_spectrum.graph.image.el) _spectrum.graph.image.el.removeClass('flipped');
+          if (_spectrum.image.el) _spectrum.image.el.removeClass('flipped');
  
         }
 
@@ -1247,7 +1276,8 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
     /* ======================================
      * Output server-style JSON of the spectrum
-     * with all active powertags/operations applied -- exactly as currently seen in the graph
+     * with all active powertags/operations applied -- 
+     * exactly as currently seen in the graph.
      */
     _spectrum.toJSON = function() {
 
@@ -1271,6 +1301,42 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
 
     /* ======================================
+     * Overwrite spectrum.json.data.lines, the raw JSON of the spectrum
+     * <y> is the y-position of the cross section of pixels, where 0 is the top row
+     * <keepCalibrated> is a boolean which indicates whether to keep or flush the calibration
+     * <image> is a SpectralWorkbench.Image object, defaulting to spectrum.image
+     */
+    _spectrum.imgToJSON = function(y, keepCalibrated, image) {
+
+      var lines = [];
+
+      image = image || _spectrum.image;
+
+      image.getLine(y).forEach(function(pixel, index) {
+
+        lines.push({
+          'average': +((pixel[0] + pixel[1] + pixel[2]) / 3).toPrecision(_spectrum.sigFigIntensity),
+          'r': pixel[0],
+          'g': pixel[1],
+          'b': pixel[2],
+          'pixel': index
+        });
+
+        if (keepCalibrated) lines[lines.length - 1].wavelength = _spectrum.pxToNm(index);
+
+      });
+
+      // dislike:
+      _spectrum.json = _spectrum.json || {};
+      _spectrum.json.data = _spectrum.json.data || {};
+      _spectrum.json.data.lines = lines;
+
+      return _spectrum.json.data.lines;
+
+    }
+
+
+    /* ======================================
      * Iterate through channel data and set precision of 
      * each entry to sigFigures>, but defaulting to
      * _spectrum.sigFigIntensity which is 3.
@@ -1289,34 +1355,6 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
          });
 
        });
-
-    }
-
-
-    /* ======================================
-     * Overwrite spectrum.json.data.lines, the raw JSON of the spectrum
-     * <y> is the y-position of the cross section of pixels, where 0 is the top row
-     * <keepCalibrated> is a boolean which indicates whether to keep or flush the calibration
-     */
-    _spectrum.imgToJSON = function(y, keepCalibrated) {
-
-      var lines = [];
-
-      _spectrum.graph.image.getLine(y).forEach(function(pixel, index) {
-
-        lines.push({
-          'average': +((pixel[0] + pixel[1] + pixel[2]) / 3).toPrecision(_spectrum.sigFigIntensity),
-          'r': pixel[0],
-          'g': pixel[1],
-          'b': pixel[2],
-          'pixel': index
-        });
-
-        if (keepCalibrated) lines[lines.length - 1].wavelength = _spectrum.pxToNm(index);
-
-      });
-
-      _spectrum.json.data.lines = lines;
 
     }
 
@@ -3472,7 +3510,7 @@ SpectralWorkbench.API.Operations = {
       tag.datum.load(); // reparse graph-format data
 
       tag.datum.graph.args.sample_row = tag.value;
-      tag.datum.graph.image.setLine(tag.value);
+      tag.datum.image.setLine(tag.value);
 
       if (callback) callback(tag);
 
@@ -3558,7 +3596,7 @@ SpectralWorkbench.API.Operations = {
 
       if (x1 > x2) {
 
-        if (tag.datum.graph.image.el) tag.datum.graph.image.el.removeClass('flipped');
+        if (tag.datum.image.el) tag.datum.image.el.removeClass('flipped');
 
       }
 
@@ -4136,21 +4174,21 @@ SpectralWorkbench.UI.ToolPaneTypes = {
 
       form.customFormEl.html("<p>Click the spectrum image or enter a row number:</p><input class='cross-section' type='text' value='0' />");
 
-      form.graph.image.click(function(x, y, e) {
+      form.graph.datum.image.click(function(x, y, e) {
 
         form.el.find('.cross-section').val(y);
 
-        form.graph.image.setLine(y);
+        form.graph.datum.image.setLine(y);
 
       });
 
       // restore the existing sample row indicator
       // test this in jasmine!!!
-      form.closeEl.click(function() { form.graph.image.setLine(form.graph.args.sample_row) });
+      form.closeEl.click(function() { form.graph.datum.image.setLine(form.graph.args.sample_row) });
 
       form.customFormEl.find('input').on('change', function() {
 
-        form.graph.image.setLine(form.customFormEl.find('input').val());
+        form.graph.datum.image.setLine(form.customFormEl.find('input').val());
 
       });
 
@@ -4181,8 +4219,8 @@ SpectralWorkbench.UI.ToolPaneTypes = {
 
       $('.calibration-pane').remove();
 
-      form.graph.image.el.height(100); // return it to full height
-      form.graph.image.container.height(100);
+      form.graph.datum.image.el.height(100); // return it to full height
+      form.graph.datum.image.container.height(100);
 
     },
     setup: function(form) {
@@ -4200,8 +4238,8 @@ SpectralWorkbench.UI.ToolPaneTypes = {
 
       }
 
-      form.graph.image.container.height(180); // we should move away from hard-coded height, but couldn't make the below work:
-      //form.graph.image.container.height(_graph.image.container.height() + 80);
+      form.graph.datum.image.container.height(180); // we should move away from hard-coded height, but couldn't make the below work:
+      //form.graph.datum.image.container.height(_graph.datum.image.container.height() + 80);
 
       // Using reference image from 
       // http://publiclab.org/notes/warren/09-30-2015/new-wavelength-calibration-procedure-preview-for-spectral-workbench-2-0
@@ -4248,8 +4286,8 @@ SpectralWorkbench.UI.ToolPaneTypes = {
         var widthAsCalibrated = _graph.datum.json.data.lines.length; // sometimes calibration was run on a lower-res image; we are transitioning away from this
             auto_cal = SpectralWorkbench.API.Core.attemptCalibration(_graph), // [r,g,b] in terms of width of json stored image data
             // convert to display space from image space:
-            blue2guess  = _graph.image.container.width() * (auto_cal[2] / widthAsCalibrated),
-            green2guess = _graph.image.container.width() * (auto_cal[1] / widthAsCalibrated);
+            blue2guess  = _graph.datum.image.container.width() * (auto_cal[2] / widthAsCalibrated),
+            green2guess = _graph.datum.image.container.width() * (auto_cal[1] / widthAsCalibrated);
 
         calibrationResize(blue2guess, green2guess);
 
@@ -4319,7 +4357,7 @@ SpectralWorkbench.UI.ToolPaneTypes = {
         $('.slider-2').attr('data-pos', x2);
 
         // compatibility with legacy systems where data extraction from image to json is not always 1:1
-        var jsonPxPerImgPx = _graph.datum.json.data.lines.length/_graph.image.width;
+        var jsonPxPerImgPx = _graph.datum.json.data.lines.length/_graph.datum.image.width;
 
         // get source image pixel location, round to 2 decimal places:
         ix1 = Math.round(_graph.displayPxToImagePx(x1) * jsonPxPerImgPx * 100) / 100;
@@ -4390,7 +4428,7 @@ SpectralWorkbench.UI.ToolPaneTypes = {
       // displayed range, limit them:
       var limitRange = function(x) {
 
-        if (x > _graph.image.container.width()) x = _graph.image.container.width();
+        if (x > _graph.datum.image.container.width()) x = _graph.datum.image.container.width();
         if (x < 0) x = 0;
         return x;
 
@@ -4470,15 +4508,15 @@ SpectralWorkbench.UI.ToolPaneTypes = {
       // need a simple way to reset the toolPane content, like alert();
       alert('Start by clicking the middle blue line.');
 
-      form.graph.image.click(function(_x1, _y1) {
+      form.graph.datum.image.click(function(_x1, _y1) {
 
         x1 = _x1;
 
-        form.graph.image.clickOff();
+        form.graph.datum.image.clickOff();
   
         alert('Now, click the bright green line.');
   
-        form.graph.image.click(function(_x2, _y2) {
+        form.graph.datum.image.click(function(_x2, _y2) {
 
           x2 = _x2;
 
@@ -5066,15 +5104,6 @@ SpectralWorkbench.Graph = Class.extend({
 
       _graph.dataType = "spectrum";
 
-      // Create an image and canvas element to display and manipulate image data. 
-      // We could have this non-initialized at boot, and only create it if asked to.
-      _graph.image = new SpectralWorkbench.Image(_graph, {
-        callback:   _graph.onImageComplete,
-        selector:   _graph.args.imageSelector,
-        url:        _graph.args.imgSrc,
-        sample_row: _graph.args.sample_row
-      });
-
     } else if (_graph.args.hasOwnProperty('set_id')) {
 
       _graph.dataType = "set";
@@ -5160,9 +5189,9 @@ SpectralWorkbench.Graph = Class.extend({
     _graph.imagePxToDisplayPx = function(x) {
 
       // what proportion of the full image is being displayed?
-      var proportion = x / _graph.image.width, // x position as a percent of original image
-          scaledX = proportion * _graph.image.el.width(), // that proportion of the displayed DOM image element;
-          displayPxPerNm = _graph.image.el.width() / (_graph.fullExtent[1] - _graph.fullExtent[0]), 
+      var proportion = x / _graph.datum.image.width, // x position as a percent of original image
+          scaledX = proportion * _graph.datum.image.el.width(), // that proportion of the displayed DOM image element;
+          displayPxPerNm = _graph.datum.image.el.width() / (_graph.fullExtent[1] - _graph.fullExtent[0]), 
           leftXOffsetInDisplayPx = (_graph.extent[0] - _graph.fullExtent[0]) * displayPxPerNm;
 
       return scaledX - leftXOffsetInDisplayPx;
@@ -5177,11 +5206,11 @@ SpectralWorkbench.Graph = Class.extend({
     _graph.displayPxToImagePx = function(x) {
 
       // what proportion of the full image is being displayed?
-      var displayPxPerNm = _graph.image.el.width() / (_graph.fullExtent[1] - _graph.fullExtent[0]), 
+      var displayPxPerNm = _graph.datum.image.el.width() / (_graph.fullExtent[1] - _graph.fullExtent[0]), 
           leftXOffsetInDisplayPx = (_graph.extent[0] - _graph.fullExtent[0]) * displayPxPerNm,
           fullX = x + leftXOffsetInDisplayPx, // starting from true image DOM element zero
-          proportion = fullX / _graph.image.el.width(), // x position as a percent of DOM image
-          scaledX = proportion * _graph.image.width; // that proportion of the original image
+          proportion = fullX / _graph.datum.image.el.width(), // x position as a percent of DOM image
+          scaledX = proportion * _graph.datum.image.width; // that proportion of the original image
 
       return scaledX;
 
@@ -5305,6 +5334,15 @@ SpectralWorkbench.Graph = Class.extend({
         });
 
       if (_graph.dataType == "spectrum") {
+
+        // Create an image and canvas element to display and manipulate image data. 
+        _graph.datum.image = new SpectralWorkbench.Image(_graph, {
+          onLoad:   _graph.onImageComplete,
+          selector:   _graph.args.imageSelector,
+          // plus optionals:
+          url:        _graph.args.imgSrc,
+          sample_row: _graph.args.sample_row
+        });
 
         _graph.UI = new SpectralWorkbench.UI.Spectrum(_graph);
 
@@ -5592,7 +5630,7 @@ SpectralWorkbench.Graph = Class.extend({
 
       _graph.el.height(100); // this isn't done later because we mess w/ height, in, for example, calibration
 
-      if (_graph.image) _graph.image.updateSize(); // adjust image element and image.container element
+      if (_graph.datum && _graph.datum.image) _graph.datum.image.updateSize(); // adjust image element and image.container element
 
       if (_graph.datum) {
 
