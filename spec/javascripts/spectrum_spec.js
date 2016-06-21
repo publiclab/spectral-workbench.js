@@ -8,7 +8,7 @@ describe("Spectrum", function() {
   // {"average":64.3333,"r":69,"g":46,"b":78,"wavelength":269.089},
   // {"average":31,"r":33,"g":19,"b":41,"wavelength":958.521}
 
-  var spectrum = new SpectralWorkbench.Spectrum(data)
+  var spectrum = new SpectralWorkbench.Spectrum(data);
 
   it("is not undefined when initialized with spectrum json", function() {
 
@@ -283,19 +283,31 @@ describe("Spectrum", function() {
 
   });
 
-  // test spectrum.image, which the following method uses; here, we don't have an image. 
-
-
   /* ======================================
    * Overwrite spectrum.json.data.lines, the raw JSON of the spectrum
    * <y> is the y-position of the cross section of pixels, where 0 is the top row
    * <keepCalibrated> is a boolean which indicates whether to keep or flush the calibration
    * spectrum.imgToJSON = function(y, keepCalibrated) {
    */
-  xit("imgToJSON() extracts JSON data from an image", function() {
+  it("imgToJSON() extracts JSON data from an image", function(done) {
 
-    // check that we can extract image data
-    expect(graph.datum.imgToJSON(1)).toBe(64.3333);
+    var image = new SpectralWorkbench.Image(false, {
+      url: 'spec/javascripts/fixtures/test-spectrum-9.png',
+      onLoad: function onLoad() {
+
+        var spectrumFromImage = new SpectralWorkbench.Spectrum(image, false, { y: 10 });
+
+        expect(spectrumFromImage.image).toBeDefined();
+
+        // check that we can extract image data
+        expect(spectrumFromImage.imgToJSON(1)[0].average).toBe(64.33);
+        expect(spectrumFromImage.imgToJSON(1)[0].pixel).toBe(0);
+        expect(spectrumFromImage.imgToJSON(1)[0].wavelength).toBeUndefined();
+
+        done();
+
+      }
+    });
 
   });
 

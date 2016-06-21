@@ -46,7 +46,7 @@ SpectralWorkbench.Image = Class.extend({
 
         // We're in a browser; build a canvas element, but hide it.
         $('body').append('<canvas id="spectral-workbench-canvas" style="display:none;"></canvas>;');
-        image.canvasEl = $('canvas#spectral-workbench-canvas');
+        image.canvasEl = $('canvas#spectral-workbench-canvas:last');
         image.canvasEl.width(image.width);
         image.canvasEl.height(image.height);
         image.ctx = image.canvasEl[0].getContext("2d");
@@ -59,7 +59,7 @@ SpectralWorkbench.Image = Class.extend({
 
       if (image.options.sample_row) image.setLine(image.options.sample_row);
 
-      if (image.options.callback) image.options.callback(); // since image loading is asynchronous
+      if (image.options.onLoad) image.options.onLoad(); // since image loading is asynchronous
 
     }
 

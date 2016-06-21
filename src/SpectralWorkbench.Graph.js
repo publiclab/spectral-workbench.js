@@ -27,15 +27,6 @@ SpectralWorkbench.Graph = Class.extend({
 
       _graph.dataType = "spectrum";
 
-      // Create an image and canvas element to display and manipulate image data. 
-      // We could have this non-initialized at boot, and only create it if asked to.
-      _graph.image = new SpectralWorkbench.Image(_graph, {
-        callback:   _graph.onImageComplete,
-        selector:   _graph.args.imageSelector,
-        url:        _graph.args.imgSrc,
-        sample_row: _graph.args.sample_row
-      });
-
     } else if (_graph.args.hasOwnProperty('set_id')) {
 
       _graph.dataType = "set";
@@ -121,9 +112,9 @@ SpectralWorkbench.Graph = Class.extend({
     _graph.imagePxToDisplayPx = function(x) {
 
       // what proportion of the full image is being displayed?
-      var proportion = x / _graph.image.width, // x position as a percent of original image
-          scaledX = proportion * _graph.image.el.width(), // that proportion of the displayed DOM image element;
-          displayPxPerNm = _graph.image.el.width() / (_graph.fullExtent[1] - _graph.fullExtent[0]), 
+      var proportion = x / _graph.datum.image.width, // x position as a percent of original image
+          scaledX = proportion * _graph.datum.image.el.width(), // that proportion of the displayed DOM image element;
+          displayPxPerNm = _graph.datum.image.el.width() / (_graph.fullExtent[1] - _graph.fullExtent[0]), 
           leftXOffsetInDisplayPx = (_graph.extent[0] - _graph.fullExtent[0]) * displayPxPerNm;
 
       return scaledX - leftXOffsetInDisplayPx;
@@ -138,11 +129,11 @@ SpectralWorkbench.Graph = Class.extend({
     _graph.displayPxToImagePx = function(x) {
 
       // what proportion of the full image is being displayed?
-      var displayPxPerNm = _graph.image.el.width() / (_graph.fullExtent[1] - _graph.fullExtent[0]), 
+      var displayPxPerNm = _graph.datum.image.el.width() / (_graph.fullExtent[1] - _graph.fullExtent[0]), 
           leftXOffsetInDisplayPx = (_graph.extent[0] - _graph.fullExtent[0]) * displayPxPerNm,
           fullX = x + leftXOffsetInDisplayPx, // starting from true image DOM element zero
-          proportion = fullX / _graph.image.el.width(), // x position as a percent of DOM image
-          scaledX = proportion * _graph.image.width; // that proportion of the original image
+          proportion = fullX / _graph.datum.image.el.width(), // x position as a percent of DOM image
+          scaledX = proportion * _graph.datum.image.width; // that proportion of the original image
 
       return scaledX;
 
@@ -266,6 +257,15 @@ SpectralWorkbench.Graph = Class.extend({
         });
 
       if (_graph.dataType == "spectrum") {
+
+        // Create an image and canvas element to display and manipulate image data. 
+        _graph.datum.image = new SpectralWorkbench.Image(_graph, {
+          onLoad:   _graph.onImageComplete,
+          selector:   _graph.args.imageSelector,
+          // plus optionals:
+          url:        _graph.args.imgSrc,
+          sample_row: _graph.args.sample_row
+        });
 
         _graph.UI = new SpectralWorkbench.UI.Spectrum(_graph);
 
@@ -553,7 +553,7 @@ SpectralWorkbench.Graph = Class.extend({
 
       _graph.el.height(100); // this isn't done later because we mess w/ height, in, for example, calibration
 
-      if (_graph.image) _graph.image.updateSize(); // adjust image element and image.container element
+      if (_graph.datum && _graph.datum.image) _graph.datum.image.updateSize(); // adjust image element and image.container element
 
       if (_graph.datum) {
 

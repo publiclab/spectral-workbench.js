@@ -75,7 +75,7 @@ describe("Graph", function() {
       calibrated: true, // 269.089 to 958.521
       range: [400, 800],
       onComplete: callback,
-      onImageComplete: function() { done(); } // fires when graph.image is loaded, so that later tests can run
+      onImageComplete: function() { done(); } // fires when graph.datum.image is loaded, so that later tests can run
 
     });
 
@@ -107,7 +107,7 @@ describe("Graph", function() {
     // expect(graph.width).toBe(600); // this prob depends on the container
     expect(graph.zooming).toBe(false);
     expect(graph.el.html()).toBeDefined();
-    expect(graph.image.el.html()).toBeDefined();
+    expect(graph.datum.image.el.html()).toBeDefined();
     expect(graph.svg).toBeDefined();
 
     expect(graph.svg).toBeDefined();
@@ -122,9 +122,9 @@ describe("Graph", function() {
     expect(graph.extent).toBeDefined();
     expect(graph.fullExtent).toBeDefined();
     expect(graph.fullExtent[1] - graph.fullExtent[0]).toBeGreaterThan(graph.extent[1] - graph.extent[0]);
-    expect(graph.image).toBeDefined();
-    expect(graph.image.el).toBeDefined();
-    expect(graph.image.width).toBeDefined();
+    expect(graph.datum.image).toBeDefined();
+    expect(graph.datum.image.el).toBeDefined();
+    expect(graph.datum.image.width).toBeDefined();
 
   });
 
@@ -132,9 +132,9 @@ describe("Graph", function() {
   var originalPxPerNm;
 
   it("imagePxToDisplayPx() converts an x-coordinate pixel value from image space to a display space pixel value", function() {
-    originalPxPerNm = originalPxPerNm = graph.image.width / (graph.fullExtent[1] - graph.fullExtent[0]);
+    originalPxPerNm = originalPxPerNm = graph.datum.image.width / (graph.fullExtent[1] - graph.fullExtent[0]);
 
-    // image 800px wide (graph.image.width), normally displayed at 800px, 
+    // image 800px wide (graph.datum.image.width), normally displayed at 800px, 
     // but with 400-800 range limiting pushing it wider; 1189.27px
     // source spectrum goes from 269.089nm to 958.521nm, or a range of 689.432nm
     // so, 130.911nm between start and range start (400)
@@ -143,14 +143,14 @@ describe("Graph", function() {
     // and pxPerNm should be 1.1603754975109946
     // margins make displayed image width more difficult to calculate:
     // default margin = { top: 10, right: 30, bottom: 20, left: 70 }; but right margin is not used in image display
-    // but we can use graph.image.el.width() for the final displayed width:
+    // but we can use graph.datum.image.el.width() for the final displayed width:
 
     // 130 nm in original image pixels; 
     expect(Math.round(graph.imagePxToDisplayPx(originalPxPerNm * 130.911))).toBeCloseTo(0);
     // graph.width is 690px, displayed image, cropped
 
     var rightEdgeNm = 689.432 - 158.521; // full range in nm minus hidden right side should be right edge in nm
-    expect(Math.round(graph.imagePxToDisplayPx(originalPxPerNm * rightEdgeNm))).toBeCloseTo(Math.round(graph.image.container.width())); 
+    expect(Math.round(graph.imagePxToDisplayPx(originalPxPerNm * rightEdgeNm))).toBeCloseTo(Math.round(graph.datum.image.container.width())); 
 
   });
 
@@ -166,7 +166,7 @@ describe("Graph", function() {
       so 500/800 = 0.625, times 680 = 425
     */
 
-    expect(graph.image.container.width()).toBe(680);
+    expect(graph.datum.image.container.width()).toBe(680);
     expect(graph.imagePxToDisplayPx(500)).toBeCloseTo(425);
 
     graph.range = range;
@@ -225,7 +225,7 @@ describe("Graph", function() {
 
     expect(Math.round(graph.imagePxToDisplayPx(originalPxPerNm * 130.911))).toBeCloseTo(-1); // rounding error; toBeCloseTo(0, 1) syntax doesn't seem to work for precision?
     var rightEdgeNm = 689.432 - 158.521; // displayed range in nm (~400) minus hidden right side should be right edge in nm
-    expect(Math.round(graph.imagePxToDisplayPx(originalPxPerNm * rightEdgeNm))).toBeCloseTo(graph.image.container.width() + 1); // rounding error
+    expect(Math.round(graph.imagePxToDisplayPx(originalPxPerNm * rightEdgeNm))).toBeCloseTo(graph.datum.image.container.width() + 1); // rounding error
     expect(Math.round(graph.imagePxToDisplayPx(500))).toBeCloseTo(675);
 
     expect(graph.displayPxToNm(0)).toBeCloseTo(graph.extent[0]);
