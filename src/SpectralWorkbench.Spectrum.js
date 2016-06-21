@@ -584,8 +584,8 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
          _spectrum[channel].forEach(function(point, i) {
 
-           if (point.y) point.y = +point.y.toPrecision(sigFigures);
-           if (point.x) point.x = +point.x.toPrecision(_spectrum.sigFigWavelength);
+           if (point.y && (point.y + '').length > sigFigures) point.y = +(point.y).toPrecision(sigFigures);
+           if (point.x && (point.x + '').length > _spectrum.sigFigWavelength) point.x = +(point.x).toPrecision(_spectrum.sigFigWavelength);
 
          });
 
