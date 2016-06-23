@@ -18,13 +18,18 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
     var _spectrum = this;
 
-   _spectrum.load = function() {
 
-     if      (_spectrum.args instanceof Array)                    _spectrum.decodeArray(_spectrum.args);
-     else if (typeof _spectrum.args == 'string')                  _spectrum.decodeCSV(_spectrum.args);
-     else if (_spectrum.args instanceof SpectralWorkbench.Image)  _spectrum.constructFromImage(_spectrum.args, options);
-     else if (_spectrum.args instanceof Image)                    _spectrum.constructFromImage(_spectrum.args, options);
-     else if (_spectrum.json && 
+    // test if we're inside a require()
+    // http://www.timetler.com/2012/10/13/environment-detection-in-javascript/
+    var nodejs = typeof exports !== 'undefined' && this.exports !== exports;
+
+    _spectrum.load = function() {
+
+      if      (_spectrum.args instanceof Array)                    _spectrum.decodeArray(_spectrum.args);
+      else if (typeof _spectrum.args == 'string')                  _spectrum.decodeCSV(_spectrum.args);
+      else if (_spectrum.args instanceof SpectralWorkbench.Image)  _spectrum.constructFromImage(_spectrum.args, options);
+      else if (typeof Image === 'function' && _spectrum.args instanceof Image)                    _spectrum.constructFromImage(_spectrum.args, options);
+      else if (_spectrum.json && 
              (_spectrum.json.lines || _spectrum.json.data.lines)) _spectrum.decodeJSON(_spectrum.json); // snapshot or spectrum format
 
     }
@@ -600,33 +605,62 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
      * Most uses of this function will be deprecated with the Snapshots system:
      * https://publiclab.org/wiki/spectral-workbench-snapshots
      */
-    _spectrum.upload = function(url, callback) {
+    _spectrum.upload = function(url, callback, formData) {
 
       url = url || '/spectrums/' + _spectrum.id;
+      callback = callback || function callback(err, httpResponse, body) { console.log(body) };
+      formData = formData || {};
 
-      $.ajax({
-
-        url: url,
-        type: "PUT",
-        dataType: "json",
-        data: {
-          spectrum: {
-            title: _spectrum.json.title,
-            notes: _spectrum.json.notes,
-            // we stringify manually here since it was not flattening 
-            // spectrum.json.data.lines into an array, but an object
-            data: JSON.stringify(_spectrum.json.data)
-          }
+      var data = {
+        spectrum: {
+          title: _spectrum.json.title,
+          notes: _spectrum.json.notes,
+          data_type: 'json',
+          // we stringify manually here since it was not flattening 
+          // spectrum.json.data.lines into an array, but an object
+          data: JSON.stringify(_spectrum.json.data.lines)
+          //data: JSON.stringify(_spectrum.json.data) // <= this was previous version... was it used?
         }
-      }).done(function(response) {
+      }
 
-        callback(response);
-
-      }).fail(function(response) {
-
-        _spectrum.graph.UI.notify(response['errors'], "error");
-
+      // overwrite default form data with passed options object
+      Object.keys(formData).forEach(function(key, i) {
+        data[key] = formData[key];
       });
+
+      if (nodejs) {
+
+        var request = require('request');
+ 
+        // untested... mock this
+        request.post({
+                  url: url,
+                  form: data 
+                }, callback)
+                .on('error', function(err) {
+                  console.log(err)
+                });
+
+      } else {
+
+        $.ajax({
+ 
+          url: url,
+          type: "PUT",
+          dataType: "json",
+          data: data
+
+        }).done(function(response) {
+
+          callback(response);
+ 
+        }).fail(function(response) {
+ 
+          _spectrum.graph.UI.notify(response['errors'], "error");
+ 
+        });
+
+      }
       
     }
 

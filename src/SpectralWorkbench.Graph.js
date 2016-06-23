@@ -503,6 +503,8 @@ SpectralWorkbench.Graph = Class.extend({
    */
   updateSize: function(newWidth) {
 
+    // tests frequency of occurences
+    //console.log('updateSize');
     var _graph = this;
  
     return (function() { 
@@ -551,7 +553,7 @@ SpectralWorkbench.Graph = Class.extend({
                     //- _graph.margin.right // right margin not required on image, for some reason
                     - (_graph.embedmargin * 2); // this is 10 * 2
 
-      _graph.el.height(100); // this isn't done later because we mess w/ height, in, for example, calibration
+      _graph.el.height(120); // this isn't done later because we mess w/ height, in, for example, calibration
 
       if (_graph.datum && _graph.datum.image) _graph.datum.image.updateSize(); // adjust image element and image.container element
 

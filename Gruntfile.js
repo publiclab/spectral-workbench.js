@@ -19,16 +19,6 @@ module.exports = function(grunt) {
             }
         },
 
-/*
-        browserify: {
-            dist: {
-                src: [
-                    'src/SpectralWorkbench.js'
-                ],
-                dest: 'dist/spectral-workbench.js'
-            }
-        },
-*/
         concat: {
             dist: {
                 src: [
@@ -84,6 +74,14 @@ module.exports = function(grunt) {
               ]
             }
           }
+        },
+
+        tape: {
+          options: {
+            pretty: true,
+            output: 'console'
+          },
+          files: ['spec/tape/spectral-workbench.js']
         }
 
     });
@@ -96,6 +94,12 @@ module.exports = function(grunt) {
         //'browserify:dist'
     ]);
 
+    grunt.registerTask('test', [
+        'jasmine',
+        'tape'
+    ]);
+
     grunt.loadNpmTasks('grunt-contrib-jasmine');
+    grunt.loadNpmTasks('grunt-tape');
 
 };

@@ -347,27 +347,37 @@ SpectralWorkbench.Datum = Class.extend({
 
       _datum.tagQueue = new Array();
 
-      _datum.powertags.forEach(function(tag, index) {
+      if (_datum.powertags.length === 0) {
 
-        _datum.tagQueue.push(tag.deferredParse(_datum.tagQueue)
-          .done(function() {
+        _datum.graph.reload_and_refresh();
+        if (callback) callback();
+        
 
-             if (index == _datum.powertags.length - 1) {
+      } else {
 
-               if (_datum.graph) _datum.graph.reload_and_refresh();
-               if (callback) callback();
+        _datum.powertags.forEach(function(tag, index) {
+ 
+          _datum.tagQueue.push(tag.deferredParse(_datum.tagQueue)
+            .done(function() {
+ 
+               if (index == _datum.powertags.length - 1) {
+ 
+                 if (_datum.graph) _datum.graph.reload_and_refresh();
+                 if (callback) callback();
+ 
+               }
+ 
+            })
+            .fail(function() {
+ 
+               console.log('failed to parse' + tag.name);
+ 
+            })
+          );
+ 
+        });
 
-             }
-
-          })
-          .fail(function() {
-
-             console.log('failed to parse' + tag.name);
-
-          })
-        );
-
-      });
+      }
 
     }
 
