@@ -1,31 +1,30 @@
 #!/usr/bin/env node
 
 // This example accepts an image piped to it with, for example, 
-// `fswebcam test.jpg && node-example-import.js --row 50 --image test.jpg --format json`
+// `fswebcam test.jpg && node-example-import.js --row 50 --file test.jpg --format json`
 // and returns data of the cross section in specified format at the specified row.
+  
+var SpectralWorkbench = require('../dist/spectral-workbench.js').SpectralWorkbench;
 
-var options = parseArgv(process.argv)
+var options = parseArgv(process.argv);
 
 if (options.hasOwnProperty('help')) {
-  help()
-}
-else {
-  go()
+  help();
+} else {
+  run();
 }
 
-
-function go() {
-  
-  var SpectralWorkbench = require('../dist/spectral-workbench.js').SpectralWorkbench;
+function run() {
   
   var image;
 
+  if (!options.hasOwnProperty('file')) console.log('Image required');
   options.row    = options.row || 0;
   options.format = options.format || 'csv';
-  options.image   = options.image;
+  options.file   = options.file;
   
   image = new SpectralWorkbench.Image(false, {
-            url: options.image
+            url: options.file
           }); 
 
   var data = image.getLine(options.row);
@@ -45,20 +44,20 @@ function go() {
   var spectrum = new SpectralWorkbench.Spectrum(data);
 
   if      (options.format === "csv")  console.log(spectrum.encodeCSV());
-  else if (options.format === "json") console.log(spectrum.encodeJSON());
+  else if (options.format === "json") console.log(JSON.stringify(spectrum.encodeJSON()));
   process.exit(0)
 
 }
 
 
 function help() {
-  console.log('node-example-import.js')
+  console.log('image-extract.js')
   console.log('  --format <csv|json> the data format to output. Default: csv')
   console.log('  --row    <integer>  to cross-section the image. Default: 0')
-  console.log('  --image  <filepath> Example: test.jpg')
+  console.log('  --file   <path> Example: test.jpg')
   console.log('')
   console.log('This example accepts an image piped to it with, for example,')
-  console.log('`fswebcam test.jpg && node-example-import.js --row 50 --image test.jpg --format json`')
+  console.log('`fswebcam test.jpg && image-extract.js --row 50 --file test.jpg --format json`')
   console.log('and returns data of the cross section in specified format at the specified row.')
   console.log('')
 }

@@ -3,6 +3,8 @@
 // This example creates a spectrum from JSON data, then, separately, 
 // imports an image file and converts its first line into nested array data.
 
+// More finished (and useful) examples can be found in the /scripts/ directory.
+
 var SpectralWorkbench = require('../dist/spectral-workbench.js').SpectralWorkbench;
 
 var data = {

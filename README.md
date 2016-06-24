@@ -138,7 +138,13 @@ For a working example, see: https://publiclab.github.io/spectral-workbench.js/ex
 
 ### In Node.js
 
-Example node scripts are available in the `/examples/` directory. 
+An example node script is available in the `/examples/` directory, and some command line utilities are available in the `/scripts/` directory, including ones to upload from JSON files to https://spectralworkbench.org and to extract JSON from images. For example, you could extract data from an image with:
+
+    scripts/image-extract.js --file spec/javascripts/fixtures/test-spectrum-9.png --format json > test.json
+
+Then upload the JSON data with (replacing XXXX with your API key):
+
+    scripts/upload.js --file test.json --token XXXXXXXXXXXXXX
 
 To write a script in Node.js, you could create and run a file like this:
 
@@ -166,12 +172,7 @@ console.log(spectrum.getIntensity(282));
 
 ````
 
-And run it with `node yourscript.js`
-
-
-### Uploading from Node.js
-
-You can upload directly to SpectralWorkbench.org's database from the commandline with the following command, using the secret API token on your SpectralWorkbench.org profile page:
+And run it with `node yourscript.js`. If you make a useful one, submit a pull request and I'll pull it in!
 
 ```js
 
