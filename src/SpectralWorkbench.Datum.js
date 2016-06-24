@@ -31,6 +31,17 @@ SpectralWorkbench.Datum = Class.extend({
 
 
     /* ======================================
+     * Returns simple JSON array of pixels, in format:
+     * { r: 0, g: 0, b: 0, average: 0, wavelength: 0 }
+     */
+    _datum.getJSON = function() {
+
+      return _datum.json.data.lines;
+
+    }
+
+
+    /* ======================================
      * Create a new Tag or PowerTag depending on name,
      * upload it (if Tag), and run a callback. See addAndParseTag() and
      * addAndUploadTag() for PowerTag options.

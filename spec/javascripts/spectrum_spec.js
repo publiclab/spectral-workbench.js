@@ -35,6 +35,8 @@ describe("Spectrum", function() {
     expect(spectrum.blue).toBeDefined();
     expect(spectrum.blue.length).toBe(spectrum.json.data.lines.length);
 
+    expect(spectrum.getJSON()).toEqual(spectrum.json.data.lines);
+
   });
 
   it("succeeds in basic initialization with CSV data", function() {
