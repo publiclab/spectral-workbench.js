@@ -24,7 +24,7 @@ To install spectral-workbench, run:
 
 The `SpectralWorkbench.Image` class uses the `node-canvas` package when run without a browser, so you'll need to install it by:
 
-* runing (on Debian): `sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++` See build instructions for [other platforms here](https://github.com/Automattic/node-canvas#installation).
+* running (on Debian): `sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++` See build instructions for [other platforms here](https://github.com/Automattic/node-canvas#installation).
 * running `npm install`
 
 ### In a browser
@@ -87,14 +87,46 @@ You can pass a nested array of `[wavelength, intensity]` data to the Spectrum co
 ````js
 
 var data = [
-  [400, 24],
-  [410, 44],
-  [420, 42],
-  [430, 45],
-  [440, 20]
+  [0, 24],
+  [1, 44],
+  [2, 42],
+  [3, 45],
+  [4, 20]
 ];
 
 var spectrum = new SpectralWorkbench.Spectrum(data);
+
+spectrum.getJSON();
+
+/*
+
+// Output:
+
+[ { average: 22.95, r: 22.95, g: 22.95, b: 22.95, pixel: 0 },
+  { average: 43.35, r: 43.35, g: 43.35, b: 43.35, pixel: 1 },
+  { average: 40.8,  r: 40.8,  g: 40.8,  b: 40.8,  pixel: 2 },
+  { average: 43.35, r: 43.35, g: 43.35, b: 43.35, pixel: 3 },
+  { average: 17.85, r: 17.85, g: 17.85, b: 17.85, pixel: 4 } ]
+
+*/
+
+// this is non-ideal, but will be expanded upon with a better calibrate API:
+spectrum.json.data.lines = spectrum.calibrate(400, 500, 0, 4);
+spectrum.load(); // calibrate does not save
+
+spectrum.getJSON();
+
+/*
+
+// Output:
+
+[ { average: 22.95, r: 22.95, g: 22.95, b: 22.95, wavelength: 400 },
+  { average: 43.35, r: 43.35, g: 43.35, b: 43.35, wavelength: 425 },
+  { average: 40.8,  r: 40.8,  g: 40.8,  b: 40.8,  wavelength: 450 },
+  { average: 43.35, r: 43.35, g: 43.35, b: 43.35, wavelength: 475 },
+  { average: 17.85, r: 17.85, g: 17.85, b: 17.85, wavelength: 500 } ]
+
+*/
 
 ````
 
