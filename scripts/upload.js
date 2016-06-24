@@ -20,8 +20,7 @@ function run() {
   if (!options.hasOwnProperty('token')) console.log('API token required: see README.md');
   if (!options.hasOwnProperty('file')) console.log('file required: see --help');
   options.url   = options.url   || "https://spectralworkbench.org/spectrums.json";
-  options.title = options.title || "Uploaded data";
-
+  options.title = options.title || "Uploaded data"; 
 
   var content = fs.readFileSync(options.file);
 
@@ -41,6 +40,20 @@ function upload(fileData) {
 
   var spectrum = new SpectralWorkbench.Spectrum(data);
 
+  if (options.hasOwnProperty('calibrate')) {
+
+    var args = options.calibrate.split(','),
+        w1   = args[0],
+        w2   = args[1],
+        x1   = args[2],
+        x2   = args[3];
+
+    // this is non-ideal, but will be expanded upon with a better calibrate API:
+    spectrum.json.data.lines = spectrum.calibrate(w1, w2, x1, x2);
+    spectrum.load(); // calibrate does not save
+
+  }
+
   spectrum.upload(
     options.url, 
     function callback(err, httpResponse, body) { 
@@ -55,10 +68,14 @@ function upload(fileData) {
 
 function help() {
   console.log('upload.js')
-  console.log('  --title  <string> a title for your spectrum. Default: "Uploaded data"')
-  console.log('  --url    <string> the server to upload to. Default: https://spectralworkbench.org')
-  console.log('  --token  <string> secret API token, from server (see README). Default: none')
-  console.log('  --file   <path>   path to a CSV file. Default: none')
+  console.log('  --title       <string> a title for your spectrum. Default: "Uploaded data"')
+  console.log('  --url         <string> the server to upload to. Default: https://spectralworkbench.org')
+  console.log('  --token       <string> secret API token, from server (see README). Default: none')
+  console.log('  --file        <path>   path to a CSV file. Default: none')
+  console.log('')
+  console.log('  --calibrate   <w1>,<w2>,<x1>,<x2>, four numbers specifying wavelength 1 & 2,')
+  console.log('                                     and (integer) pixels 1 & 2, on which to base')
+  console.log('                                     a linear calibration.')
   console.log('')
   console.log('This example creates a spectrum from CSV data, then')
   console.log('uploads it to the specified server (default spectralworkbench.org)')
@@ -67,12 +84,12 @@ function help() {
   console.log('> upload.js --token 1234567890 --file spectrum.json')
   console.log('')
   console.log('JSON format:')
-  console.log('   [');
-  console.log('     {"average": 64.33, "r": 69, "g": 46, "b": 78, "wavelength": 269.0 },');
-  console.log('     {"average": 63.33, "r": 71, "g": 45, "b": 74, "wavelength": 277.7 },');
-  console.log('     {"average": 64,    "r": 71, "g": 47, "b": 74, "wavelength": 291.5 },');
-  console.log('     {"average": 64,    "r": 68, "g": 49, "b": 75, "wavelength": 303.6 }');
-  console.log('   ]');
+  console.log('   [')
+  console.log('     {"average": 64.33, "r": 69, "g": 46, "b": 78, "wavelength": 269.0 },')
+  console.log('     {"average": 63.33, "r": 71, "g": 45, "b": 74, "wavelength": 277.7 },')
+  console.log('     {"average": 64,    "r": 71, "g": 47, "b": 74, "wavelength": 291.5 },')
+  console.log('     {"average": 64,    "r": 68, "g": 49, "b": 75, "wavelength": 303.6 }')
+  console.log('   ]')
   console.log('')
 }
 
