@@ -191,7 +191,7 @@ describe("UI", function() {
   it("should create tags and display them", function(done) {
 
     // test that the range is not yet limited
-    expect(graph.datum.getExtentX()).toEqual([269.089, 958.521]);
+    expect(graph.datum.getExtentX()).toEqual([269.1, 958.5]);
 
     tagForm = new SpectralWorkbench.UI.TagForm(graph, function() {
 

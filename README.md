@@ -169,6 +169,22 @@ console.log(spectrum.getIntensity(282));
 And run it with `node yourscript.js`
 
 
+### Uploading from Node.js
+
+You can upload directly to SpectralWorkbench.org's database from the commandline with the following command, using the secret API token on your SpectralWorkbench.org profile page:
+
+```js
+
+spectrum.upload(
+  'https://spectralworkbench.org/spectrums.json', 
+  function callback(err, httpResponse, body) { console.log(body) }, 
+  { token: "31343338303237303934" }
+);
+
+```
+Note that this direct upload feature is experimental. 
+
+
 ### Manipulating spectrum data
 
 Once you've initialized a Spectrum, you can add Operations to it using the following syntax:

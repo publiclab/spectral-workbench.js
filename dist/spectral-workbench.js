@@ -743,27 +743,37 @@ SpectralWorkbench.Datum = Class.extend({
 
       _datum.tagQueue = new Array();
 
-      _datum.powertags.forEach(function(tag, index) {
+      if (_datum.powertags.length === 0) {
 
-        _datum.tagQueue.push(tag.deferredParse(_datum.tagQueue)
-          .done(function() {
+        _datum.graph.reload_and_refresh();
+        if (callback) callback();
+        
 
-             if (index == _datum.powertags.length - 1) {
+      } else {
 
-               if (_datum.graph) _datum.graph.reload_and_refresh();
-               if (callback) callback();
+        _datum.powertags.forEach(function(tag, index) {
+ 
+          _datum.tagQueue.push(tag.deferredParse(_datum.tagQueue)
+            .done(function() {
+ 
+               if (index == _datum.powertags.length - 1) {
+ 
+                 if (_datum.graph) _datum.graph.reload_and_refresh();
+                 if (callback) callback();
+ 
+               }
+ 
+            })
+            .fail(function() {
+ 
+               console.log('failed to parse' + tag.name);
+ 
+            })
+          );
+ 
+        });
 
-             }
-
-          })
-          .fail(function() {
-
-             console.log('failed to parse' + tag.name);
-
-          })
-        );
-
-      });
+      }
 
     }
 
@@ -791,13 +801,18 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
 
     var _spectrum = this;
 
-   _spectrum.load = function() {
 
-     if      (_spectrum.args instanceof Array)                    _spectrum.decodeArray(_spectrum.args);
-     else if (typeof _spectrum.args == 'string')                  _spectrum.decodeCSV(_spectrum.args);
-     else if (_spectrum.args instanceof SpectralWorkbench.Image)  _spectrum.constructFromImage(_spectrum.args, options);
-     else if (_spectrum.args instanceof Image)                    _spectrum.constructFromImage(_spectrum.args, options);
-     else if (_spectrum.json && 
+    // test if we're inside a require()
+    // http://www.timetler.com/2012/10/13/environment-detection-in-javascript/
+    var nodejs = typeof exports !== 'undefined' && this.exports !== exports;
+
+    _spectrum.load = function() {
+
+      if      (_spectrum.args instanceof Array)                    _spectrum.decodeArray(_spectrum.args);
+      else if (typeof _spectrum.args == 'string')                  _spectrum.decodeCSV(_spectrum.args);
+      else if (_spectrum.args instanceof SpectralWorkbench.Image)  _spectrum.constructFromImage(_spectrum.args, options);
+      else if (typeof Image === 'function' && _spectrum.args instanceof Image)                    _spectrum.constructFromImage(_spectrum.args, options);
+      else if (_spectrum.json && 
              (_spectrum.json.lines || _spectrum.json.data.lines)) _spectrum.decodeJSON(_spectrum.json); // snapshot or spectrum format
 
     }
@@ -1373,33 +1388,62 @@ SpectralWorkbench.Spectrum = SpectralWorkbench.Datum.extend({
      * Most uses of this function will be deprecated with the Snapshots system:
      * https://publiclab.org/wiki/spectral-workbench-snapshots
      */
-    _spectrum.upload = function(url, callback) {
+    _spectrum.upload = function(url, callback, formData) {
 
       url = url || '/spectrums/' + _spectrum.id;
+      callback = callback || function callback(err, httpResponse, body) { console.log(body) };
+      formData = formData || {};
 
-      $.ajax({
-
-        url: url,
-        type: "PUT",
-        dataType: "json",
-        data: {
-          spectrum: {
-            title: _spectrum.json.title,
-            notes: _spectrum.json.notes,
-            // we stringify manually here since it was not flattening 
-            // spectrum.json.data.lines into an array, but an object
-            data: JSON.stringify(_spectrum.json.data)
-          }
+      var data = {
+        spectrum: {
+          title: _spectrum.json.title,
+          notes: _spectrum.json.notes,
+          data_type: 'json',
+          // we stringify manually here since it was not flattening 
+          // spectrum.json.data.lines into an array, but an object
+          data: JSON.stringify(_spectrum.json.data.lines)
+          //data: JSON.stringify(_spectrum.json.data) // <= this was previous version... was it used?
         }
-      }).done(function(response) {
+      }
 
-        callback(response);
-
-      }).fail(function(response) {
-
-        _spectrum.graph.UI.notify(response['errors'], "error");
-
+      // overwrite default form data with passed options object
+      Object.keys(formData).forEach(function(key, i) {
+        data[key] = formData[key];
       });
+
+      if (nodejs) {
+
+        var request = require('request');
+ 
+        // untested... mock this
+        request.post({
+                  url: url,
+                  form: data 
+                }, callback)
+                .on('error', function(err) {
+                  console.log(err)
+                });
+
+      } else {
+
+        $.ajax({
+ 
+          url: url,
+          type: "PUT",
+          dataType: "json",
+          data: data
+
+        }).done(function(response) {
+
+          callback(response);
+ 
+        }).fail(function(response) {
+ 
+          _spectrum.graph.UI.notify(response['errors'], "error");
+ 
+        });
+
+      }
       
     }
 
@@ -5588,6 +5632,8 @@ SpectralWorkbench.Graph = Class.extend({
    */
   updateSize: function(newWidth) {
 
+    // tests frequency of occurences
+    //console.log('updateSize');
     var _graph = this;
  
     return (function() { 
@@ -5636,7 +5682,7 @@ SpectralWorkbench.Graph = Class.extend({
                     //- _graph.margin.right // right margin not required on image, for some reason
                     - (_graph.embedmargin * 2); // this is 10 * 2
 
-      _graph.el.height(100); // this isn't done later because we mess w/ height, in, for example, calibration
+      _graph.el.height(120); // this isn't done later because we mess w/ height, in, for example, calibration
 
       if (_graph.datum && _graph.datum.image) _graph.datum.image.updateSize(); // adjust image element and image.container element
 

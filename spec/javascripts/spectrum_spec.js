@@ -10,6 +10,7 @@ describe("Spectrum", function() {
 
   var spectrum = new SpectralWorkbench.Spectrum(data);
 
+
   it("is not undefined when initialized with spectrum json", function() {
 
     expect(spectrum).toBeDefined();
@@ -320,13 +321,48 @@ describe("Spectrum", function() {
    * spectrum.fetch = function(url, callback) {
    */ 
 
-  // relies on server push of own data; we're basing on a static fixture, so we can skip this:
 
   /* ======================================
    * Upload a new json string to the server, overwriting the original. 
    * Not recommended without cloning! But recoverable from original image.
    * spectrum.upload = function(url, callback) {
    */ 
+  it("uploads json in correct format to Spectral Workbench server API", function(done) {
+
+    jasmine.Ajax.install();
+
+    var ajaxSpy = spyOn($, "ajax").and.callFake(function(options) {
+
+      if (options.url === '/spectrums.json') {
+
+        var response = '/url-to-spectrum';
+
+        // http://stackoverflow.com/questions/13148356/how-to-properly-unit-test-jquerys-ajax-promises-using-jasmine-and-or-sinon
+        var d = $.Deferred();
+        d.resolve(response);
+        d.reject(response);
+        return d.promise();
+
+      }
+
+    });
+
+    spectrum.upload(
+      '/spectrums.json', 
+      function callback(response) { // in nodejs, this would be (error, httpResponse, body)
+
+        expect(response).toEqual('/url-to-spectrum'); 
+
+        jasmine.Ajax.uninstall();
+        done();
+
+      }, 
+      { 
+        token: "31343338303237303934" // Find your secret API token on your SpectralWorkbench.org profile page
+      }
+    );
+
+  });
 
 
   it("getOverexposure() inspects all channels recursively for sequential pixels of 100%", function() {

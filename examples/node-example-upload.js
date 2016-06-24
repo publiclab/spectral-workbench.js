@@ -6,8 +6,8 @@
 var SpectralWorkbench = require('../dist/spectral-workbench.js').SpectralWorkbench;
 
 var data = {
+  "title": "Test spectrum",
   "data": { 
-    "title": "Test spectrum",
     "lines":[ // as many data points as you like may be entered here:
       {"average":64.3333,"r":69,"g":46,"b":78,"wavelength":269.089},
       {"average":63.3333,"r":71,"g":45,"b":74,"wavelength":277.718},
@@ -19,12 +19,12 @@ var data = {
 
 var spectrum = new SpectralWorkbench.Spectrum(data);
 
-console.log('spectrum.getIntensity(282):', spectrum.getIntensity(282));
-
-var image;
-
-image = new SpectralWorkbench.Image(false, {
-          url: 'spec/javascripts/fixtures/test-spectrum-9.png'
-        }); 
-
-console.log('image.getLine(1):', image.getLine(1));
+spectrum.upload(
+  'http://localhost:3000/spectrums.json', 
+  function callback(err, httpResponse, body) { 
+    console.log(body) 
+  }, 
+  { 
+    token: "31343338303237303934" // Find your secret API token on your SpectralWorkbench.org profile page
+  }
+);

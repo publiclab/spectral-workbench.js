@@ -85,6 +85,23 @@ describe("Graph", function() {
   });
 
 
+  // This mysteriously does not work, though the same 
+  // process can be successfully reproduced manually. :-/
+  xit("undims graph when done initializing, even without tags", function(done) {
+
+    graph.datum.powertags = [];
+
+    graph.datum.parseTags(function() {
+
+      expect(graph.svg.style('opacity')).toBe('1');
+
+      done();
+
+    });
+
+  });
+
+
   it("fires onComplete event when done initializing", function() {
 
     expect(callback).toHaveBeenCalled();
@@ -252,7 +269,7 @@ describe("Graph", function() {
   it("does not create datum.image for an imageless spectrum", function(done) {
 
     $('img.spectrum').src = "";
-    var graph = new SpectralWorkbench.Graph({
+    graph2 = new SpectralWorkbench.Graph({
       spectrum_id: 9,           // presence of spectrum_id denotes spectrum and not set
       imageSelector: 'nothing', // pass nonexistent selector
       onImageComplete: function onImageComplete(image) {
@@ -267,7 +284,6 @@ describe("Graph", function() {
     });
 
   });
-
 
 
 
