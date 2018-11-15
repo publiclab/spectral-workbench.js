@@ -24,8 +24,12 @@
   "homepage": "http://spectralworkbench.org",
   "dependencies": {
     "request":         "~2.72.0",
-    "jquery":          "~2.1.3",
+    "jquery":          "^3.3.1",
+    "bootstrap": "~3.2.0",
+    "font-awesome": "~4.5.0",
     "nvd3":            "~1.8.0",
+    "flot":            "~0.8.0-alpha",
+    "getusermedia-js": "~1.0.0",
     "d3":              "~3.4.0"
   },
   "devDependencies": {
