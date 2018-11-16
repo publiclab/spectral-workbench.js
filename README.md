@@ -240,6 +240,13 @@ Operations are a type of tag that are passed as strings in `operation:value` for
 
 Read more at https://publiclab.org/wiki/spectral-workbench-operations
 
+****
+
+An in-progress project to port the HTML capture interface to this library can be tested at:
+
+https://publiclab.github.io/spectral-workbench.js/examples/capture/
+
+Follow progress at https://github.com/publiclab/spectral-workbench.js/issues/56
 
 ****
 
