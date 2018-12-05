@@ -33,7 +33,7 @@
     "d3":              "~3.4.0"
   },
   "devDependencies": {
-    "matchdep":                 "^0.3.0",
+    "matchdep":                 "^2.0.0",
     "grunt":                    "^0.4.5",
     "grunt-cli":                "^1.2.0",
     "grunt-tape":               "^0.1.0",
