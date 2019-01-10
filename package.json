@@ -23,7 +23,7 @@
   },
   "homepage": "http://spectralworkbench.org",
   "dependencies": {
-    "request":         "~2.72.0",
+    "request":         "~2.88.0",
     "jquery":          "^3.3.1",
     "bootstrap": "~3.4.0",
     "font-awesome": "~4.7.0",
