@@ -105,7 +105,7 @@ $W = {
       //  stream.stop();
       //}
       if (navigator.mozGetUserMedia) video.mozSrcObject = stream;
-      else video.src = vendorURL ? vendorURL.createObjectURL(stream) : stream;
+      else video.srcObject = stream;
       video.onerror = function (e) {
         stream.stop();
       };
