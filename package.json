@@ -28,7 +28,7 @@
     "bootstrap": "~3.4.0",
     "font-awesome": "~4.7.0",
     "nvd3":            "~1.8.0",
-    "flot":            "~0.8.0-alpha",
+    "flot":            "~2.1.6",
     "getusermedia-js": "~1.0.0",
     "d3":              "~3.4.0"
   },
