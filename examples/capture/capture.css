@@ -1,39 +1,44 @@
 .navbar-fixed-top .nav li {
-  padding-top:3px;
-  font-family:junction,sans-serif;
+  padding-top: 3px;
+  font-family: junction, sans-serif;
 }
 #webcam-msg {
-  position:absolute;
-  z-index:2;
-  background:#777;
-  color:#aaa;
-  text-align:center;
-  height:240px;
-  width:320px;
-  font-size:14px;
+  position: absolute;
+  z-index: 2;
+  background: #777;
+  color: #aaa;
+  text-align: center;
+  height: 240px;
+  width: 320px;
+  font-size: 14px;
 }
 a {
-  color:#0af;
+  color: #0af;
 }
 #webcam-msg p {
-  padding:80px 20px; 
+  padding: 80px 20px;
 }
 #webcam {
-  position:absolute;
-  z-index:1;
+  position: absolute;
+  z-index: 1;
 }
 #header.navbar-inner {
-  margin-right:-40px;
+  margin-right: -40px;
 }
 
 body {
-  background:#444;
-  color:#ccc;
+  background: #444;
+  color: #ccc;
 }
 hr {
-  border-color:#666;
+  border-color: #666;
 }
 
 .modal {
-  color:#333;
+  color: #333;
+}
+#graph {
+  width: 1024px;
+  height: 200px;
+  margin: 10px 0px;
 }
