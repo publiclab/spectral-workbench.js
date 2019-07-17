@@ -374,8 +374,7 @@ draw: function() {
         infragram.options.processor.updateImage(piImage);
       };
       var fetchImageInterval = setInterval(function fetchImage() {
-        // piImage.src = "http://pi.local/cam/cam_pic.php?time=" + new Date().getTime();
-        piImage.src = "../logo.png";
+        piImage.src = "http://pi.local/cam/cam_pic.php?time=" + new Date().getTime();
       }, 50);
     }
 
