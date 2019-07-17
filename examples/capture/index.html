@@ -24,7 +24,9 @@
     <script src="graph.js" type="text/javascript"></script>
     <script src="capture.js" type="text/javascript"></script>
     <script src="api.js" type="text/javascript"></script>
+    <script src="../../node_modules/infragram/dist/infragram.js" type="text/javascript"></script>
     <link href="capture.css" media="all" rel="stylesheet" type="text/css" />
+
 
 <!--
     <link href="/assets/application-5135736be98a3c4fdf136cbc62545fd2.css" media="all" rel="stylesheet" type="text/css" />
@@ -124,7 +126,7 @@
   <p style="padding-top:5px;">
     Help <a href="http://publiclab.org/wiki/spectral-workbench-usage#Webcam+selection">selecting a camera</a>
     <!--the connect to raspberry-pi button-->
-    <a class="btn btn-large btn-primary" href="#capture" onclick="connect_to_pi();">Connect to Raspberry-Pi</a>
+    <a class="btn btn-large btn-primary" href="" onclick="connect_to_pi();">Connect to Raspberry-Pi</a>
   </p>
   
   <a class="btn btn-large btn-primary" href="#capture" onClick="$('#capture-btn').addClass('active');$('#settings-btn').removeClass('active');" data-toggle="tab">Begin capturing &raquo;</a>
@@ -354,19 +356,30 @@ draw: function() {
   else $('#tool-pane').hide()
 
   })(); 
-function connect_to_pi(){
-  var piImage = new Image();
-    piImage.onload = function () {
-      infragram.options.processor.updateImage(piImage);
+
+  var infragram, boost, openInSequencer;
+
+    (function() {
+      infragram = Infragram({
+        uploader: false,
+        processor: 'webgl',
+        shaderVertPath: "../../node_modules/dist/shader.vert",
+        shaderFragPath: "../../node_modules/dist/shader.frag"
+      })
+    })();
+
+    function connect_to_pi() {
+      var piImage = new Image();
+      piImage.onload = function () {
+        infragram.options.processor.updateImage(piImage);
+      };
+      var fetchImageInterval = setInterval(function fetchImage() {
+        // piImage.src = "http://pi.local/cam/cam_pic.php?time=" + new Date().getTime();
+        piImage.src = "../logo.png";
+      }, 50);
     }
-    var fetchImageInterval = setInterval(function fetchImage() {
-      // piImage.src = "http://pi.local/cam/cam_pic.php?time=" + new Date().getTime();
-        piImage.src = "../logo.png"
-    }, 50);
-  }
+
+
 </script>
-
-
-
 </body>
 </html>
