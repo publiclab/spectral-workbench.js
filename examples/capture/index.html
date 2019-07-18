@@ -126,7 +126,7 @@
   <p style="padding-top:5px;">
     Help <a href="http://publiclab.org/wiki/spectral-workbench-usage#Webcam+selection">selecting a camera</a>
     <!--the connect to raspberry-pi button-->
-    <a class="btn btn-large btn-primary" href="" onclick="connect_to_pi();">Connect to Raspberry-Pi</a>
+    <a class="btn btn-large btn-primary" id="pi-button" href="">Connect to Raspberry-Pi</a>
   </p>
   
   <a class="btn btn-large btn-primary" href="#capture" onClick="$('#capture-btn').addClass('active');$('#settings-btn').removeClass('active');" data-toggle="tab">Begin capturing &raquo;</a>
@@ -348,37 +348,36 @@ draw: function() {
     width: 640
   }) 
 
-
   setInterval($W.getRow,100)
   	$W.calibrated = false
 
   if ($('body').width() > 768) $('#tool-toggle').hide()
   else $('#tool-pane').hide()
+  })();
 
-  })(); 
-
+//infragram code to connect to raspberry-pi
   var infragram, boost, openInSequencer;
-
-    (function() {
-      infragram = Infragram({
-        uploader: false,
-        processor: 'webgl',
-        shaderVertPath: "../../node_modules/infragram/dist/shader.vert",
-        shaderFragPath: "../../node_modules/infragram/dist/shader.frag"
-      })
-    })();
-
-    function connect_to_pi() {
-      var piImage = new Image();
-      piImage.onload = function () {
-        infragram.options.processor.updateImage(piImage);
-      };
-      var fetchImageInterval = setInterval(function fetchImage() {
-        piImage.src = "http://pi.local/cam/cam_pic.php?time=" + new Date().getTime();
-      }, 50);
-    }
-
-
+  var el=document.getElementById("pi-button");
+  if(el){
+    //if pi_div button does not return null
+document.getElementById("pi-button").addEventListener("click", function connect_to_pi() {
+  infragram = Infragram({
+    uploader: false,
+    processor: 'webgl',
+    shaderVertPath: "../../node_modules/dist/shader.vert",
+    shaderFragPath: "../../node_modules/dist/shader.frag"
+  });
+    var piImage = new Image();
+    piImage.onload = function () {
+      infragram.options.processor.updateImage(piImage);
+    };
+    var fetchImageInterval = setInterval(function fetchImage() {
+      // piImage.src = "http://pi.local/cam/cam_pic.php?time=" + new Date().getTime();
+      piImage.src = "../logo.png";
+    }, 50);
+  });
+}
 </script>
 </body>
 </html>
+    
