@@ -9,6 +9,7 @@ spectral-workbench.js is currently set up to run in a browser, but some parts ma
 
 This library is primarily used in the Spectral Workbench application, running at http://spectralworkbench.org, which is a Ruby on Rails project that is also [open source](https://github.com/publiclab/spectral-workbench). Read about how to build and use your own spectrometer with it here: http://publiclab.org/wiki/spectrometer
 
+See static demo here: https://publiclab.github.io/spectral-workbench.js/examples/
 
 ****
 
