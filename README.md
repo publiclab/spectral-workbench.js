@@ -11,6 +11,8 @@ This library is primarily used in the Spectral Workbench application, running at
 
 See static demo here: https://publiclab.github.io/spectral-workbench.js/examples/
 
+And static demo of capture interface: https://publiclab.github.io/spectral-workbench.js/examples/capture/
+
 ****
 
 
