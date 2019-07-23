@@ -355,25 +355,20 @@ draw: function() {
   else $('#tool-pane').hide()
   })();
 
-//infragram code to connect to raspberry-pi
-  var infragram, boost, openInSequencer;
+//code to connect to raspberry-pi
   var el=document.getElementById("pi-button");
   if(el){
     //if pi_div button does not return null
 document.getElementById("pi-button").addEventListener("click", function connect_to_pi() {
-  infragram = Infragram({
-    uploader: false,
-    processor: 'webgl',
-    shaderVertPath: "../../node_modules/dist/shader.vert",
-    shaderFragPath: "../../node_modules/dist/shader.frag"
-  });
+    $W.loadingfromPi=true;
     var piImage = new Image();
     piImage.onload = function () {
-      infragram.options.processor.updateImage(piImage);
+      var sourceX = 0, sourceY = 0, sourceHeight = 300, sourceWidth = 800; 
+      $W.ctx.drawImage(piImage, sourceX, sourceY, sourceHeight, sourceWidth, 0, 0, $W.width, 1);
     };
     var fetchImageInterval = setInterval(function fetchImage() {
       // piImage.src = "http://pi.local/cam/cam_pic.php?time=" + new Date().getTime();
-      piImage.src = "../logo.png";
+      piImage.src = "../logo.png";//demo picture
     }, 50);
   });
 }

@@ -47,6 +47,7 @@ $W = {
   waterfall_height: 150,
   scale_h: 1,
   scale_w: 1,
+  loadingfromPi: false,
   // width: 1280,
   // height: 720,
   frame: 0,
@@ -191,25 +192,27 @@ $W = {
     onSave: function(data) {
       // in progress for Flash now
       // seems to execute 240 times... once for each column?
-      var col = data.split(";"),
-        img = $W.canvas
-          .getContext("2d")
-          .getImageData(0, 0, this.width, this.height);
-      (tmp = null), (w = this.width), (h = this.height);
+      if ($W.loadingfromPi == false) {
+        var col = data.split(";"),
+          img = $W.canvas
+            .getContext("2d")
+            .getImageData(0, 0, this.width, this.height);
+        (tmp = null), (w = this.width), (h = this.height);
 
-      for (var i = 0; i < w; i++) {
-        tmp = parseInt(col[i], 10);
-        img.data[$W.pos + 0] = (tmp >> 16) & 0xff;
-        img.data[$W.pos + 1] = (tmp >> 8) & 0xff;
-        img.data[$W.pos + 2] = tmp & 0xff;
-        img.data[$W.pos + 3] = 0xff;
-        $W.pos += 4;
-      }
+        for (var i = 0; i < w; i++) {
+          tmp = parseInt(col[i], 10);
+          img.data[$W.pos + 0] = (tmp >> 16) & 0xff;
+          img.data[$W.pos + 1] = (tmp >> 8) & 0xff;
+          img.data[$W.pos + 2] = tmp & 0xff;
+          img.data[$W.pos + 3] = 0xff;
+          $W.pos += 4;
+        }
 
-      if ($W.pos >= 4 * w * $W.sample_height) {
-        $W.canvas.getContext("2d").putImageData(img, 0, 0);
-        $W.ctx.drawImage(img, 0, 0);
-        $W.pos = 0;
+        if ($W.pos >= 4 * w * $W.sample_height) {
+          $W.canvas.getContext("2d").putImageData(img, 0, 0);
+          $W.ctx.drawImage(img, 0, 0);
+          $W.pos = 0;
+        }
       }
     },
     onLoad: function() {}
