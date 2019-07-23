@@ -28,22 +28,21 @@
     "flot": "^0.8.3",
     "font-awesome": "~4.7.0",
     "getusermedia-js": "~1.0.0",
-    "infragram": "^0.2.1",
     "jquery": "^3.4.1",
     "nvd3": "~1.8.6",
     "request": "~2.88.0"
   },
   "devDependencies": {
-    "matchdep": "^2.0.0",
     "grunt": "^1.0.4",
     "grunt-cli": "^1.3.2",
-    "grunt-tape": "^0.1.0",
-    "tape": "^4.11.0",
     "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-jasmine": "~2.0.3",
     "grunt-contrib-watch": "^1.1.0",
+    "grunt-tape": "^0.1.0",
     "jasmine": "~3.4.0",
-    "jasmine-jquery": "~2.1.1",
     "jasmine-ajax": "~4.0.0",
-    "grunt-contrib-jasmine": "~2.0.3"
+    "jasmine-jquery": "~2.1.1",
+    "matchdep": "^2.0.0",
+    "tape": "^4.11.0"
   }
 }
