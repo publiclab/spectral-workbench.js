@@ -2,6 +2,7 @@ spectral-workbench.js
 ====
 
 [![Build Status](https://travis-ci.org/publiclab/spectral-workbench.js.svg?branch=master)](https://travis-ci.org/publiclab/spectral-workbench.js)
+[![npm](https://img.shields.io/npm/v/spectral-workbench.svg)](https://www.npmjs.com/package/spectral-workbench)
 
 The JavaScript heart of Spectral Workbench; a Public Lab project to record, manipulate, and analyze spectrometric data. 
 
