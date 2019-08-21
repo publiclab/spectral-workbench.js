@@ -362,13 +362,13 @@ draw: function() {
 document.getElementById("pi-button").addEventListener("click", function connect_to_pi() {
     $W.loadingfromPi=true;
     $W.piImage = new Image();
-    piImage.onload = function () {
+    $W.piImage.onload = function () {
       var sourceX = 0, sourceY = 0, sourceHeight = 300, sourceWidth = 800; 
-      $W.ctx.drawImage(piImage, sourceX, sourceY, sourceHeight, sourceWidth, 0, 0, $W.width, 1);
+      $W.ctx.drawImage($W.piImage, sourceX, sourceY, sourceHeight, sourceWidth, 0, 0, $W.width, 1);
     };
     var fetchImageInterval = setInterval(function fetchImage() {
       // piImage.src = "http://pi.local/cam/cam_pic.php?time=" + new Date().getTime();
-      piImage.src = "../logo.png";//demo picture
+      $W.piImage.src = "../logo.png";//demo picture
     }, 50);
   });
 }
