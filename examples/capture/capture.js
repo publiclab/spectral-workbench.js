@@ -290,8 +290,10 @@ $W = {
         $W.preview_ctx.translate($("#preview").width(), 0);
         $W.preview_ctx.scale(-1, 1);
       }
+      if ($W.loadingfromPi) var videoSrc = $W.piImage;
+      else var videoSrc = $("video")[0];
       $W.preview_ctx.drawImage(
-        $("video")[0],
+        videoSrc,
         0,
         0,
         $("#preview").width(),

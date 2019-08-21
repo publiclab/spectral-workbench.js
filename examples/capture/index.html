@@ -126,7 +126,7 @@
   <p style="padding-top:5px;">
     Help <a href="http://publiclab.org/wiki/spectral-workbench-usage#Webcam+selection">selecting a camera</a>
     <!--the connect to raspberry-pi button-->
-    <a class="btn btn-large btn-primary" id="pi-button" href="">Connect to Raspberry-Pi</a>
+    <a class="btn btn-large btn-primary" id="pi-button" href="#">Connect to Raspberry-Pi</a>
   </p>
   
   <a class="btn btn-large btn-primary" href="#capture" onClick="$('#capture-btn').addClass('active');$('#settings-btn').removeClass('active');" data-toggle="tab">Begin capturing &raquo;</a>
@@ -361,7 +361,7 @@ draw: function() {
     //if pi_div button does not return null
 document.getElementById("pi-button").addEventListener("click", function connect_to_pi() {
     $W.loadingfromPi=true;
-    var piImage = new Image();
+    $W.piImage = new Image();
     piImage.onload = function () {
       var sourceX = 0, sourceY = 0, sourceHeight = 300, sourceWidth = 800; 
       $W.ctx.drawImage(piImage, sourceX, sourceY, sourceHeight, sourceWidth, 0, 0, $W.width, 1);
