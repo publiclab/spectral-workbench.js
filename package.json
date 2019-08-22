@@ -30,7 +30,7 @@
     "nvd3":            "~1.8.0",
     "flot":            "~0.8.0-alpha",
     "getusermedia-js": "~1.0.0",
-    "d3":              "~3.4.0"
+    "d3":              "~5.11.0"
   },
   "devDependencies": {
     "matchdep":                 "^2.0.0",
