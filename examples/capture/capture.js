@@ -906,3 +906,7 @@ $W = {
     return excerptCanvasContext;
   }
 };
+function getVideoEl() {
+  if ($W.loadingfromPi) return $W.piImage;
+  else return $("video")[0];
+}
