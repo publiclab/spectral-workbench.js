@@ -41,4 +41,30 @@ hr {
   width: 1024px;
   height: 200px;
   margin: 10px 0px;
+  background-image: linear-gradient(to right, rgb(137, 216, 245), rgb(0, 64, 128));
 }
+
+.col-md-10{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center
+}
+
+
+/*MEDIA QUERIES FOR GRAPH RESPONSIVE*/
+
+@media only screen and (max-width:1030px)
+{
+    #graph{
+        width:500px;
+    }
+}
+
+@media only screen and (max-width:520px)
+{
+    #graph{
+        width:400px;
+    }
+}
+
