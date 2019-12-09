@@ -1,5 +1,4 @@
 // window.webcam.getCameraList()
-
 flotoptions = {"crosshair":{"mode":"x"},"series":{"lines":{"show":true,"lineWidth":1}},"yaxis":{"show":true,"max":100,"min":0},"xaxis":{"show":false},"shadowSize":0,"threshold":{"below":0,"color":"#a00"},"grid":{"clickable":true,"hoverable":true,"borderWidth":0,"color":"#ccc","backgroundColor":"#111"},"colors":["#ffffff","rgba(255,0,0,0.3)","rgba(0,255,0,0.3)","rgba(0,0,255,0.3)","#ffff00"]}
 
   flotoptions.grid = {
@@ -308,9 +307,11 @@ $W = {
           $W.data[1].data.push([col,red/2.55])
           $W.data[2].data.push([col,green/2.55])
           $W.data[3].data.push([col,blue/2.55])
-          if (red == 255) $W.data[4].data.push([col,100])
-          if (green == 255) $W.data[4].data.push([col,100])
-          if (blue == 255) $W.data[4].data.push([col,100])
+          if (red == 255 || green == 255 || blue == 255){
+            $W.data[4].data.push([col,100])
+            $W.data[4].data.push([col,100])
+            $W.data[4].data.push([col,100])
+          }
         }
       } else {
         if ($W.mode == "average") {
@@ -332,9 +333,10 @@ $W = {
           $W.data[1].data.push([w,red/2.55])
           $W.data[2].data.push([w,green/2.55])
           $W.data[3].data.push([w,blue/2.55])
-          if (red == 255) $W.data[4].data.push([w,100])
-          if (green == 255) $W.data[4].data.push([w,100])
-          if (blue == 255) $W.data[4].data.push([w,100])
+          if (red == 255 || green == 255 || blue == 255){ 
+            $W.data[4].data.push([w,100])
+          }
+          
         }
       }
     }
