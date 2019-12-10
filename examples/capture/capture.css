@@ -43,8 +43,20 @@ hr {
   margin: 10px 0px;
 }
 
-@media only screen and (max-width: 1300px) {
+@media only screen and (max-width: 1382px) {
   #graph {
-    width: 100%;
+    width: 667px;
+  }
+}
+
+@media only screen and (max-width: 991px) {
+  #graph {
+    width: 440px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  #graph {
+    width: 300px;
   }
 }
