@@ -24,7 +24,9 @@
     <script src="graph.js" type="text/javascript"></script>
     <script src="capture.js" type="text/javascript"></script>
     <script src="api.js" type="text/javascript"></script>
+    <script src="../../node_modules/infragram/dist/infragram.js" type="text/javascript"></script>
     <link href="capture.css" media="all" rel="stylesheet" type="text/css" />
+
 
 <!--
     <link href="/assets/application-5135736be98a3c4fdf136cbc62545fd2.css" media="all" rel="stylesheet" type="text/css" />
@@ -123,9 +125,10 @@
   </p>
   <p style="padding-top:5px;">
     Help <a href="http://publiclab.org/wiki/spectral-workbench-usage#Webcam+selection">selecting a camera</a>
+    <!--the connect to raspberry-pi button-->
+    <a class="btn btn-large btn-primary" id="pi-button" href="#">Connect to Raspberry-Pi</a>
   </p>
-
-
+  
   <a class="btn btn-large btn-primary" href="#capture" onClick="$('#capture-btn').addClass('active');$('#settings-btn').removeClass('active');" data-toggle="tab">Begin capturing &raquo;</a>
 
   <hr />
@@ -345,17 +348,31 @@ draw: function() {
     width: 640
   }) 
 
-
   setInterval($W.getRow,100)
   	$W.calibrated = false
 
   if ($('body').width() > 768) $('#tool-toggle').hide()
   else $('#tool-pane').hide()
+  })();
 
-  })(); 
+//code to connect to raspberry-pi
+  var el=document.getElementById("pi-button");
+  if(el){
+    //if pi_div button does not return null
+document.getElementById("pi-button").addEventListener("click", function connect_to_pi() {
+    $W.loadingfromPi=true;
+    $W.piImage = new Image();
+    $W.piImage.onload = function () {
+      var sourceX = 0, sourceY = 0, sourceHeight = 300, sourceWidth = 800; 
+      $W.ctx.drawImage($W.piImage, sourceX, sourceY, sourceHeight, sourceWidth, 0, 0, $W.width, 1);
+    };
+    var fetchImageInterval = setInterval(function fetchImage() {
+      // piImage.src = "http://pi.local/cam/cam_pic.php?time=" + new Date().getTime();
+      $W.piImage.src = "../logo.png";//demo picture
+    }, 50);
+  });
+}
 </script>
-
-
-
 </body>
 </html>
+    
