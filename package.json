@@ -23,26 +23,26 @@
   },
   "homepage": "http://spectralworkbench.org",
   "dependencies": {
-    "request":         "~2.88.0",
-    "jquery":          "^3.3.1",
     "bootstrap": "~3.4.0",
+    "d3": "~3.4.0",
+    "flot": "~0.8.0-alpha",
     "font-awesome": "~4.7.0",
-    "nvd3":            "~1.8.0",
-    "flot":            "~0.8.0-alpha",
     "getusermedia-js": "~1.0.0",
-    "d3":              "~3.4.0"
+    "jquery": "^3.3.1",
+    "nvd3": "~1.8.0",
+    "request": "~2.88.0"
   },
   "devDependencies": {
-    "matchdep":                 "^2.0.0",
-    "grunt":                    "^1.0.3",
-    "grunt-cli":                "^1.2.0",
-    "grunt-tape":               "^0.1.0",
-    "tape":                     "^4.9.1",
-    "grunt-contrib-concat":     "^1.0.1",
-    "grunt-contrib-watch":      "^1.1.0",
-    "jasmine":                  "~3.3.1",
-    "jasmine-jquery":           "~2.1.1",
-    "jasmine-ajax":             "~3.4.0",
-    "grunt-contrib-jasmine":    "~1.0.3"
+    "matchdep": "^2.0.0",
+    "grunt": "^1.0.3",
+    "grunt-cli": "^1.2.0",
+    "grunt-tape": "^0.1.0",
+    "tape": "^4.9.1",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-watch": "^1.1.0",
+    "jasmine": "~3.3.1",
+    "jasmine-jquery": "~2.1.1",
+    "jasmine-ajax": "~3.4.0",
+    "grunt-contrib-jasmine": "~1.0.3"
   }
 }
