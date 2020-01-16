@@ -45,6 +45,14 @@ module.exports = function(grunt) {
                     'src/SpectralWorkbench.Graph.js'
                 ],
                 dest: 'dist/spectral-workbench.js',
+            },
+            capture: {
+                src: [
+                    'examples/capture/detect_sample_row.js',
+                    'examples/capture/toggleRotation.js',
+                    'examples/capture/getRow.js',
+                ],
+                dest: 'dist/capture.dist.js'
             }
         },
 
