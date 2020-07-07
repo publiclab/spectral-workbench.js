@@ -31,7 +31,8 @@
     "http-server": "^0.12.3",
     "jquery": "^3.3.1",
     "nvd3": "~1.8.6",
-    "request": "~2.88.0"
+    "request": "~2.88.0",
+    "moment": "~2.10.6"
   },
   "devDependencies": {
     "matchdep": "^2.0.0",
