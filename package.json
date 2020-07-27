@@ -42,7 +42,7 @@
     "tape": "^5.0.1",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-watch": "^1.1.0",
-    "jasmine": "~3.5.0",
+    "jasmine": "~3.6.1",
     "jasmine-jquery": "~2.1.1",
     "jasmine-ajax": "~4.0.0",
     "grunt-contrib-jasmine": "~1.0.3"
