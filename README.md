@@ -86,6 +86,18 @@ jQuery(document).ready(function($) {
 
 ## Usage
 
+### Running
+
+If you're using this locally, the best way to run it locally is to use the `http-server` npm module. Install it with:
+
+`npm install -g http-server`
+
+then run the app with:
+
+`http-server` 
+
+and it will open at the address: http://localhost:8080/
+
 
 ### Inputting data
 
