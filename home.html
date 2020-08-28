@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">                                                                                         
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta content="text/html;charset=UTF-8" http-equiv="Content-Type"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Home</title>
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/d3/d3.js" type="text/javascript"></script>                                                                              
+  <script src="bower_components/nvd3/build/nv.d3.js" type="text/javascript"></script>                                                                              
+  <script src="bower_components/bootstrap-css/js/bootstrap.min.js"></script>
+  <script src="bower_components/moment/moment.js"></script>
+  <link href="bower_components/nvd3/build/nv.d3.css" rel="stylesheet">
+  <script src="dist/spectral-workbench.js" type="text/javascript"></script>
+
+</head>
+<!-- TODO: turbolinks breaks spec filter links -->
+<body data-no-turbolink>
+  <div id="graph"></div>
+</body>
+<script>
+
+
+jQuery(document).ready(function($) {
+
+var data = {
+  "data": { 
+    "name": "Test spectrum",
+    "lines":[ // as many data points as you like may be entered here:
+      {"average":64.3333,"r":69,"g":46,"b":78,"wavelength":269.089},
+      {"average":64.3333,"r":70,"g":46,"b":77,"wavelength":270.815},
+      {"average":64,"r":71,"g":46,"b":75,"wavelength":272.541},
+      {"average":63.6667,"r":70,"g":47,"b":74,"wavelength":274.267},
+      {"average":63.6667,"r":71,"g":46,"b":74,"wavelength":275.992},
+      {"average":63.3333,"r":71,"g":45,"b":74,"wavelength":277.718},
+      {"average":62,"r":69,"g":44,"b":73,"wavelength":279.444},
+      {"average":60.3333,"r":66,"g":44,"b":71,"wavelength":281.17},
+      {"average":61,"r":67,"g":45,"b":71,"wavelength":282.895},
+      {"average":62,"r":68,"g":46,"b":72,"wavelength":284.621},
+      {"average":63,"r":69,"g":47,"b":73,"wavelength":286.347},
+      {"average":62,"r":67,"g":47,"b":72,"wavelength":288.073},
+      {"average":62.6667,"r":69,"g":47,"b":72,"wavelength":289.798},
+      {"average":64,"r":71,"g":47,"b":74,"wavelength":291.524},
+      {"average":64,"r":70,"g":46,"b":76,"wavelength":293.25},
+      {"average":63.6667,"r":68,"g":48,"b":75,"wavelength":294.975},
+      {"average":63.3333,"r":68,"g":50,"b":72,"wavelength":296.701},
+      {"average":64,"r":70,"g":50,"b":72,"wavelength":298.427},
+      {"average":65,"r":72,"g":49,"b":74,"wavelength":300.153},
+      {"average":65,"r":71,"g":50,"b":74,"wavelength":301.878},
+      {"average":64,"r":68,"g":49,"b":75,"wavelength":303.604}
+    ]
+  }
+}
+
+graph = new SpectralWorkbench.Graph({});
+
+var spectrum = new SpectralWorkbench.Spectrum(data, graph); // graph is optional but needed if you want changes to spectrum to display
+
+graph.load(spectrum);
+
+graph.datum.addAndParseTag('smooth:3')
+
+});
+
+
+</script>
+</html>
