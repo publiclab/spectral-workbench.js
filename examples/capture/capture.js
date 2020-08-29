@@ -1,4 +1,3 @@
-// window.webcam.getCameraList()
 flotoptions = {"crosshair":{"mode":"x"},"series":{"lines":{"show":true,"lineWidth":1}},"yaxis":{"show":true,"max":100,"min":0},"xaxis":{"show":false},"shadowSize":0,"threshold":{"below":0,"color":"#a00"},"grid":{"clickable":true,"hoverable":true,"borderWidth":0,"color":"#ccc","backgroundColor":"#111"},"colors":["#ffffff","rgba(255,0,0,0.3)","rgba(0,255,0,0.3)","rgba(0,0,255,0.3)","#ffff00"]}
 
   flotoptions.grid = {
@@ -29,6 +28,7 @@ $W = {
   // width: 1280,
   // height: 720,
   frame: 0,
+  defaultConstraints: { video: true, audio: false },
 
   initialize: function(args) {
     this.mobile = args['mobile'] || false
@@ -51,10 +51,7 @@ $W = {
       this.sample_start_row = localStorage.getItem('sw:samplestartrow') || this.width/2;
     }
     this.setSampleRow(this.sample_start_row)
-
-    getUserMedia(this.options, this.success, this.deviceError)
-
-    window.webcam = this.options
+    this.getUserMedia(this.options, this.success, this.deviceError);
     this.canvas = document.getElementById("canvas")
     $('canvas').width = this.width+"px"
     this.canvas.width = this.width
@@ -91,101 +88,8 @@ $W = {
     }
   },
 
-  success: function (stream) {
-    //console.log('success')
-    if ($W.options.context === 'webrtc') {
-      $('#heightIndicator').show()
-      $('#webcam-msg').hide()
-      var video = $W.options.videoEl, vendorURL = window.URL || window.webkitURL;
-      window.stream = stream
-      window.video = video
-      //if (!!stream) {
-      //  video.src = null;
-      //  stream.stop();
-      //}
-      if (navigator.mozGetUserMedia) video.mozSrcObject = stream;
-      else video.srcObject = stream;
-      video.onerror = function (e) {
-        stream.stop();
-      };
-      //video.play()
-      // flip image horiz. based on init terms
-      if ($W.flipped == true) {
-        $W.flipped = false; // <= turn it false because f_h() will toggle it. messy.
-        $W.flip_horizontal();
-      }
-    } else {
-      //flash context
-      console.log('flash or something else')
-    }
-  },
   deviceError: function (error) {
     //console.log(error)
-  },
-  // options contains the configuration information for the shim
-  // it allows us to specify the width and height of the video
-  // output we're working with, the location of the fallback swf,
-  // events that are triggered onCapture and onSave (for the fallback)
-  // and so on.
-  options: {
-
-    "audio": false,
-    "video": true,
-
-    // the element (by id) you wish to apply
-    el: "webcam",
-
-    extern: null,
-    append: true,
-
-    // the recommended mode to be used is 'callback '
-    // where a callback is executed once data
-    // is available
-    mode: "callback",
-
-    // the flash fallback Url
-    swffile: "/javascripts/webcam-fallback/jscam_canvas_only.swf",
-
-    // quality of the fallback stream
-    quality: 100,
-    context: "",
-
-    debug: function () {},
-
-    // callback for capturing the fallback stream
-    onCapture: function () {
-      window.webcam.save();
-    },
-    onTick: function () {},
-
-    // callback for saving the stream, useful for
-    // relaying data further.
-    onSave: function (data) {
-      // in progress for Flash now
-      // seems to execute 240 times... once for each column?
-      var col = data.split(";"),
-        img = $W.canvas.getContext('2d').getImageData(0, 0, this.width, this.height);
-        tmp = null,
-        w = this.width,
-        h = this.height;
-
-      for (var i = 0; i < w; i++) {
-        tmp = parseInt(col[i], 10);
-        img.data[$W.pos + 0] = (tmp >> 16) & 0xff;
-        img.data[$W.pos + 1] = (tmp >> 8) & 0xff;
-        img.data[$W.pos + 2] = tmp & 0xff;
-        img.data[$W.pos + 3] = 0xff;
-        $W.pos += 4;
-      }
-
-      if ($W.pos >= 4 * w * $W.sample_height) {
-        $W.canvas.getContext('2d').putImageData(img, 0, 0);
-        $W.ctx.drawImage(img, 0, 0);
-        $W.pos = 0;
-      }
-
-    },
-    onLoad: function () {}
   },
 
   // Draws the appropriate pixels onto the top row of the waterfall.

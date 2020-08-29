@@ -51,6 +51,7 @@ module.exports = function(grunt) {
                     'examples/capture/detect_sample_row.js',
                     'examples/capture/toggleRotation.js',
                     'examples/capture/getRow.js',
+                    'examples/capture/getUserMedia.js'
                 ],
                 dest: 'dist/capture.dist.js'
             }

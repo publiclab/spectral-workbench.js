@@ -73,25 +73,61 @@
     if (selected_row > -1) $W.setSampleRows(selected_row, selected_row+1);
     else console.log('AutoDetectSampleRow: Increase light intensity and try again!')
   }
+$W.toggle_rotation=function(){
+    
+  $W.rotated = !$W.rotated
+  if ($W.rotated == true) $('.btn-rotate').addClass('active');
+  else                    $('.btn-rotate').removeClass('active');
+  var style = $('#heightIndicator')[0].style
+  var stylePrev = $('#heightIndicatorPrev')[0].style
+  if ($W.rotated) {
+    style.marginTop = '0px';
+    style.borderBottomWidth = "0px"
+    style.borderRightWidth = "2px"
+    style.height = "240px"
+    style.width = "0px"
+    stylePrev.marginTop = '0px';
+    stylePrev.borderBottomWidth = "0px"
+    stylePrev.borderRightWidth = "2px"
+    stylePrev.height = "100px"
+    stylePrev.width = "0px"
+    $('#heightIndicator .vertical').show();
+    $('#heightIndicator .horizontal').hide();
+    $('.spectrum-example-horizontal').hide();
+    $('.spectrum-example-vertical').show();
+  } else {
+    style.marginLeft = '0px';
+    style.borderBottomWidth = "2px"
+    style.borderRightWidth = "0px"
+    style.width = "320px"
+    style.height = "0px"
+    stylePrev.marginLeft = '0px';
+    stylePrev.borderBottomWidth = "2px"
+    stylePrev.borderRightWidth = "0px"
+    stylePrev.width = "100%"
+    stylePrev.height = "0px"
+    $('#heightIndicator .vertical').hide();
+    $('#heightIndicator .horizontal').show();
+    $('.spectrum-example-horizontal').show();
+    $('.spectrum-example-vertical').hide();
+  }
+  // reset the indicator to the correct sample row:
+  $W.setSampleRows($W.sample_start_row,$W.sample_start_row)
+}
 $W.getRow=function() {
-     $W.frame += 1
-    if ( $W.options.context === 'webrtc') {
-      var video = $('video')[0];
-      // Grab the existing canvas:
-      var saved =  $W.excerptCanvas(0,0, $W.width, $W.height, $W.ctx).getImageData(0,0, $W.width, $W.height)
+    $W.frame += 1
+    var video = $('video')[0];
+    // Grab the existing canvas:
+    var saved =  $W.excerptCanvas(0,0, $W.width, $W.height, $W.ctx).getImageData(0,0, $W.width, $W.height)
 
-      // manipulate the canvas to get the image to copy onto the canvas in the right orientation
-       $W.ctx.save()
-       $W.getCrossSection(video)
-       $W.ctx.restore()
+    // manipulate the canvas to get the image to copy onto the canvas in the right orientation
+    $W.ctx.save()
+    $W.getCrossSection(video)
+    $W.ctx.restore()
 
-      // draw old data 1px below new row of data:
-       $W.ctx.putImageData(saved,0,1)
-    } else if( $W.options.context === 'flash'){
-      window.webcam.capture();
-    } else {
-      console.log('No context was supplied to getSnapshot()');
-    }
+    // draw old data 1px below new row of data:
+    $W.ctx.putImageData(saved,0,1)
+
 
     // populate the sidebar preview if there's a "preview" element:
     if ($('#preview').length > 0) {
@@ -204,44 +240,34 @@ $W.getRow=function() {
       }
     }
   }
-$W.toggle_rotation=function(){
+// Temasys Adapter JS
+// https://github.com/Temasys/AdapterJS
+// AdapterJS provides polyfills and cross-browser helpers for WebRTC. It wraps around
+// the native APIs in Chrome, Opera and Firefox and provides support for WebRTC in 
+// Internet Explorer and Safari on Mac and Windows through the available Temasys Browser Plugins.
+
+$W.getUserMedia = function(options) {
+  AdapterJS.webRTCReady(() => {
+    // The WebRTC API is ready.
+    const container = document.getElementById('webcam'),
+          video = document.createElement('video');
     
-  $W.rotated = !$W.rotated
-  if ($W.rotated == true) $('.btn-rotate').addClass('active');
-  else                    $('.btn-rotate').removeClass('active');
-  var style = $('#heightIndicator')[0].style
-  var stylePrev = $('#heightIndicatorPrev')[0].style
-  if ($W.rotated) {
-    style.marginTop = '0px';
-    style.borderBottomWidth = "0px"
-    style.borderRightWidth = "2px"
-    style.height = "240px"
-    style.width = "0px"
-    stylePrev.marginTop = '0px';
-    stylePrev.borderBottomWidth = "0px"
-    stylePrev.borderRightWidth = "2px"
-    stylePrev.height = "100px"
-    stylePrev.width = "0px"
-    $('#heightIndicator .vertical').show();
-    $('#heightIndicator .horizontal').hide();
-    $('.spectrum-example-horizontal').hide();
-    $('.spectrum-example-vertical').show();
-  } else {
-    style.marginLeft = '0px';
-    style.borderBottomWidth = "2px"
-    style.borderRightWidth = "0px"
-    style.width = "320px"
-    style.height = "0px"
-    stylePrev.marginLeft = '0px';
-    stylePrev.borderBottomWidth = "2px"
-    stylePrev.borderRightWidth = "0px"
-    stylePrev.width = "100%"
-    stylePrev.height = "0px"
-    $('#heightIndicator .vertical').hide();
-    $('#heightIndicator .horizontal').show();
-    $('.spectrum-example-horizontal').show();
-    $('.spectrum-example-vertical').hide();
-  }
-  // reset the indicator to the correct sample row:
-  $W.setSampleRows($W.sample_start_row,$W.sample_start_row)
-}
+    container.appendChild(video);
+    video.autoplay = true;
+    video.id = 'webcam-video'
+    
+    const successCallback = stream => {
+      $('#heightIndicator').show()
+      $('#webcam-msg').hide()
+      attachMediaStream(video, stream)
+      if ($W.flipped == true) {
+        $W.flipped = false; // <= turn it false because f_h() will toggle it. messy.
+        $W.flip_horizontal();
+      }
+    };
+
+    const errorCallback = () => console.warn(error);
+
+    getUserMedia($W.defaultConstraints, successCallback, errorCallback);
+  });
+};
