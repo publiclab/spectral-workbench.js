@@ -26,10 +26,38 @@
 /*  margin-right: -40px;*/
 /*}*/
 
+html {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 body {
   background: #f9f9f9;
   color: black;
 }
+
+.full-strecth-block {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.full-strecth-flex-vertical {
+  display: flex !important;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.demo-button {
+  border: none;
+  color: white;
+  padding: 1rem;
+  border-radius: 6px;
+  background-image: linear-gradient(to bottom,#08c,#04c);
+}
+
 /*hr {*/
 /*  border-color: #666;*/
 /*}*/
@@ -67,6 +95,48 @@ body {
   }
 }
 
+
+/* Individual Component Style -------------------------------------------*/
+
 #heightIndicatorPrev {
 
 }
+
+#landing-page:before {
+  background-image: url('./asset/landing-wallpaper.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  content: ' ';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.3;
+}
+#landing-page {
+  justify-content: center;
+  align-items: center;
+}
+#landing-page-content {
+  width: 70%;
+  max-width: 800px;
+  text-align: center;
+}
+#landing-page-content p {
+  color: grey
+}
+
+#landing-page-content span  {
+  font-size: 1.7rem;
+  opacity: 0.5;
+}
+
+
+
+
+
+

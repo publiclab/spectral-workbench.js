@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.min.css"/>
   <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css"/>
 
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
   <script src="../../node_modules/getusermedia-js/dist/getUserMedia.min.js"></script>
   <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
   <script src="../../node_modules/flot/jquery.flot.js"></script>
@@ -23,9 +24,10 @@
   <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="graph.js" type="text/javascript"></script>
 
-  <script src="capture.js" type="text/javascript"></script>
+
+  <!-- <script src="capture.js" type="text/javascript"></script>
   <script src="../../dist/capture.dist.js" type="text/javascript"></script>
-  <script src="api.js" type="text/javascript"></script>
+  <script src="api.js" type="text/javascript"></script> -->
   <link href="new-capture.css" media="all" rel="stylesheet" type="text/css" />
 
   <!--
@@ -41,10 +43,48 @@
 
 </head>
 
-<body>
-  <div class="tab-content capture" style="padding:0 20px;">
+<body class="full-strecth-block">
+
+
+  <div class="tab-content capture full-strecth-block">
+
+    <!--  step 0 landing Page   -->
+
+    <div id="landing-page" class="tab-pane active full-strecth-flex-vertical">
+      <div id="landing-page-content">
+        <h1> 
+          <img src="./asset//logo.png">
+          Spectral WorkBench <small>by Public Lab (DEMO)</small></h1>
+        <br><br>
+        <p>What is Spectral Workbench? SpectralWorkbench.org is a web based application to collect, 
+          archive, share, and analyze spectral data, for Public Lab DIY spectrometers and other spectrometers. 
+          With it, you can: connect your USB Desktop Spectrometry Kit. scan and save samples. Try out the 
+          application with upload or capture image.
+        </p>
+        <br><br><br>
+        <button class="demo-button">Capture Spectra</button>
+        <br><br><br>
+        <span>
+          <a href="https://spectralworkbench.org/dashboard"><i class="fas fa-home"></i></a>
+          <a href="https://github.com/publiclab/spectral-workbench.js"><i class="fab fa-github"></i></a>
+          <a href="https://twitter.com/intent/follow?original_referer=https%3A%2F%2Fspectralworkbench.org%2Fdashboard&ref_src=twsrc%5Etfw&screen_name=SpectralWB&tw_p=followbutton"><i class="fab fa-twitter"></i></a>
+          <a href="https://publiclab.org/wiki/spectral-workbench-help"><i class="fas fa-info-circle"></i></a>
+        </span>
+
+      </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
     <!--  step 2 setup   -->
-    <div id="settings" class="tab-pane">
+    <!-- <div id="settings" class="tab-pane">
       <div id="heightIndicator" style="display:none;position:absolute;margin:0;z-index:999;border-right:0px solid #ff4;border-bottom:2px solid #ff4;height:1px;margin-top:120px;width:320px;font-weight:bold;">
         <div class="vertical"   style="margin-top:3px;padding:2px;background:black;float:right;display:none;">BLUE</div>
         <div class="horizontal" style="margin-top:3px;padding:2px;background:black;float:right;">RED</div>
@@ -88,10 +128,10 @@
 
       <p><b>Offline use:</b> To use this interface offline, load the offline capture tool <a href="/capture/offline">by clicking here</a>. Once the page loads, you'll be able to access that page even without internet access; it will be stored in your browser.</p>
 
-    </div>
+    </div> -->
 
     <!--     step 3 capturing phasing-->
-    <div id="capture" class="tab-pane active" style="display: flex">
+    <!-- <div id="capture" class="tab-pane" style="display: flex">
       <div style="width: 28em; background-color: #bfbfbf; margin-right: 5em">
         <div id="sidebar" style="width: 26em; margin: 2em auto 2em auto">
         <div class="hidden-phone" >
@@ -128,11 +168,11 @@
           <p style="margin-left: 1.8em;margin-top:2em;width: 96%;">This display shows the last few seconds of data, descending. The top, newest row of pixels is used by default to generate the graph. This can be changed later.</p>
         </div>
       </div>
-    </div>
+    </div> -->
 
   </div>
 
-  <script>
+  <!-- <script>
     (function() {
 
       $W.initialize({
@@ -151,6 +191,6 @@
       else $('#tool-pane').hide()
 
     })();
-  </script>
+  </script> -->
 </body>
 </html>
