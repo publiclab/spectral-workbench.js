@@ -96,7 +96,7 @@
             application with upload or capture image.
           </p>
           <br><br><br>
-          <button class="demo-button next">Capture Spectra</button>
+          <button class="demo-button next" id="landing-page-next">Capture Spectra</button>
           <br><br><br>
           <span>
             <a href="https://spectralworkbench.org/dashboard"><i class="fas fa-home"></i></a>
@@ -161,7 +161,7 @@
           </p>
 
 
-          <a class="btn btn-large btn-primary" href="#capture" onClick="$('#capture-btn').addClass('active');$('#settings-btn').removeClass('active');" data-toggle="tab">Begin capturing &raquo;</a>
+          <a class="btn btn-large btn-primary" href="#capture" onClick="$('#capture-btn').addClass('active');$('#settings-btn').removeClass('active');" data-toggle="tab" id="setting-page-next">Begin capturing &raquo;</a>
 
           <hr />
         </div>
@@ -226,6 +226,8 @@
           </div>
         </div>
 
+        <button class="demo-button next" id="capture-page-next">Save Capture</button>
+
       </div>
     </div>
 
@@ -275,10 +277,20 @@
     $("#landing-page-trigger").on('click', function (params) {
       stepper.to(1);
     });
+    $("#landing-page-next").on('click', function (params) {
+      stepper.to(2);
+    });
 
+    
     $("#setting-trigger").on('click', function (params) {
       stepper.to(2);
     });
+    $("#setting-page-next").on('click', function (params) {
+      stepper.to(3);
+    });
+
+
+    
 
     $("#capture-trigger").on('click', function (params) {
       stepper.to(3);

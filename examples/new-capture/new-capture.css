@@ -228,7 +228,7 @@ div.bs-stepper-content {
 }
 
 #capture .full-strecth-flex-horizontal {
-  height: 65%;
+  height: 60%;
 }
 
 #capture .full-strecth-flex-horizontal > div {
@@ -245,6 +245,10 @@ div.bs-stepper-content {
 
 #capture-phase-right > div {
   margin: 1rem
+}
+
+#capture-page-next {
+  margin-top: 4rem
 }
 
 
