@@ -201,7 +201,7 @@ div.bs-stepper-content {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 0 11rem;
+  padding: 0 25rem;
   margin: 0 auto;
   margin-top: 4rem;
   position: absolute;
@@ -235,6 +235,7 @@ div.bs-stepper-content {
   background-color: #353535;
   height: 100%;
   box-shadow: 1px 1px 11px 2px #151515;
+  border-radius: 5px;
 }
 
 #capture-phase-right .btn-group {
@@ -249,6 +250,27 @@ div.bs-stepper-content {
 
 #capture-page-next {
   margin-top: 4rem
+}
+
+#plotting > div:first-child {
+  width: 100%;
+  max-width: 1000px;
+}
+
+#plotting-note {
+  background: #dedede;
+  max-width: 300px;
+  padding: 1.5rem;
+  border-radius: 5px;
+}
+
+#graph1 {
+  height: 300px !important;
+}
+
+
+.fade.in {
+  opacity: 0;
 }
 
 

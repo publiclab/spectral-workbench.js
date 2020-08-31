@@ -31,6 +31,16 @@
   <script src="capture.js" type="text/javascript"></script>
   <script src="../../dist/capture.dist.js" type="text/javascript"></script>
   <script src="api.js" type="text/javascript"></script>
+
+
+  <script src="../../bower_components/d3/d3.js" type="text/javascript"></script>                                                                              
+  <script src="../../bower_components/nvd3/build/nv.d3.js" type="text/javascript"></script>                                                                              
+  <script src="../../bower_components/moment/moment.js"></script>
+  <script src="../../dist/spectral-workbench.js" type="text/javascript"></script>
+  <link href="../../bower_components/nvd3/build/nv.d3.css" rel="stylesheet">
+  <link href="../../dist/spectral-workbench.css" rel="stylesheet">
+  
+
   <link href="new-capture.css" media="all" rel="stylesheet" type="text/css" />
 
   <!--
@@ -75,6 +85,12 @@
       <div class="step" data-target="#capture">
         <button type="button" class="step-trigger" role="tab" aria-controls="capture" id="capture-trigger">
           <span class="bs-stepper-label">Capture</span>
+        </button>
+      </div>
+      <div class="line"></div>
+      <div class="step" data-target="#plotting">
+        <button type="button" class="step-trigger" role="tab" aria-controls="plotting" id="plot-trigger">
+          <span class="bs-stepper-label">Plotting</span>
         </button>
       </div>
     </div>
@@ -227,9 +243,31 @@
         </div>
 
         <button class="demo-button next" id="capture-page-next">Save Capture</button>
-
+        <img style="display:none;background:#333;" id="spectrum-preview" />
       </div>
+
+
+
+
+      <!--  step 4 Plotting phasing-->
+      <div id="plotting" class="content center-content" role="tabpanel">
+        Here Is the result plot
+        <div class="swb-graphing center-content">
+          <div id="graph1"></div>
+        </div>
+
+        <div id="plotting-note">
+          Use the bottom graph as the navigator to zoom into any section of the plot by dragging
+          to select the target region span. User could also move the span in the navigator
+        </div>
+      </div>
+
+
+
+
+
     </div>
+
 
 
 
@@ -290,11 +328,39 @@
     });
 
 
-    
-
     $("#capture-trigger").on('click', function (params) {
       stepper.to(3);
     });
+
+    $("#plot-trigger").on('click', function (params) {
+      stepper.to(4);
+    });
+
+    var imageData;
+    $("#capture-page-next").on('click', function (params) {
+      stepper.to(4);
+      $W.saveSpectrum();
+      imageData = $W.full_data;
+      console.log('what is my image data like', JSON.stringify($W.full_data));
+
+      graph = new SpectralWorkbench.Graph({
+        selector: '#graph1' // defaults to "#graph" using jQuery selector syntax
+      });
+
+      var imageDataFormatted = [];
+      imageData.forEach((item, index) => {
+        var formattedItem = [index, item[item.length-1]]
+        imageDataFormatted.push(formattedItem)
+      })
+
+      var spectrum = new SpectralWorkbench.Spectrum(imageDataFormatted, graph); 
+      // console.log('spectrum', spectrum.getJSON())
+      graph.load(spectrum);
+
+
+    });
+
+
   })
 </script>
 </html>

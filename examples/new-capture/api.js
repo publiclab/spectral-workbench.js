@@ -42,13 +42,16 @@ $W.calibrate = function(id,x1,w1,x2,w2) {
 $W.contrast = function(res) {
   var sum = 0
   res = res || 10
-  for (var i=res; i<$W.data[0].data.length; i+=res) {
-    // added /res to make it about slope
-    slope = Math.abs(parseInt($W.data[0].data[i-res][1])-parseInt($W.data[0].data[i][1]))/res
-    // only add it if slope is greater than 1
-    if (slope > 1) sum += slope
+  if ($W.data[0]) {
+    for (var i=res; i<$W.data[0].data.length; i+=res) {
+      // added /res to make it about slope
+      slope = Math.abs(parseInt($W.data[0].data[i-res][1])-parseInt($W.data[0].data[i][1]))/res
+      // only add it if slope is greater than 1
+      if (slope > 1) sum += slope
+    }
+    return (sum/($W.data[0].data.length))
   }
-  return (sum/($W.data[0].data.length))
+
 }
 
 // watch and alert if contrast is high enough to likely be a CFL
