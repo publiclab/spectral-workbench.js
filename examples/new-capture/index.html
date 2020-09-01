@@ -243,6 +243,7 @@
         </div>
 
         <button class="demo-button next" id="capture-page-next">Save Capture</button>
+        <p style="margin-top: 0.5em">Once you save the capture, you cannot go back here.</p>
         <img style="display:none;background:#333;" id="spectrum-preview" />
       </div>
 
@@ -260,6 +261,17 @@
           Use the bottom graph as the navigator to zoom into any section of the plot by dragging
           to select the target region span. User could also move the span in the navigator
         </div>
+
+        <button class="demo-button" id="restart" style="margin-top: 1em">Restart</button>
+
+        <script>
+          jQuery(document).ready(function() {
+            $("#restart").on('click', function (params) {
+              location.reload();
+            });
+          })
+
+        </script>
       </div>
 
 
@@ -332,13 +344,39 @@
       stepper.to(3);
     });
 
+    var imageData;
     $("#plot-trigger").on('click', function (params) {
-      stepper.to(4);
+      stepper.to(4);stepper.to(4);
+      $("#capture-trigger").prop('disabled', true);
+      $("#setting-trigger").prop('disabled', true);
+      $("#landing-page-trigger").prop('disabled', true);
+
+      $W.saveSpectrum();
+      imageData = $W.full_data;
+      console.log('what is my image data like', JSON.stringify($W.full_data));
+
+      graph = new SpectralWorkbench.Graph({
+        selector: '#graph1' // defaults to "#graph" using jQuery selector syntax
+      });
+
+      var imageDataFormatted = [];
+      imageData.forEach((item, index) => {
+        var formattedItem = [index, item[item.length-1]]
+        imageDataFormatted.push(formattedItem)
+      })
+
+      var spectrum = new SpectralWorkbench.Spectrum(imageDataFormatted, graph);
+      // console.log('spectrum', spectrum.getJSON())
+      graph.load(spectrum);
     });
 
-    var imageData;
+
     $("#capture-page-next").on('click', function (params) {
       stepper.to(4);
+      $("#capture-trigger").prop('disabled', true);
+      $("#setting-trigger").prop('disabled', true);
+      $("#landing-page-trigger").prop('disabled', true);
+
       $W.saveSpectrum();
       imageData = $W.full_data;
       console.log('what is my image data like', JSON.stringify($W.full_data));
