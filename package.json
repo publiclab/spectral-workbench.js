@@ -35,16 +35,17 @@
     "moment": "~2.27.0"
   },
   "devDependencies": {
-    "matchdep": "^2.0.0",
+    "cypress": "^5.1.0",
     "grunt": "^1.0.3",
     "grunt-cli": "^1.2.0",
-    "grunt-tape": "^0.1.0",
-    "tape": "^5.0.1",
     "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-jasmine": "~1.0.3",
     "grunt-contrib-watch": "^1.1.0",
+    "grunt-tape": "^0.1.0",
     "jasmine": "~3.6.1",
-    "jasmine-jquery": "~2.1.1",
     "jasmine-ajax": "~4.0.0",
-    "grunt-contrib-jasmine": "~1.0.3"
+    "jasmine-jquery": "~2.1.1",
+    "matchdep": "^2.0.0",
+    "tape": "^5.0.1"
   }
 }
