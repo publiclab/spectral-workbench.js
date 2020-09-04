@@ -27,4 +27,6 @@ context('Actions', () => {
     cy.get('.bs-stepper-header>div').eq(4).not('have.class', 'active')
     cy.get('.bs-stepper-header>div').eq(6).not('have.class', 'active')
   });
+
+  
 })
