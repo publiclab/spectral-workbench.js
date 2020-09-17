@@ -1,22 +1,17 @@
 $W.getRow=function() {
-     $W.frame += 1
-    if ( $W.options.context === 'webrtc') {
-      var video = $('video')[0];
-      // Grab the existing canvas:
-      var saved =  $W.excerptCanvas(0,0, $W.width, $W.height, $W.ctx).getImageData(0,0, $W.width, $W.height)
+    $W.frame += 1
+    var video = $('video')[0];
+    // Grab the existing canvas:
+    var saved =  $W.excerptCanvas(0,0, $W.width, $W.height, $W.ctx).getImageData(0,0, $W.width, $W.height)
 
-      // manipulate the canvas to get the image to copy onto the canvas in the right orientation
-       $W.ctx.save()
-       $W.getCrossSection(video)
-       $W.ctx.restore()
+    // manipulate the canvas to get the image to copy onto the canvas in the right orientation
+    $W.ctx.save()
+    $W.getCrossSection(video)
+    $W.ctx.restore()
 
-      // draw old data 1px below new row of data:
-       $W.ctx.putImageData(saved,0,1)
-    } else if( $W.options.context === 'flash'){
-      window.webcam.capture();
-    } else {
-      console.log('No context was supplied to getSnapshot()');
-    }
+    // draw old data 1px below new row of data:
+    $W.ctx.putImageData(saved,0,1)
+
 
     // populate the sidebar preview if there's a "preview" element:
     if ($('#preview').length > 0) {
