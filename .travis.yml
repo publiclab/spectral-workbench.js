@@ -3,9 +3,6 @@ node_js:
   - '8'
 before_script: grunt build
 script: grunt jasmine
-before_install:
-  - npm install -g grunt-cli bower
-  - bower install
 env:
  - CXX=g++-4.8
 addons:
