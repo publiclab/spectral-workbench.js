@@ -240,6 +240,16 @@ $W.getRow=function() {
       }
     }
   }
+// Resulotion Map
+// Map resolution option name to value
+const resolutionMap = {
+  "1080p": { width: 1920, height: 1080 },
+  "720p": { width: 1080, height: 720 },
+  "480p": { width: 854, height: 480 },
+  "360p": { width: 640, height: 360 },
+  "240p": { width: 426, height: 240 }
+}
+
 // Temasys Adapter JS
 // https://github.com/Temasys/AdapterJS
 // AdapterJS provides polyfills and cross-browser helpers for WebRTC. It wraps around
@@ -271,3 +281,34 @@ $W.getUserMedia = function(options) {
     getUserMedia($W.defaultConstraints, successCallback, errorCallback);
   });
 };
+
+$W.updateResolution = function(resolution) {
+  const width = resolutionMap[resolution].width,
+        height = resolutionMap[resolution].height;
+
+  const constraints = {
+    ...$W.defaultConstraints,
+    facingMode: { ideal: "environment" },
+    video: {
+      ...$W.defaultConstraints.video,
+      width: { min: width },
+      height: { min: height }
+    }
+  };
+
+  const message = $('#resolution-message > small');
+
+  const successCallback = stream => {
+    attachMediaStream(document.getElementById("webcam-video"), stream);
+    message.html('Update Successfully!');
+    message.css('color', '#52BE80');
+  }
+
+  const errorCallback = error => {
+    message.html(error.name || 'Failed to update resolution');
+    message.css('color', '#E74C3C');
+    console.warn(error);
+  };
+
+  getUserMedia(constraints, successCallback, errorCallback);
+}
