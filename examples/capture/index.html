@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css"/>
 
-    <script src="../../node_modules/getusermedia-js/dist/getUserMedia.min.js"></script>
+    <script src="https://cdn.temasys.io/adapterjs/0.15.x/adapter.min.js"></script>
     <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../../node_modules/flot/jquery.flot.js"></script>
     <script src="../../node_modules/flot/jquery.flot.crosshair.js"></script>
@@ -94,7 +94,7 @@
     <div class="horizontal" style="margin-top:3px;padding:2px;background:black;float:left;">BLUE</div>
     <div class="vertical"   style="margin-top:3px;padding:2px;background:black;float:right;margin-top:200px;display:none;">RED</div>
   </div> 
-  <div id="webcam-msg"><p><b>Requesting camera access... <br />(<a href="https://play.google.com/store/apps/details?id=org.mozilla.firefox">Firefox</a>, <a href="https://play.google.com/store/apps/details?id=com.opera.browser">Opera</a> or Chrome on Android, or <a href="https://itunes.apple.com/us/app/bowser/id560478358">Bowser</a> on iOS). Please click "Allow" when prompted, or try the <a href="/upload">Upload interface</a>.</b></p></div> 
+  <div id="webcam-msg"><p><b>Requesting camera access... <br />(Chrome on Android, or Safari on iOS). Please click "Allow" when prompted, or try the <a href="/upload">Upload interface</a>.</b></p></div> 
   <div style="" id="webcam"></div>
 
   <div style="padding-bottom:10px;padding-top:250px;">
@@ -151,7 +151,20 @@
     </div>
 
     <div class="tool-pane" id="tool-pane">
- 
+
+      <p><small><b>RESOLUTION</b></small></p>
+      <div class="btn-group toolbar" style="margin-bottom:5px;">
+        <select name="resolutions" id="resolution-select" onChange="$W.updateResolution(this.value)" style="width: 100%;color: #000000;">
+          <option value="" style="color:#c4c4c4;">--options--</option>
+          <option value="1080p">1920 x 1080</option>
+          <option value="720p">1280 x 720</option>
+          <option value="480p">854 x 480</option>
+          <option value="360p">640 x 360</option>
+          <option value="240p">426 x 240</option>
+        </select>
+        <p id="resolution-message" style="margin:5px 0 0 0;"><small></small></p>
+      </div>
+
       <p><small><b>ADJUSTMENTS</b></small></p>
       <div class="btn-group toolbar" data-toggle="buttons-checkbox" style="margin-bottom:5px;">
 
