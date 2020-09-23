@@ -1,13 +1,26 @@
 language: node_js
 node_js:
-  - '8'
+  - '10'
+cache:
+  # Caches $HOME/.npm when npm ci is default script command
+  # Caches node_modules in all other cases
+  npm: true
+  directories:
+    # we also need to cache folder with Cypress binary
+    - ~/.cache
+install:
+  - npm ci
 before_script: grunt build
-script: grunt jasmine
+script:
+  - $(npm bin)/cypress run --record
+  - grunt jasmine
 env:
- - CXX=g++-4.8
+  - CXX=g++-4.8
 addons:
- apt:
-  sources:
-   - ubuntu-toolchain-r-test
-  packages:
-   - g++-4.8
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
+      # Ubuntu 16+ does not install this dependency by default, so we need to install it ourselves
+      - libgconf-2-4
