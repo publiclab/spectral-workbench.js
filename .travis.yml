@@ -10,7 +10,9 @@ cache:
     - ~/.cache
 install:
   - npm ci
-before_script: grunt build
+before_script:
+  - grunt build
+  - node_modules/http-server/bin/http-server
 script:
   - $(npm bin)/cypress run --record
   - grunt jasmine
