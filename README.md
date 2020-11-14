@@ -1,7 +1,7 @@
 spectral-workbench.js
 ====
 
-[![Build Status](https://travis-ci.org/publiclab/spectral-workbench.js.svg?branch=master)](https://travis-ci.org/publiclab/spectral-workbench.js)
+[![Build Status](https://travis-ci.com/publiclab/spectral-workbench.js.svg?branch=master)](https://travis-ci.com/publiclab/spectral-workbench.js)
 [![npm](https://img.shields.io/npm/v/spectral-workbench.svg)](https://www.npmjs.com/package/spectral-workbench)
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/publiclab/spectral-workbench.js/)
 [![Join the chat at https://publiclab.org/chat](https://img.shields.io/badge/chat-in%20different%20ways-blue.svg)](https://publiclab.org/chat)
