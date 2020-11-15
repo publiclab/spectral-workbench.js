@@ -67,7 +67,7 @@ module.exports = function(grunt) {
                 'node_modules/d3/d3.js',
                 'node_modules/nvd3/build/nv.d3.js',
                 'node_modules/bootstrap/dist/js/bootstrap.min.js',
-                'node_modules/moment/dist/moment.js',
+                'node_modules/moment/moment.js',
                 'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
                 'node_modules/jasmine-ajax/lib/mock-ajax.js',
                 'spec/javascripts/helpers/test_responses.js'

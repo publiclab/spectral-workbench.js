@@ -231,38 +231,30 @@ SpectralWorkbench.Graph = Class.extend({
       d3.selectAll('g.nv-focus g.nv-line > g > g.nv-groups g') 
         //.addClass('main-line') // we should do this (or the d3 equiv.) for later selections. Or if nvd3 offers a ready-made selection
         .attr("id", function(datum, index) {
-          if (index < 4) {
-            var id = d3.select('svg').data()[0][index].id; // this is the real d3 DOM-stored data
-            return 'spectrum-line-' + id;
-          }
+          var id = d3.select('svg').data()[0][index].id; // this is the real d3 DOM-stored data
+          return 'spectrum-line-' + id;
         });
 
       // zoom graph lines
       d3.selectAll('g.nv-context g.nv-line > g > g.nv-groups g') 
         .attr("id", function(datum, index) {
-          if (index < 4) {
-            var id = d3.select('svg').data()[0][index].id; // this is the real d3 DOM-stored data
-            return 'spectrum-line-' + id;
-          }
+          var id = d3.select('svg').data()[0][index].id; // this is the real d3 DOM-stored data
+          return 'spectrum-line-' + id;
         });
 
       // graph line hover circles for main graph lines
       d3.selectAll('g.nv-focus g.nv-scatterWrap g.nv-groups g') 
         .attr("id", function(datum, index) {
-          if (index < 4) {
-            var id = d3.select('svg').data()[0][index].id; // this is the real d3 DOM-stored data
-            return 'spectrum-hover-' + id;
-          }
+          var id = d3.select('svg').data()[0][index].id; // this is the real d3 DOM-stored data
+          return 'spectrum-hover-' + id;
         });
 
       // graph line hover circles for zoom graph lines
       d3.selectAll('g.nv-context g.nv-scatterWrap g.nv-groups g') 
         .attr("id", function(datum, index) {
-          if (index < 4) {
-            var id = d3.select('svg').data()[0][index].id; // this is the real d3 DOM-stored data
-            return 'spectrum-hover-' + id;
-          }
-        });
+          var id = d3.select('svg').data()[0][index].id; // this is the real d3 DOM-stored data
+          return 'spectrum-hover-' + id;
+         });
 
       if (_graph.dataType == "spectrum") {
 
