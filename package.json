@@ -24,20 +24,22 @@
   "homepage": "http://spectralworkbench.org",
   "dependencies": {
     "bootstrap": "~3.4.0",
-    "d3": "~3.5.17",
+    "d3": "^3.5.4",
     "flot": "~0.8.0-alpha",
     "font-awesome": "~4.7.0",
     "http-server": "^0.12.3",
     "jquery": "^3.3.1",
-    "nvd3": "~1.8.6",
-    "request": "~2.88.0",
-    "moment": "~2.27.0"
+    "jquery.steps": "^1.0.3",
+    "moment": "~2.10.6",
+    "nvd3": "~1.7.1",
+    "request": "~2.88.0"
   },
   "devDependencies": {
-    "grunt": "^1.0.3",
+    "cypress": "^5.1.0",
+    "grunt": "^1.3.0",
     "grunt-cli": "^1.3.2",
     "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-jasmine": "~1.0.3",
+    "grunt-contrib-jasmine": "^1.2.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-tape": "^0.1.0",
     "jasmine": "~3.6.1",

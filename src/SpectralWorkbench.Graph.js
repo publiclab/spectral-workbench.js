@@ -254,7 +254,7 @@ SpectralWorkbench.Graph = Class.extend({
         .attr("id", function(datum, index) {
           var id = d3.select('svg').data()[0][index].id; // this is the real d3 DOM-stored data
           return 'spectrum-hover-' + id;
-        });
+         });
 
       if (_graph.dataType == "spectrum") {
 

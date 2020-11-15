@@ -64,10 +64,10 @@ module.exports = function(grunt) {
               specs: 'spec/javascripts/*spec.js',
               vendor: [
                 'node_modules/jquery/dist/jquery.min.js',
-                'bower_components/d3/d3.js',
-                'bower_components/nvd3/build/nv.d3.js',
-                'bower_components/bootstrap-css/js/bootstrap.min.js',
-                'bower_components/moment/moment.js',
+                'node_modules/d3/d3.js',
+                'node_modules/nvd3/build/nv.d3.js',
+                'node_modules/bootstrap/dist/js/bootstrap.min.js',
+                'node_modules/moment/moment.js',
                 'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
                 'node_modules/jasmine-ajax/lib/mock-ajax.js',
                 'spec/javascripts/helpers/test_responses.js'
