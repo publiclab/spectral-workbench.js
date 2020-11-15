@@ -294,7 +294,6 @@ $W.updateResolution = function(resolution) {
       height: { min: height }
     }
   };
-
   const message = $('#resolution-message > small');
 
   const successCallback = stream => {
