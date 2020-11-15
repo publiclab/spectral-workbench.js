@@ -28,7 +28,12 @@ $W = {
   // width: 1280,
   // height: 720,
   frame: 0,
-  defaultConstraints: { video: true, audio: false },
+  defaultConstraints: {
+    audio: false,
+    video: {
+      facingMode: "environment"
+    }
+  },
 
   initialize: function(args) {
     this.mobile = args['mobile'] || false
@@ -43,7 +48,6 @@ $W = {
       this.options.height = args['height']
       this.options.width = args['width']
     }
-
     if (args.video_row) {
       this.sample_start_row = args.video_row;
     } else {

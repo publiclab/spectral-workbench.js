@@ -46,14 +46,12 @@ $W.updateResolution = function(resolution) {
 
   const constraints = {
     ...$W.defaultConstraints,
-    facingMode: { ideal: "environment" },
     video: {
       ...$W.defaultConstraints.video,
       width: { min: width },
       height: { min: height }
     }
   };
-
   const message = $('#resolution-message > small');
 
   const successCallback = stream => {
