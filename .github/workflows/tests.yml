@@ -55,4 +55,4 @@ jobs:
     - name: "Start test server"
       run: npm install http-server && node_modules/http-server/bin/http-server &
     - name: "Run Cypress tests"
-      run: cypress run --record
+      run: $(npm bin)/cypress run --record
