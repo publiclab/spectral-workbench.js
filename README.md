@@ -17,6 +17,8 @@ See static demo here: https://publiclab.github.io/spectral-workbench.js/examples
 
 And static demo of capture interface: https://publiclab.github.io/spectral-workbench.js/examples/capture/
 
+Try a demo of the newly rewritten capture interface here: https://publiclab.github.io/spectral-workbench.js/examples/new-capture/
+
 ****
 
 
