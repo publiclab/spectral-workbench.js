@@ -24,7 +24,7 @@
   "homepage": "http://spectralworkbench.org",
   "dependencies": {
     "bootstrap": "~3.4.0",
-    "d3": "^3.5.4",
+    "d3": "^6.6.1",
     "flot": "~0.8.0-alpha",
     "font-awesome": "~4.7.0",
     "http-server": "^0.12.3",
