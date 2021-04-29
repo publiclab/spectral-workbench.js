@@ -1,0 +1,35 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: cypress
+    versions:
+    - 6.3.0
+    - 6.4.0
+    - 6.5.0
+    - 6.6.0
+    - 6.7.1
+    - 6.8.0
+    - 7.0.0
+    - 7.0.1
+    - 7.1.0
+  - dependency-name: d3
+    versions:
+    - 6.5.0
+    - 6.6.0
+    - 6.6.1
+    - 6.6.2
+  - dependency-name: tape
+    versions:
+    - 5.1.1
+    - 5.2.1
+  - dependency-name: jasmine
+    versions:
+    - 3.6.4
+  - dependency-name: flot
+    versions:
+    - 4.2.1
