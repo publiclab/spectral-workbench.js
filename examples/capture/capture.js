@@ -162,23 +162,12 @@ $W = {
   },
 
   downloadSpectrum: function() {
-    function getFormattedTime() {
-      let current_date = new Date();
-      let year = current_date.getFullYear();
-      let month = current_date.getMonth() + 1;
-      let day = current_date.getDate();
-      let hours = current_date.getHours();
-      let minutes = current_date.getMinutes();
-      let seconds = current_date.getSeconds();
-      return (year + '-' + month + '-' + day + '-' + hours + '-' + minutes + '-' + seconds);
-    }
-
   let base64_imgdata = $('#dataurl').val($W.canvas.toDataURL())[0].defaultValue;
   console.log(base64_imgdata);
 
   let a = document.createElement('a');
   a.href = base64_imgdata;
-  a.download = ('spectrum_img-' + getFormattedTime() + '.png');
+  a.download = ('spectrum_img.png');
   a.click();
   },
 

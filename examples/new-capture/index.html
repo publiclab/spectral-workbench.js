@@ -170,8 +170,12 @@
             <a rel="tooltip" title="" class="btn btn-default" onclick="$W.auto_detect_sample_row()" data-original-title="Auto select sample row"><i class="fa fa-white fa-arrows-v"></i> Auto-select Sample Row</a>
             <a rel="tooltip" title="Flip video horizontally" class="btn btn-default btn-flip" onClick="$W.flip_horizontal()"><i class="fa fa-white fa-arrows-h"></i> Flip image</a>
             <a rel="tooltip" title="Rotate video 90 &deg;" class="btn btn-default btn-rotate" onClick="$W.toggle_rotation()"><i class="fa fa-white fa-rotate-right"></i> Rotate</a>
-
           </p>
+
+          <div class="select" style="padding-top:5px;">
+            <label for="videoSource">Camera source: </label><select id="videoSource"></select>
+          </div>
+
           <p style="padding-top:5px;">
             Help <a href="http://publiclab.org/wiki/spectral-workbench-usage#Webcam+selection">selecting a camera</a>
           </p>
@@ -242,9 +246,14 @@
           </div>
         </div>
 
+        <input name="dataurl" type="hidden" id="dataurl" />
+
         <button class="demo-button next" id="capture-page-next">Save Capture</button>
         <p style="margin-top: 0.5em">Once you save the capture, you cannot go back here.</p>
         <img style="display:none;background:#333;" id="spectrum-preview" />
+
+        <button class="demo-button next" id="download-spectrum" onClick="$W.downloadSpectrum();">Download</button>
+
       </div>
 
 
