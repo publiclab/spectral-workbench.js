@@ -265,20 +265,98 @@ $W.getUserMedia = function(options) {
     container.appendChild(video);
     video.autoplay = true;
     video.id = 'webcam-video'
+
+    var videoElement = document.getElementById('webcam-video');
+    var videoSelect = document.querySelector('select#videoSource');
+    var selectors = [videoSelect];
     
-    const successCallback = stream => {
+    successCallback = stream => {
       $('#heightIndicator').show()
       $('#webcam-msg').hide()
-      attachMediaStream(video, stream)
+
+      window.stream = stream;
+      videoElement = attachMediaStream(videoElement, stream)
       if ($W.flipped == true) {
         $W.flipped = false; // <= turn it false because f_h() will toggle it. messy.
         $W.flip_horizontal();
       }
+      return getVidDevices();
     };
 
     const errorCallback = () => console.warn(error);
 
     getUserMedia($W.defaultConstraints, successCallback, errorCallback);
+
+    gotVidDevices = (deviceInfos) => {
+      let values = selectors.map(function(select) {
+        return select.value; 
+      });
+    
+      selectors.forEach(function(select) {
+        while (select.firstChild) {
+          select.removeChild(select.firstChild);
+        }
+      });
+      for (let i = 0; i !== deviceInfos.length; ++i) {
+        let deviceInfo = deviceInfos[i];
+        let option = document.createElement('option');
+        option.value = (deviceInfo.id || deviceInfo.deviceId);
+        if (deviceInfo.kind === 'videoinput' || deviceInfo.kind === 'video') {
+          console.log(deviceInfo.label);
+          option.text = deviceInfo.label || 'camera ' + (videoSelect.length + 1);
+          videoSelect.appendChild(option);
+        } 
+      }
+      
+      selectors.forEach(function(select, selectorIndex) {
+        if (Array.prototype.slice.call(select.childNodes).some(function(n) {
+          return n.value === values[selectorIndex];
+        })) {
+          select.value = values[selectorIndex];
+        }
+      });
+    }
+  
+    getVidDevices = () => {
+      if (typeof Promise === 'undefined') {
+        return MediaStreamTrack.getSources(gotVidDevices);
+      } else {
+        return navigator.mediaDevices.enumerateDevices()
+        .then(gotVidDevices)
+        .catch((error) => {
+          console.error(error);
+        });
+      }
+    }
+  
+    getVidDevices();
+  
+    start = () => {
+      if (window.stream) {
+        window.stream.getTracks().forEach(function(track) {
+          track.stop(); //stopping the current video stream
+        });
+      }
+  
+      var videoSource = videoSelect.value;
+      var constraints = {
+        video: {
+          deviceId: videoSource ? {exact: videoSource} : undefined //Taking device ids as the video source 
+        }
+      };
+  
+      if (typeof Promise === 'undefined') {
+      navigator.getUserMedia(constraints, successCallback, function(){}); 
+      } 
+      else {
+      navigator.mediaDevices.getUserMedia(constraints)
+      .then(successCallback);
+      } 
+    }
+  
+    videoSelect.onchange = start; //repeating the process for source change
+  
+    start();
   });
 };
 
