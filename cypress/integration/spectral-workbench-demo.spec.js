@@ -44,7 +44,7 @@ context('Actions', () => {
     // so use "cy.readFile" to retry until the file exists
     // and has length - and we assume that it has finished downloading then
     cy.readFile(filename, { timeout: 15000 })
-    .should('have.length.gt', 50)
+    .should('have.length.gt', 5000000000)
   });
 
 })
