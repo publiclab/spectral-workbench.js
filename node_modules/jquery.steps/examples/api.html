@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Api</title>
+  <link rel="stylesheet" href="../dist/jquery-steps.css">
+  <!-- Demo stylesheet -->
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="step-app" id="demo">
+    <ul class="step-steps">
+      <li data-step-target="step1">Step 1</li>
+      <li data-step-target="step2">Step 2</li>
+      <li data-step-target="step3">Step 3</li>
+    </ul>
+    <div class="step-content">
+      <div class="step-tab-panel" data-step="step1">
+        ... step1
+      </div>
+      <div class="step-tab-panel" data-step="step2">
+        ... step2
+      </div>
+      <div class="step-tab-panel" data-step="step3">
+        ... step3
+      </div>
+    </div>
+    <div class="step-footer">
+      <button data-step-action="prev" class="step-btn">Previous</button>
+      <button data-step-action="next" class="step-btn">Next</button>
+      <button data-step-action="finish" class="step-btn">Finish</button>
+    </div>
+  </div>
+
+  <br>
+  <button id="btnPrev">Prev</button>
+  <button id="btnNext">Next</button>
+  <hr>
+  <button id="btnGetStepIndex">Current Step Index</button>
+  <button id="btnGetMaxStepIndex">Max Step Index</button>
+  <hr>
+  <button id="btnGoToFirstStep">First Step</button>
+  <button id="btnGoToStep2">Go to Step 2</button>
+  <button id="btnGoToLastStep">Last Step</button>
+  <hr>
+  <button id="btnDestroy">Destroy</button>
+
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="../dist/jquery-steps.js"></script>
+  <script>
+    var steps = $('#demo').steps({
+      showFooterButtons: false,
+      onFinish: function () {
+        alert('Wizard Completed');
+      }
+    });
+
+    steps_api = steps.data('plugin_Steps');
+
+    $('#btnPrev').on('click', function () {
+      steps_api.prev();
+		});
+
+    $('#btnNext').on('click', function () {
+      steps_api.next();
+		});
+
+    $('#btnGetStepIndex').on('click', function () {
+      var idx = steps_api.getStepIndex();
+      alert(idx);
+		});
+
+    $('#btnGetMaxStepIndex').on('click', function () {
+      var idx = steps_api.getMaxStepIndex();
+      alert(idx);
+		});
+
+    $('#btnGoToFirstStep').on('click', function () {
+      steps_api.setStepIndex(0);
+		});
+
+    $('#btnGoToStep2').on('click', function () {
+      steps_api.setStepIndex(1);
+		});
+
+    $('#btnGoToLastStep').on('click', function () {
+      var maxIdx = steps_api.getMaxStepIndex();
+      steps_api.setStepIndex(maxIdx);
+		});
+
+    $('#btnDestroy').on('click', function () {
+      steps_api.destroy();
+		});
+	</script>
+</body>
+</html>
