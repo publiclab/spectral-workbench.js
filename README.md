@@ -21,6 +21,8 @@ Try a demo of the newly rewritten capture interface here: https://publiclab.gith
 
 ****
 
+![screenshot](https://publiclab.org/i/42828.png)
+
 
 ## Installation
 

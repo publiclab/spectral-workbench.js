@@ -161,6 +161,16 @@ $W = {
     this_.getRecentCalibrations("#calibration_id");
   },
 
+  downloadSpectrum: function() {
+  let base64_imgdata = $('#dataurl').val($W.canvas.toDataURL())[0].defaultValue;
+  console.log(base64_imgdata);
+
+  let a = document.createElement('a');
+  a.href = base64_imgdata;
+  a.download = ('spectrum_img.png');
+  a.click();
+  },
+
   getRecentCalibrations: function(selector) {
     $.ajax({
       url: "/capture/recent_calibrations.json?calibration_id=" + $W.calibration_id,
