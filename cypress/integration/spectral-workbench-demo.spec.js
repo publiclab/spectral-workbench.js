@@ -28,6 +28,8 @@ context('Actions', () => {
     cy.get('.bs-stepper-header>div').eq(6).not('have.class', 'active')
   });
 
+  const downloadsFolder = Cypress.config('downloadsFolder')
+
   it('can be clicked through to begin capturing', () => {
     cy.get('#landing-page-next').click()
     cy.get('#setting-page-next').click()
