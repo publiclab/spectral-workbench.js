@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+const path = require('path')
 
 context('Actions', () => {
 
