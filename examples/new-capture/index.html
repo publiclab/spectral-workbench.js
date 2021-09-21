@@ -246,9 +246,14 @@
           </div>
         </div>
 
+        <input name="dataurl" type="hidden" id="dataurl" />
+
         <button class="demo-button next" id="capture-page-next">Save Capture</button>
         <p style="margin-top: 0.5em">Once you save the capture, you cannot go back here.</p>
         <img style="display:none;background:#333;" id="spectrum-preview" />
+
+        <button class="demo-button next" id="download-spectrum" onClick="$W.downloadSpectrum();">Download</button>
+
       </div>
 
 
