@@ -687,7 +687,7 @@ SpectralWorkbench.API.Core = {
       spectrum.average.forEach(function(line, i) {
 
         // subtract the reference
-        line.y = line.y * getRefIntensity(line.x);
+        line.y *= getRefIntensity(line.x);
 
       });
 
