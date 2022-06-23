@@ -39,7 +39,7 @@
     "grunt": "^1.3.0",
     "grunt-cli": "^1.4.3",
     "grunt-contrib-concat": "^2.1.0",
-    "grunt-contrib-jasmine": "^1.2.0",
+    "grunt-contrib-jasmine": "^3.0.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-tape": "^0.1.0",
     "jasmine": "~4.2.1",
