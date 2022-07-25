@@ -42,7 +42,7 @@
     "grunt-contrib-jasmine": "^1.2.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-tape": "^0.1.0",
-    "jasmine": "~4.2.1",
+    "jasmine": "~4.3.0",
     "jasmine-ajax": "~4.0.0",
     "jasmine-jquery": "~2.1.1",
     "matchdep": "^2.0.0",
